@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block content %}
+!-- Dean Profile Bar -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card bg-light">
+            <div class="card-body py-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0">Dean Review Portal</h5>
+                        <small class="text-muted">{{ faculty.name }}</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="text-end me-3">
+                            <strong>{{ user.get_full_name }}</strong><br>
+                            <small class="text-muted">Dean, {{ faculty.code }}</small>
+                        </div>
+                        {% if user.profile.profile_pic %}
+                            <img src="{{ user.profile.profile_pic.url }}" 
+                                 alt="Dean" 
+                                 class="rounded-circle border border-2 border-primary"
+                                 style="width: 50px; height: 50px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                 style="width: 50px; height: 50px; font-size: 20px;">
+                                {{ faculty.code|slice:":1" }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Dean Review - {{ faculty.code }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6 class="border-bottom pb-2">Student Information</h6>
+                        <p><strong>Name:</strong> {{ application.student.user.get_full_name }}</p>
+                        <p><strong>Admission No:</strong> {{ application.student.admission_number }}</p>
+                        <p><strong>Current Faculty:</strong> {{ application.current_program.faculty.name }}</p>
+                        <p><strong>Current Program:</strong> {{ application.current_program.name }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="border-bottom pb-2">Application Details</h6>
+                        <p><strong>Date:</strong> {{ application.application_date|date:"F d, Y" }}</p>
+                        <p><strong>Requested Program:</strong> {{ application.requested_program.name }}</p>
+                        <p><strong>Requested Faculty:</strong> {{ application.requested_program.faculty.name }}</p>
+                        <p><strong>HOD Status:</strong> 
+                            <span class="badge bg-success">Approved</span>
+                        </p>
+                        <p><strong>HOD Comment:</strong> {{ application.hod_comment|default:"None" }}</p>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h6 class="border-bottom pb-2">Student's Reason for Transfer</h6>
+                    <div class="p-3 bg-light rounded">
+                        {{ application.reason|linebreaks }}
+                    </div>
+                </div>
+                <!-- Add this after the Student's Reason section -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h6 class="border-bottom pb-2">📄 KCSE Result Slip</h6>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>KCSE Index No.:</strong> {{ application.student.kcse_index_no|default:"—" }}</p>
+                <p><strong>Mean Grade:</strong> {{ application.student.mean_grade|default:"—" }}</p>
+                <p><strong>Aggregate Points:</strong> {{ application.student.aggregate_points|default:"—" }}</p>
+                <p><strong>Cluster Weight:</strong> {{ application.student.cluster_weight|default:"—" }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Uploaded Result Slip:</strong></p>
+                {% if application.student.kcse_slip %}
+                    <a href="{{ application.student.kcse_slip.url }}" class="btn btn-sm btn-info" target="_blank">
+                        📎 View KCSE Result Slip
+                    </a>
+                {% else %}
+                    <span class="text-muted">No result slip uploaded</span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="mt-3">
+            <p><strong>KCSE Subject Results:</strong></p>
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Subject</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in application.student.kcse_results.all %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ result.subject }}</td>
+                                <td>{{ result.grade }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-muted">No subject results recorded</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Dean's Comment</label>
+                        <textarea name="comment" id="comment" class="form-control" rows="3" placeholder="Add your decision comments here..."></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" name="action" value="reject" class="btn btn-danger me-md-2" onclick="return confirm('Are you sure you want to reject this application?')">
+                            ❌ Reject
+                        </button>
+                        <button type="submit" name="action" value="approve" class="btn btn-success" onclick="return confirm('Are you sure you want to approve this application?')">
+                            ✅ Approve
+                        </button>
+                        <a href="{% url 'dean_dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

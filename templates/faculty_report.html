@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    {% if faculty %}
+                        {{ faculty.name }} Report
+                    {% else %}
+                        All Faculties Report
+                    {% endif %}
+                </h4>
+                <div>
+                    <a href="{% url 'export_applications_csv' %}" class="btn btn-light btn-sm">
+                        <i class="fas fa-download"></i> Download CSV
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h6>Total</h6>
+                                <h3>{{ total }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning">
+                            <div class="card-body text-center">
+                                <h6>Pending</h6>
+                                <h3>{{ pending }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h6>Approved</h6>
+                                <h3>{{ approved }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body text-center">
+                                <h6>Rejected</h6>
+                                <h3>{{ rejected }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applications Table -->
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Student</th>
+                                <th>Admission</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for app in applications %}
+                            <tr>
+                                <td>{{ app.application_date|date:"M d, Y" }}</td>
+                                <td>{{ app.student.user.get_full_name }}</td>
+                                <td>{{ app.student.admission_number }}</td>
+                                <td>{{ app.current_program.faculty.code }}</td>
+                                <td>{{ app.requested_program.faculty.code }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if 'pending' in app.status %}bg-warning
+                                        {% elif 'approved' in app.status %}bg-info
+                                        {% elif 'rejected' in app.status %}bg-danger
+                                        {% elif 'completed' in app.status %}bg-success
+                                        {% endif %}">
+                                        {{ app.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{% url 'student_academic_report' app.student.id %}" class="btn btn-sm btn-outline-primary">
+                                        View Student
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">No applications found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

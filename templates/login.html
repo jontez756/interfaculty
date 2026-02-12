@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: url('{% static "images/login.png" %}') no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+        margin: -30px 0;
+        padding: 60px 0;
+    }
+    
+    .login-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(3px);
+    }
+    
+    .login-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        padding: 40px;
+        width: 100%;
+        max-width: 450px;
+        position: relative;
+        z-index: 2;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .login-header h2 {
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .login-header p {
+        color: #666;
+        font-size: 0.95rem;
+    }
+    
+    .form-control {
+        height: 50px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        padding-left: 15px;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #444;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-login {
+        background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: 600;
+        height: 50px;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(78, 115, 223, 0.4);
+    }
+    
+    .remember-forgot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px 0;
+    }
+    
+    .form-check-label {
+        color: #666;
+        font-size: 0.9rem;
+    }
+    
+    .forgot-link {
+        color: #4e73df;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    .forgot-link:hover {
+        text-decoration: underline;
+    }
+    
+    .signup-link {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        color: #666;
+    }
+    
+    .signup-link a {
+        color: #4e73df;
+        font-weight: 600;
+        text-decoration: none;
+        margin-left: 5px;
+    }
+    
+    .signup-link a:hover {
+        text-decoration: underline;
+    }
+    
+    .error-message {
+        background: #fee;
+        color: #c33;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+        border-left: 4px solid #c33;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>Hi, welcome back 👋</h2>
+            <p>Please fill in your details to log in</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-4">
+                <label class="form-label">Username</label>
+                <small class="text-muted d-block mb-1">Student No/Employee No</small>
+                <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+            </div>
+            
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Enter your Password" required>
+            </div>
+            
+            {% if form.errors %}
+                <div class="error-message">
+                    Invalid username or password. Please try again.
+                </div>
+            {% endif %}
+            
+            <div class="remember-forgot">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                <a href="{% url 'password_reset' %}" class="forgot-link">Forgot Password?</a>
+                
+            </div>
+            
+            <button type="submit" class="btn btn-login w-100">
+                Sign In
+            </button>
+            
+            <div class="signup-link">
+                Don't have an account?
+                <a href="{% url 'register_student' %}">Sign Up</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

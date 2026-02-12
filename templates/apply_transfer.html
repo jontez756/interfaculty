@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">Apply for Inter-Faculty Transfer</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Current Program:</strong> {{ student.current_program.name }} ({{ student.current_program.faculty.name }})
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <!-- IMPORTANT: Hidden field for current program -->
+                    <input type="hidden" name="current_program" value="{{ student.current_program.id }}">
+                    
+                    <div class="mb-3">
+                        <label for="id_requested_program" class="form-label">Select Program to Transfer To</label>
+                        <select name="requested_program" id="id_requested_program" class="form-control">
+                            <option value="">-- Choose Program --</option>
+                            {% for program in form.requested_program.field.queryset %}
+                                <option value="{{ program.id }}">
+                                    {{ program.name }} ({{ program.faculty.name }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">You can only transfer to programs outside your current faculty.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_academic_year" class="form-label">Academic Year</label>
+                        <input type="text" name="academic_year" id="id_academic_year" class="form-control" placeholder="e.g., 2025/2026">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_semester" class="form-label">Semester</label>
+                        <select name="semester" id="id_semester" class="form-control">
+                            <option value="">-- Select Semester --</option>
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_reason" class="form-label">Reason for Transfer</label>
+                        <textarea name="reason" id="id_reason" class="form-control" rows="5" placeholder="Please explain why you want to transfer to this program..."></textarea>
+                    </div>
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {% for field, errors in form.errors.items %}
+                                <strong>{{ field }}:</strong>
+                                {% for error in errors %}
+                                    <p class="mb-0">{{ error }}</p>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                        <a href="{% url 'student_dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,199 @@
+{{% extends 'base.html' %}
+
+{% block content %}
+<!-- Dean Profile Card - Top Right Corner -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card border-0 bg-transparent">
+            <div class="card-body p-0">
+                <div class="d-flex justify-content-end align-items-center">
+                    <div class="text-end me-3">
+                        <h5 class="mb-0 fw-bold">
+                            {% if user.profile.user.first_name and user.profile.user.last_name %}
+                                {{ user.profile.user.get_full_name }}
+                            {% else %}
+                                {% if faculty.code == 'SCIT' %}Prof. Kelvin K. Omieno
+                                {% elif faculty.code == 'SOBE' %}Dr. Atieno Margaret Omondi
+                                {% elif faculty.code == 'SESS' %}Dr. NABETA K.N SANGILI
+                                {% elif faculty.code == 'SOS' %}Dr. Annette O. Busula
+                                {% elif faculty.code == 'SOHES' %}Dr. Cyprian Mabonga
+                                {% endif %}
+                            {% endif %}
+                        </h5>
+                        <p class="text-muted mb-0">{{ faculty.name }}</p>
+                        <p class="text-muted small mb-0">Dean, {{ faculty.code }}</p>
+                    </div>
+                    <div class="profile-image-container">
+                        {% if user.profile.profile_pic %}
+                            <img src="{{ user.profile.profile_pic.url }}" 
+                                 alt="{{ faculty.code }} Dean" 
+                                 class="rounded-circle border border-3 border-primary"
+                                 style="width: 80px; height: 80px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                 style="width: 80px; height: 80px; font-size: 32px; font-weight: bold;">
+                                {{ faculty.code|slice:":1" }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rest of your dashboard content -->
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Dean Dashboard</h5>
+            </div>
+            <div class="card-body">
+                <h6>{{ faculty.name }}</h6>
+                <p class="text-muted">{{ faculty.code }}</p>
+                <hr>
+                <div class="d-grid gap-2">
+                    <a href="#pending" class="btn btn-warning">
+                        Pending Review <span class="badge bg-dark">{{ pending_count }}</span>
+                    </a>
+                    <a href="#all" class="btn btn-outline-secondary">All Applications</a>
+                    <a href="{% url 'report_dashboard' %}" class="btn btn-outline-info mt-2">
+                        📊 Reports
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Notifications</h5>
+            </div>
+            <div class="card-body">
+                {% if notifications %}
+                    {% for note in notifications %}
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            {{ note.message }}
+                            <small class="d-block text-muted">{{ note.created_at|date:"M d, Y H:i" }}</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted mb-0">No new notifications</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="card mb-4" id="pending">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0">Pending Dean Review ({{ pending_count }})</h5>
+            </div>
+            <div class="card-body">
+                {% if pending_applications %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Student</th>
+                                    <th>From Faculty</th>
+                                    <th>Current Program</th>
+                                    <th>Requested Program</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for app in pending_applications %}
+                                    <tr>
+                                        <td>{{ app.application_date|date:"M d, Y" }}</td>
+                                        <td>{{ app.student.user.get_full_name }}</td>
+                                        <td>{{ app.current_program.faculty.code }}</td>
+                                        <td>{{ app.current_program.name }}</td>
+                                        <td>{{ app.requested_program.name }}</td>
+                                        <td>
+                                            <a href="{% url 'dean_review' app.id %}" class="btn btn-sm btn-primary">Review</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-center text-muted mb-0">No applications pending your review.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card" id="all">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">All Applications to {{ faculty.code }}</h5>
+            </div>
+            <div class="card-body">
+                {% if all_applications %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Student</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for app in all_applications %}
+                                    <tr>
+                                        <td>{{ app.application_date|date:"M d, Y" }}</td>
+                                        <td>{{ app.student.user.get_full_name }}</td>
+                                        <td>{{ app.current_program.faculty.code }}</td>
+                                        <td>{{ app.requested_program.faculty.code }}</td>
+                                        <td>
+                                            {% if app.status == 'hod_approved' %}
+                                                <span class="badge bg-info">HOD Approved</span>
+                                            {% elif app.status == 'pending_dean' %}
+                                                <span class="badge bg-warning">Pending Dean</span>
+                                            {% elif app.status == 'dean_approved' %}
+                                                <span class="badge bg-success">Dean Approved</span>
+                                            {% elif app.status == 'dean_rejected' %}
+                                                <span class="badge bg-danger">Dean Rejected</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-center text-muted mb-0">No applications found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-image-container {
+    position: relative;
+}
+.profile-image-container:hover::after {
+    content: '📷';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    pointer-events: none;
+}
+</style>
+{% endblock %}
+    
+    
+    
+  
