@@ -63,6 +63,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'interfaculty.wsgi.application'
 
 # Database - Uses DATABASE_URL from environment variable
+import os
+
 DATABASES = {
     'default': dj_database_url.config(
         default='postgresql://postgres:admin123@localhost:5432/interfaculty_db',
@@ -70,6 +72,12 @@ DATABASES = {
         ssl_require=True
     )
 }
+
+
+
+
+
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
