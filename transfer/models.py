@@ -14,6 +14,8 @@ class Faculty(models.Model):
     
     name = models.CharField(max_length=10, choices=FACULTY_CHOICES, unique=True)
     code = models.CharField(max_length=100)
+
+    
     
     def __str__(self):
         return f"{self.code}: {self.name}"  # Shows "SESS: School of Education & Social Sciences"

@@ -63,16 +63,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'interfaculty.wsgi.application'
 
-# Database - Uses DATABASE_URL from environment variable
-import os
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://postgres:admin123@localhost:5432/interfaculty_db',
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+
 
 import os
 
@@ -81,9 +73,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'neondb',
         'USER': 'neondb_owner',
-        'PASSWORD': 'npg_tqyBIE0SpM4c',  # This might be the same
-        
-        'HOST': 'postgresql://neondb_owner:npg_tqyBIE0SpM4c@ep-sparkling-dream-agnnf37h-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',  # THIS CHANGES!
+        'PASSWORD': 'npg_tqyBIE0SpM4c',
+        'HOST': 'ep-sparkling-dream-agnnf37h-pooler.c-2.eu-central-1.aws.neon.tech',
         'PORT': '5432',
         'OPTIONS': {
             'sslmode': 'require',
@@ -91,6 +82,8 @@ DATABASES = {
         }
     }
 }
+
+
 
 
 

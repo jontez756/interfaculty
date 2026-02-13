@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Student Profile</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ student.user.get_full_name }}</p>
+                <p><strong>Admission No:</strong> {{ student.admission_number }}</p>
+                <p><strong>Program:</strong> {{ student.current_program.name }}</p>
+                <p><strong>Faculty:</strong> {{ student.current_program.faculty.name }}</p>
+                <p><strong>Year:</strong> {{ student.current_year }}</p>
+                <p><strong>Phone:</strong> {{ student.phone }}</p>
+                <p><strong>Email:</strong> {{ student.user.email }}</p>
+                <a href="{% url 'student_application_form' %}" class="btn btn-primary">New Transfer Application</a>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Notifications ({{ notifications.count }})</h5>
+            </div>
+            <div class="card-body">
+                {% if notifications %}
+                    {% for note in notifications %}
+                        <div class="alert alert-info">
+                            {{ note.message }}
+                            <small class="d-block text-muted">{{ note.created_at|date:"M d, Y H:i" }}</small>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted mb-0">No new notifications</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">My Transfer Applications</h5>
+            </div>
+            <div class="card-body">
+                {% if applications %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Current Program</th>
+                                    <th>Requested Program</th>
+                                    <th>Status</th>
+                                    <th>Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for app in applications %}
+                                    <tr>
+                                        <td>{{ app.application_date|date:"M d, Y" }}</td>
+                                        <td>{{ app.current_program.name }}</td>
+                                        <td>{{ app.requested_program.name }}</td>
+                                        <td>
+                                            {% if app.status == 'pending_hod' %}
+                                                <span class="badge bg-warning">Pending HOD</span>
+                                            {% elif app.status == 'hod_approved' %}
+                                                <span class="badge bg-info">HOD Approved</span>
+                                            {% elif app.status == 'hod_rejected' %}
+                                                <span class="badge bg-danger">HOD Rejected</span>
+                                            {% elif app.status == 'pending_dean' %}
+                                                <span class="badge bg-warning">Pending Dean</span>
+                                            {% elif app.status == 'dean_approved' %}
+                                                <span class="badge bg-info">Dean Approved</span>
+                                            {% elif app.status == 'dean_rejected' %}
+                                                <span class="badge bg-danger">Dean Rejected</span>
+                                            {% elif app.status == 'pending_registrar' %}
+                                                <span class="badge bg-warning">Pending Registrar</span>
+                                            {% elif app.status == 'registrar_approved' %}
+                                                <span class="badge bg-success">Approved</span>
+                                                <small>New No: {{ app.new_admission_number }}</small>
+                                            {% elif app.status == 'registrar_rejected' %}
+                                                <span class="badge bg-danger">Rejected</span>
+                                            {% elif app.status == 'completed' %}
+                                                <span class="badge bg-success">Completed</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if app.hod_comment %}
+                                                <small><strong>HOD:</strong> {{ app.hod_comment }}</small><br>
+                                            {% endif %}
+                                            {% if app.dean_comment %}
+                                                <small><strong>Dean:</strong> {{ app.dean_comment }}</small><br>
+                                            {% endif %}
+                                            {% if app.registrar_comment %}
+                                                <small><strong>Registrar:</strong> {{ app.registrar_comment }}</small>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <p class="lead text-muted">You haven't submitted any transfer applications yet.</p>
+                        <a href="{% url 'apply_transfer' %}" class="btn btn-primary">Apply for Transfer</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
