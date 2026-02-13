@@ -74,6 +74,24 @@ DATABASES = {
     )
 }
 
+import os
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'neondb',
+        'USER': 'neondb_owner',
+        'PASSWORD': 'npg_tqyBIE0SpM4c',  # This might be the same
+        
+        'HOST': 'postgresql://neondb_owner:npg_tqyBIE0SpM4c@ep-sparkling-dream-agnnf37h-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',  # THIS CHANGES!
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+            'connect_timeout': 10,
+        }
+    }
+}
+
 
 
 
