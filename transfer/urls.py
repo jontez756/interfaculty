@@ -37,6 +37,7 @@ urlpatterns = [
     path('reports/export/pdf/', views.export_applications_pdf, name='export_applications_pdf'),
     path('reports/faculty/<str:faculty_code>/', views.faculty_report, name='faculty_report'),
     path('reports/student/<int:student_id>/', views.student_academic_report, name='student_academic_report'),
+    path('test/', views.test_view, name='test_view'),
 ]
 
 

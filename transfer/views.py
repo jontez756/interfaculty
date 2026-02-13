@@ -13,7 +13,10 @@ import csv
 import json
 from datetime import datetime
 
+from django.http import HttpResponse
 
+def test_view(request):
+    return HttpResponse("Test view is working!")
 # ============================================
 # HOME PAGE
 # ============================================
