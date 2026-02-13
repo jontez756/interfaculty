@@ -1,3 +1,7 @@
+
+
+
+
 """
 Django settings for interfaculty project.
 """
@@ -119,3 +123,5 @@ SESSION_COOKIE_AGE = 3600  # 1 hour
 # Email Configuration (For password reset)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 PASSWORD_RESET_TIMEOUT = 3600  # 1 hour
+
+
