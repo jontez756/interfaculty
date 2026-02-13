@@ -1,20 +1,10 @@
-
-import dj_database_url
-import os
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://postgres:admin123@localhost:5432/interfaculty_db',
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
-
-
-
+"""
+Django settings for interfaculty project.
+"""
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,10 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-your-secret-key-here-change-it-in-production'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['interfaculty-transfer.onrender.com', 'localhost', '127.0.0.1']
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -36,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'transfer',  # Our transfer app
+    'transfer',
 ]
 
 MIDDLEWARE = [
@@ -69,16 +58,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'interfaculty.wsgi.application'
 
-# Database Configuration - PostgreSQL
+# Database - Uses DATABASE_URL from environment variable
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'interfaculty_db',
-        'USER': 'postgres',
-        'PASSWORD': 'admin123',  # Keep empty if no password
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://postgres:admin123@localhost:5432/interfaculty_db',
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 # Password validation
@@ -99,7 +85,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Africa/Nairobi'  # East African Time
+TIME_ZONE = 'Africa/Nairobi'
 USE_I18N = True
 USE_TZ = True
 
@@ -108,17 +94,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-
-# Media files (Uploaded profile pictures, etc)
-
-
+# Media files (Uploaded profile pictures, KCSE slips, etc)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Login URLs
 # Login URLs
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard-redirect/'
@@ -133,18 +115,7 @@ MESSAGE_TAGS = {
 # Session settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 3600  # 1 hour
-LOGOUT_REDIRECT_URL = '/login/'  # Redirect to login page after logout
 
-# Email Configuration (For development - prints to console)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # Prints emails to console
-# For production, use SMTP:
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'your-email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'your-app-password'
-# DEFAULT_FROM_EMAIL = 'Inter-Faculty Transfer <noreply@kibu.ac.ke>'
-
-# Password reset settings
+# Email Configuration (For password reset)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 PASSWORD_RESET_TIMEOUT = 3600  # 1 hour
