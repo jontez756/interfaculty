@@ -1,9 +1,23 @@
 """
 Django settings for interfaculty project.
 """
+import dj_database_url
 import os
 
+# Database
+# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# Use DATABASE_URL environment variable if available, otherwise fallback to local development
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgresql://postgres:admin123@localhost:5432/interfaculty_db',
+        conn_max_age=600,
+        ssl_require=True
+    )
+
+
+
+}
 from pathlib import Path
 import os
 
