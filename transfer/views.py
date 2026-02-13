@@ -97,26 +97,21 @@ def register_student(request):
 # ============================================
 # STUDENT DASHBOARD
 # ============================================
+
+from django.http import HttpResponse
+
 @login_required
 def student_dashboard(request):
-    try:
-        # Get the student
-        student = Student.objects.get(user=request.user)
-        
-        # Very simple context
-        context = {
-            'student': student,
-            'applications': [],
-            'notifications': [],
-            'has_completed_profile': True,
-        }
-        
-        return render(request, 'student_dashboard.html', context)
-        
-    except Student.DoesNotExist:
-        return HttpResponse("Student record not found")
-    except Exception as e:
-        return HttpResponse(f"Error: {str(e)}")
+    return HttpResponse("""
+        <html>
+            <body>
+                <h1>Direct HTML Response</h1>
+                <p>If you see this, Django is working but templates are broken.</p>
+            </body>
+        </html>
+    """)
+
+
 
 
 
