@@ -97,52 +97,26 @@ def register_student(request):
 # ============================================
 # STUDENT DASHBOARD
 # ============================================
-
-
 @login_required
 def student_dashboard(request):
     try:
-        # Check if user is a student
-        profile = Profile.objects.get(user=request.user)
-        if profile.user_type != 'student':
-            messages.error(request, 'Access denied. Student dashboard only.')
-            return redirect('dashboard_redirect')
-            
+        # Get the student
         student = Student.objects.get(user=request.user)
-        applications = TransferApplication.objects.filter(student=student).order_by('-application_date')
-        notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
         
-        # Mark notifications as read
-        for notification in notifications:
-            notification.is_read = True
-            notification.save()
-        
-        # Check if student has completed their profile
-        has_completed_profile = all([
-            student.kcse_index_no,
-            student.mean_grade,
-            student.kcse_slip
-        ])
-        
+        # Very simple context
         context = {
             'student': student,
-            'applications': applications,
-            'notifications': notifications,
-            'has_completed_profile': has_completed_profile,
+            'applications': [],
+            'notifications': [],
+            'has_completed_profile': True,
         }
+        
         return render(request, 'student_dashboard.html', context)
         
-    except Profile.DoesNotExist:
-        messages.error(request, 'Profile not found.')
-        return redirect('home')
     except Student.DoesNotExist:
-        messages.warning(request, 'Please complete your student profile first.')
-        return redirect('student_application_form')
+        return HttpResponse("Student record not found")
     except Exception as e:
-        # This will show us the actual error
-        return HttpResponse(f"Error in student_dashboard: {str(e)}")
-
-
+        return HttpResponse(f"Error: {str(e)}")
 
 
 
