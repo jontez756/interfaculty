@@ -94,6 +94,8 @@ def register_student(request):
 # ============================================
 # STUDENT DASHBOARD
 # ============================================
+
+
 @login_required
 def student_dashboard(request):
     try:
@@ -107,6 +109,11 @@ def student_dashboard(request):
         applications = TransferApplication.objects.filter(student=student).order_by('-application_date')
         notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
         
+        # Mark notifications as read
+        for notification in notifications:
+            notification.is_read = True
+            notification.save()
+        
         # Check if student has completed their profile
         has_completed_profile = all([
             student.kcse_index_no,
@@ -114,23 +121,26 @@ def student_dashboard(request):
             student.kcse_slip
         ])
         
-        # Mark notifications as read
-        for notification in notifications:
-            notification.is_read = True
-            notification.save()
+        context = {
+            'student': student,
+            'applications': applications,
+            'notifications': notifications,
+            'has_completed_profile': has_completed_profile,
+        }
+        return render(request, 'student_dashboard.html', context)
         
-    except Student.DoesNotExist:
-        return redirect('register_student')
     except Profile.DoesNotExist:
-        return redirect('register_student')
-    
-    context = {
-        'student': student,
-        'applications': applications,
-        'notifications': notifications,
-        'has_completed_profile': has_completed_profile,
-    }
-    return render(request, 'student_dashboard.html', context)
+        messages.error(request, 'Profile not found.')
+        return redirect('home')
+    except Student.DoesNotExist:
+        messages.warning(request, 'Please complete your student profile first.')
+        return redirect('student_application_form')
+    except Exception as e:
+        # This will show us the actual error
+        return HttpResponse(f"Error in student_dashboard: {str(e)}")
+
+
+
 
 
 # ============================================
