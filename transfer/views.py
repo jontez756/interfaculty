@@ -100,16 +100,13 @@ def register_student(request):
 
 from django.http import HttpResponse
 
+
 @login_required
 def student_dashboard(request):
-    return HttpResponse("""
-        <html>
-            <body>
-                <h1>Direct HTML Response</h1>
-                <p>If you see this, Django is working but templates are broken.</p>
-            </body>
-        </html>
-    """)
+    student = Student.objects.get(user=request.user)
+    return render(request, 'student_dashboard.html', {'student': student})
+
+
 
 
 

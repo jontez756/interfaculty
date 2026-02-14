@@ -1,11 +1,23 @@
+
 {% extends 'base.html' %}
 
 {% block content %}
 <div class="row">
-    <div class="col-md-12">
-        <h1>Welcome, {{ student.user.get_full_name }}!</h1>
-        <p>Admission Number: {{ student.admission_number }}</p>
-        <p>Program: {{ student.current_program.name }}</p>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>Student Dashboard</h4>
+            </div>
+            <div class="card-body">
+                <h5>Welcome, {{ student.user.get_full_name }}!</h5>
+                <p><strong>Admission Number:</strong> {{ student.admission_number }}</p>
+                <p><strong>Program:</strong> {{ student.current_program.name }}</p>
+                <p><strong>Faculty:</strong> {{ student.current_program.faculty.name }}</p>
+                
+                <a href="{% url 'student_application_form' %}" class="btn btn-success">Apply for Transfer</a>
+                <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+            </div>
+        </div>
     </div>
 </div>
-{% endblock %}
+{% endblock %}    
