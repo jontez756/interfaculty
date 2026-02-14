@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <h1>Student Dashboard</h1>
-    <p>Welcome, {{ student.user.get_full_name }}!</p>
-    <p>This is a test - if you see this, the template works!</p>
+<div class="row">
+    <div class="col-md-12">
+        <h1>Welcome, {{ student.user.get_full_name }}!</h1>
+        <p>Admission Number: {{ student.admission_number }}</p>
+        <p>Program: {{ student.current_program.name }}</p>
+    </div>
 </div>
 {% endblock %}
-
