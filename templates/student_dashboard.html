@@ -4,580 +4,699 @@
 {% block content %}
 <style>
     :root {
-        --primary: #2c3e50;
-        --secondary: #3498db;
-        --accent: #e74c3c;
-        --success: #27ae60;
-        --warning: #f39c12;
-        --light: #ecf0f1;
-        --dark: #2c3e50;
-        --text: #34495e;
-        --border: #bdc3c7;
+        --kfu-primary: #800000; /* Maroon/Burgundy color */
+        --kfu-secondary: #ffd700; /* Gold accent */
+        --kfu-light: #f8f9fa;
+        --kfu-dark: #343a40;
+        --kfu-sidebar: #1a1a2c;
+        --kfu-text: #4a5568;
     }
-    
+
     body {
-        background-color: #f5f7fa;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f2f5;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        margin: 0;
+        padding: 0;
     }
-    
-    /* Welcome Banner */
-    .welcome-banner {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    /* Main Layout */
+    .portal-container {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+        width: 280px;
+        background: var(--kfu-sidebar);
         color: white;
-        padding: 40px 0;
-        margin-bottom: 30px;
-        border-radius: 0 0 20px 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        overflow-y: auto;
+        transition: all 0.3s;
+        z-index: 1000;
     }
-    
-    .student-avatar {
-        width: 80px;
-        height: 80px;
+
+    .sidebar-header {
+        padding: 30px 20px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sidebar-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+        color: white;
+    }
+
+    .sidebar-header p {
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.7);
+        margin: 5px 0 0;
+    }
+
+    .nav-menu {
+        padding: 20px 0;
+    }
+
+    .nav-item {
+        list-style: none;
+        margin: 5px 0;
+    }
+
+    .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 12px 25px;
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+        transition: all 0.3s;
+        border-left: 3px solid transparent;
+    }
+
+    .nav-link:hover {
+        background: rgba(255,255,255,0.05);
+        color: white;
+        border-left-color: var(--kfu-secondary);
+    }
+
+    .nav-link.active {
+        background: rgba(255,215,0,0.1);
+        color: var(--kfu-secondary);
+        border-left-color: var(--kfu-secondary);
+    }
+
+    .nav-link i {
+        width: 30px;
+        font-size: 1.2rem;
+    }
+
+    .nav-link span {
+        flex: 1;
+    }
+
+    .nav-link .badge {
+        background: var(--kfu-secondary);
+        color: var(--kfu-sidebar);
+        font-size: 0.75rem;
+        padding: 3px 8px;
+        border-radius: 12px;
+    }
+
+    /* Main Content */
+    .main-content {
+        flex: 1;
+        margin-left: 280px;
+        padding: 30px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
         background: white;
+        padding: 15px 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .page-title h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--kfu-dark);
+        margin: 0;
+    }
+
+    .page-title p {
+        color: #718096;
+        margin: 5px 0 0;
+    }
+
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .notification-icon {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .notification-icon i {
+        font-size: 1.3rem;
+        color: #4a5568;
+    }
+
+    .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: #e53e3e;
+        color: white;
+        font-size: 0.7rem;
+        padding: 3px 6px;
+        border-radius: 50%;
+    }
+
+    .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--kfu-primary), #b3002d);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-right: 20px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-    
-    .student-avatar i {
-        font-size: 40px;
-        color: #764ba2;
-    }
-    
-    .welcome-text h1 {
-        font-size: 2.5rem;
+        color: white;
         font-weight: 600;
-        margin-bottom: 5px;
+        font-size: 1.2rem;
     }
-    
-    .welcome-text p {
-        font-size: 1.1rem;
-        opacity: 0.9;
-        margin-bottom: 0;
+
+    .user-info {
+        text-align: right;
     }
-    
-    .student-badge {
-        background: rgba(255,255,255,0.2);
-        padding: 8px 20px;
-        border-radius: 30px;
-        display: inline-block;
-        margin-top: 10px;
+
+    .user-name {
+        font-weight: 600;
+        color: var(--kfu-dark);
+        margin: 0;
     }
-    
-    /* Stats Cards */
-    .stat-card {
-        background: white;
+
+    .user-role {
+        font-size: 0.85rem;
+        color: #718096;
+        margin: 0;
+    }
+
+    /* Welcome Card */
+    .welcome-card {
+        background: linear-gradient(135deg, var(--kfu-primary), #b3002d);
         border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        height: 100%;
-        border: 1px solid rgba(0,0,0,0.05);
+        padding: 30px;
+        color: white;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(128,0,0,0.2);
         position: relative;
         overflow: hidden;
     }
-    
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-    
-    .stat-card::before {
+
+    .welcome-card::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, var(--secondary), var(--primary));
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
     }
-    
-    .stat-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 15px;
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
     }
-    
-    .stat-icon i {
-        font-size: 30px;
+
+    .welcome-content {
+        position: relative;
+        z-index: 1;
     }
-    
-    .stat-icon.pending { background: #fff3e0; color: #f39c12; }
-    .stat-icon.approved { background: #e8f5e9; color: #27ae60; }
-    .stat-icon.completed { background: #e3f2fd; color: #3498db; }
-    
-    .stat-value {
+
+    .welcome-content h2 {
         font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .welcome-content p {
+        font-size: 1.1rem;
+        opacity: 0.95;
+        margin-bottom: 20px;
+    }
+
+    .welcome-stats {
+        display: flex;
+        gap: 40px;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
         font-weight: 700;
-        color: var(--dark);
-        margin-bottom: 5px;
+        color: var(--kfu-secondary);
     }
-    
+
     .stat-label {
-        color: #7f8c8d;
         font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        opacity: 0.9;
     }
-    
+
     /* Section Headers */
     .section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid var(--border);
     }
-    
+
     .section-header h3 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         font-weight: 600;
-        color: var(--dark);
+        color: var(--kfu-dark);
         margin: 0;
     }
-    
-    .section-header h3 i {
-        color: var(--secondary);
-        margin-right: 10px;
-    }
-    
+
     .view-all {
-        color: var(--secondary);
+        color: var(--kfu-primary);
         text-decoration: none;
         font-weight: 500;
-        transition: color 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: gap 0.3s;
     }
-    
+
     .view-all:hover {
-        color: var(--primary);
+        gap: 10px;
+        color: #b3002d;
     }
-    
-    /* Application Cards */
-    .application-card {
+
+    /* Table Styles */
+    .table-container {
         background: white;
         border-radius: 12px;
         padding: 20px;
-        box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-        margin-bottom: 15px;
-        border: 1px solid rgba(0,0,0,0.05);
-        transition: transform 0.3s ease;
-        position: relative;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        margin-bottom: 30px;
     }
-    
-    .application-card:hover {
-        transform: translateX(5px);
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
     }
-    
-    .application-status {
-        position: absolute;
-        top: 20px;
-        right: 20px;
+
+    .table thead th {
+        background: var(--kfu-light);
+        color: var(--kfu-dark);
+        font-weight: 600;
+        border: none;
+        padding: 15px;
     }
-    
+
+    .table tbody td {
+        padding: 15px;
+        vertical-align: middle;
+        border-bottom: 1px solid #edf2f7;
+    }
+
     .status-badge {
         padding: 5px 15px;
         border-radius: 30px;
         font-size: 0.85rem;
         font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        display: inline-block;
     }
-    
-    .status-badge.pending {
-        background: #fff3e0;
-        color: #f39c12;
+
+    .status-pending {
+        background: #fef3c7;
+        color: #b45309;
     }
-    
-    .status-badge.approved {
-        background: #e8f5e9;
-        color: #27ae60;
+
+    .status-approved {
+        background: #def7ec;
+        color: #046c4e;
     }
-    
-    .status-badge.rejected {
-        background: #ffebee;
-        color: #e74c3c;
+
+    .status-progress {
+        background: #e1effe;
+        color: #1e40af;
     }
-    
-    .status-badge.completed {
-        background: #e3f2fd;
-        color: #3498db;
-    }
-    
-    .application-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--dark);
-        margin-bottom: 10px;
-        padding-right: 120px;
-    }
-    
-    .application-meta {
-        display: flex;
+
+    /* Info Cards */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
         gap: 20px;
-        color: #7f8c8d;
-        font-size: 0.95rem;
-        margin-bottom: 10px;
     }
-    
-    .application-meta i {
-        color: var(--secondary);
-        width: 20px;
-        margin-right: 5px;
-    }
-    
-    .application-progress {
-        margin-top: 15px;
-        height: 6px;
-        background: var(--light);
-        border-radius: 3px;
-        overflow: hidden;
-    }
-    
-    .progress-bar {
-        height: 100%;
-        border-radius: 3px;
-        transition: width 0.5s ease;
-    }
-    
-    .progress-bar.pending { background: #f39c12; width: 25%; }
-    .progress-bar.hod-approved { background: #3498db; width: 50%; }
-    .progress-bar.dean-approved { background: #9b59b6; width: 75%; }
-    .progress-bar.completed { background: #27ae60; width: 100%; }
-    
-    /* Quick Actions */
-    .quick-actions {
+
+    .info-card {
         background: white;
-        border-radius: 15px;
+        border-radius: 12px;
         padding: 25px;
         box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     }
-    
-    .action-button {
-        display: block;
-        padding: 15px;
+
+    .info-card h4 {
+        font-size: 1.1rem;
+        color: #718096;
         margin-bottom: 10px;
-        background: var(--light);
-        border-radius: 10px;
-        color: var(--dark);
-        text-decoration: none;
-        transition: all 0.3s ease;
-        border: 1px solid transparent;
     }
-    
-    .action-button:hover {
+
+    .info-card .value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--kfu-primary);
+    }
+
+    .info-card .small {
+        color: #48bb78;
+        font-size: 0.9rem;
+    }
+
+    .progress {
+        height: 10px;
+        background: #edf2f7;
+        border-radius: 5px;
+        margin: 15px 0 10px;
+    }
+
+    .progress-bar {
+        background: linear-gradient(90deg, var(--kfu-primary), #b3002d);
+        border-radius: 5px;
+    }
+
+    .progress-label {
+        display: flex;
+        justify-content: space-between;
+        color: #718096;
+        font-size: 0.9rem;
+    }
+
+    /* Quick Links */
+    .quick-links {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .quick-link {
         background: white;
-        border-color: var(--secondary);
-        transform: translateX(5px);
-        color: var(--secondary);
-    }
-    
-    .action-button i {
-        width: 30px;
-        color: var(--secondary);
-    }
-    
-    /* Notifications */
-    .notification-item {
-        padding: 15px;
-        border-bottom: 1px solid var(--light);
-        transition: background 0.3s ease;
-    }
-    
-    .notification-item:hover {
-        background: var(--light);
-    }
-    
-    .notification-item.unread {
-        background: #fff3e0;
-        border-left: 3px solid #f39c12;
-    }
-    
-    .notification-time {
-        font-size: 0.85rem;
-        color: #95a5a6;
-    }
-    
-    /* Empty States */
-    .empty-state {
+        border-radius: 10px;
+        padding: 20px;
         text-align: center;
-        padding: 40px 20px;
+        text-decoration: none;
+        transition: transform 0.3s;
+        border: 1px solid #edf2f7;
     }
-    
-    .empty-state i {
-        font-size: 60px;
-        color: var(--border);
-        margin-bottom: 20px;
+
+    .quick-link:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     }
-    
-    .empty-state h4 {
-        color: var(--dark);
+
+    .quick-link i {
+        font-size: 2rem;
+        color: var(--kfu-primary);
         margin-bottom: 10px;
     }
-    
-    .empty-state p {
-        color: #95a5a6;
-        margin-bottom: 20px;
+
+    .quick-link span {
+        display: block;
+        color: var(--kfu-dark);
+        font-weight: 500;
     }
-    
-    .btn-primary {
-        background: linear-gradient(135deg, var(--secondary), var(--primary));
-        border: none;
-        padding: 12px 30px;
-        border-radius: 8px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
-    }
-    
+
     /* Responsive */
     @media (max-width: 768px) {
-        .welcome-text h1 {
-            font-size: 1.8rem;
+        .sidebar {
+            width: 0;
+            transform: translateX(-100%);
         }
         
-        .application-meta {
-            flex-direction: column;
-            gap: 5px;
+        .main-content {
+            margin-left: 0;
         }
         
-        .application-title {
-            padding-right: 0;
+        .quick-links {
+            grid-template-columns: repeat(2, 1fr);
         }
         
-        .application-status {
-            position: static;
-            margin-bottom: 10px;
+        .info-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>
 
-<!-- Welcome Banner -->
-<div class="welcome-banner">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-auto">
-                <div class="student-avatar">
-                    <i class="fas fa-user-graduate"></i>
-                </div>
-            </div>
-            <div class="col">
-                <div class="welcome-text">
-                    <h1>Welcome back, {{ student.user.first_name }}! 👋</h1>
-                    <p>{{ student.current_program.name }} · Year {{ student.current_year }}</p>
-                    <div class="student-badge">
-                        <i class="fas fa-id-card me-2"></i>
-                        {{ student.admission_number }}
-                    </div>
-                </div>
-            </div>
+<div class="portal-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>KAIMOSI FRIENDS<br>UNIVERSITY</h2>
+            <p>Student Portal</p>
         </div>
-    </div>
-</div>
-
-<div class="container">
-    <!-- Stats Row -->
-    <div class="row mb-4">
-        <div class="col-md-3 mb-3">
-            <div class="stat-card">
-                <div class="stat-icon pending">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-value">{{ applications|length }}</div>
-                <div class="stat-label">Total Applications</div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="stat-card">
-                <div class="stat-icon approved">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="stat-value">{{ applications|length }}</div>
-                <div class="stat-label">Active Applications</div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="stat-card">
-                <div class="stat-icon" style="background: #fff3e0; color: #f39c12;">
-                    <i class="fas fa-hourglass-half"></i>
-                </div>
-                <div class="stat-value">{{ notifications.count }}</div>
-                <div class="stat-label">Notifications</div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="stat-card">
-                <div class="stat-icon completed">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <div class="stat-value">2026</div>
-                <div class="stat-label">Academic Year</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- Main Content - Applications -->
-        <div class="col-lg-8">
-            <div class="section-header">
-                <h3><i class="fas fa-file-alt"></i> My Transfer Applications</h3>
-                <a href="{% url 'student_application_form' %}" class="view-all">
-                    New Application <i class="fas fa-arrow-right ms-2"></i>
+        
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
                 </a>
-            </div>
-
-            {% if applications %}
-                {% for app in applications %}
-                <div class="application-card">
-                    <div class="application-status">
-                        <span class="status-badge 
-                            {% if app.status == 'pending_hod' %}pending
-                            {% elif app.status == 'hod_approved' %}approved
-                            {% elif app.status == 'hod_rejected' %}rejected
-                            {% elif app.status == 'dean_approved' %}approved
-                            {% elif app.status == 'dean_rejected' %}rejected
-                            {% elif app.status == 'completed' %}completed
-                            {% endif %}">
-                            {% if app.status == 'pending_hod' %}Pending HOD Review
-                            {% elif app.status == 'hod_approved' %}HOD Approved
-                            {% elif app.status == 'hod_rejected' %}HOD Rejected
-                            {% elif app.status == 'pending_dean' %}Pending Dean Review
-                            {% elif app.status == 'dean_approved' %}Dean Approved
-                            {% elif app.status == 'dean_rejected' %}Dean Rejected
-                            {% elif app.status == 'pending_registrar' %}Pending Registrar
-                            {% elif app.status == 'registrar_approved' %}Registrar Approved
-                            {% elif app.status == 'registrar_rejected' %}Registrar Rejected
-                            {% elif app.status == 'completed' %}✅ Completed
-                            {% endif %}
-                        </span>
-                    </div>
-                    
-                    <h5 class="application-title">
-                        Transfer to {{ app.requested_program.name }}
-                    </h5>
-                    
-                    <div class="application-meta">
-                        <span><i class="fas fa-calendar"></i> {{ app.application_date|date:"M d, Y" }}</span>
-                        <span><i class="fas fa-graduation-cap"></i> From {{ app.current_program.faculty.code }}</span>
-                        <span><i class="fas fa-map-marker-alt"></i> To {{ app.requested_program.faculty.code }}</span>
-                    </div>
-                    
-                    {% if app.reason %}
-                    <div class="mb-3">
-                        <small class="text-muted"><i class="fas fa-quote-left me-2"></i>{{ app.reason|truncatechars:100 }}</small>
-                    </div>
-                    {% endif %}
-                    
-                    <!-- Progress Bar -->
-                    <div class="application-progress">
-                        <div class="progress-bar 
-                            {% if app.status == 'pending_hod' %}pending
-                            {% elif app.status == 'hod_approved' %}hod-approved
-                            {% elif app.status == 'hod_rejected' %}pending
-                            {% elif app.status == 'dean_approved' %}dean-approved
-                            {% elif app.status == 'dean_rejected' %}pending
-                            {% elif app.status == 'completed' %}completed
-                            {% endif %}">
-                        </div>
-                    </div>
-                    
-                    {% if app.hod_comment or app.dean_comment or app.registrar_comment %}
-                    <div class="mt-3 p-3 bg-light rounded">
-                        <small class="text-muted"><i class="fas fa-comment me-2"></i>Comments:</small>
-                        {% if app.hod_comment %}
-                        <div class="mt-2"><strong>HOD:</strong> {{ app.hod_comment }}</div>
-                        {% endif %}
-                        {% if app.dean_comment %}
-                        <div class="mt-2"><strong>Dean:</strong> {{ app.dean_comment }}</div>
-                        {% endif %}
-                        {% if app.registrar_comment %}
-                        <div class="mt-2"><strong>Registrar:</strong> {{ app.registrar_comment }}</div>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                    
-                    {% if app.new_admission_number %}
-                    <div class="mt-3 alert alert-success">
-                        <i class="fas fa-check-circle me-2"></i>
-                        New Admission Number: <strong>{{ app.new_admission_number }}</strong>
-                    </div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            {% else %}
-                <div class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <h4>No Applications Yet</h4>
-                    <p>Ready to transfer? Start your application now!</p>
-                    <a href="{% url 'student_application_form' %}" class="btn btn-primary">
-                        <i class="fas fa-plus-circle me-2"></i>Apply for Transfer
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- Sidebar -->
-        <div class="col-lg-4">
-            <!-- Quick Actions -->
-            <div class="quick-actions mb-4">
-                <h5 class="mb-3"><i class="fas fa-bolt me-2 text-warning"></i>Quick Actions</h5>
-                <a href="{% url 'student_application_form' %}" class="action-button">
-                    <i class="fas fa-file-alt me-3"></i> New Transfer Application
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Socials</span>
                 </a>
-                <a href="#" class="action-button">
-                    <i class="fas fa-print me-3"></i> Print Applications
-                </a>
-                <a href="#" class="action-button">
-                    <i class="fas fa-user-edit me-3"></i> Update Profile
-                </a>
-                <a href="{% url 'report_dashboard' %}" class="action-button">
-                    <i class="fas fa-chart-bar me-3"></i> View Reports
-                </a>
-            </div>
-
-            <!-- Notifications -->
-            <div class="quick-actions">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="mb-0"><i class="fas fa-bell me-2 text-warning"></i>Notifications</h5>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Message</span>
                     {% if notifications %}
-                    <span class="badge bg-danger">{{ notifications.count }}</span>
+                    <span class="badge">{{ notifications.count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'student_application_form' %}" class="nav-link">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Admission</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-book"></i>
+                    <span>Academic</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Repository</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-coins"></i>
+                    <span>Financials</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Timetable</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-star"></i>
+                    <span>Evaluations</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>Complaints</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-question-circle"></i>
+                    <span>FAQs</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-robot"></i>
+                    <span>Virtual Assistant</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="page-title">
+                <h1>Dashboard</h1>
+                <p>Welcome back, {{ student.user.first_name }}</p>
+            </div>
+            <div class="user-menu">
+                <div class="notification-icon">
+                    <i class="far fa-bell"></i>
+                    {% if notifications %}
+                    <span class="notification-badge">{{ notifications.count }}</span>
                     {% endif %}
                 </div>
-                
-                {% if notifications %}
-                    {% for note in notifications %}
-                    <div class="notification-item {% if not note.is_read %}unread{% endif %}">
-                        <p class="mb-1">{{ note.message }}</p>
-                        <small class="notification-time">
-                            <i class="far fa-clock me-1"></i>{{ note.created_at|timesince }} ago
-                        </small>
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {{ student.user.first_name|first }}{{ student.user.last_name|first }}
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="text-center py-4">
-                        <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">No new notifications</p>
+                    <div class="user-info">
+                        <p class="user-name">{{ student.user.get_full_name }}</p>
+                        <p class="user-role">Student · {{ student.current_program.faculty.code }}</p>
                     </div>
-                {% endif %}
+                </div>
             </div>
+        </div>
+
+        <!-- Welcome Card -->
+        <div class="welcome-card">
+            <div class="welcome-content">
+                <h2>Welcome back, {{ student.user.first_name }} 👋</h2>
+                <p>We're delighted to have you. Need help on system walk through? Navigate to virtual assistant on the side menu.</p>
+                <div class="welcome-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">{{ applications|length }}</div>
+                        <div class="stat-label">Applications</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Sem 2</div>
+                        <div class="stat-label">2025/2026</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Year {{ student.current_year }}</div>
+                        <div class="stat-label">{{ student.current_program.faculty.code }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Registered Units (Your Applications) -->
+        <div class="section-header">
+            <h3>📋 Current Transfer Applications</h3>
+            <a href="{% url 'student_application_form' %}" class="view-all">
+                New Application <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Program Name</th>
+                        <th>Faculty</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if applications %}
+                        {% for app in applications %}
+                        <tr>
+                            <td><strong>{{ app.requested_program.name }}</strong></td>
+                            <td>{{ app.requested_program.faculty.name }}</td>
+                            <td>
+                                <span class="status-badge 
+                                    {% if 'pending' in app.status %}status-pending
+                                    {% elif 'approved' in app.status or 'completed' in app.status %}status-approved
+                                    {% elif 'rejected' in app.status %}status-pending
+                                    {% else %}status-progress{% endif %}">
+                                    {% if app.status == 'pending_hod' %}Pending HOD
+                                    {% elif app.status == 'hod_approved' %}HOD Approved
+                                    {% elif app.status == 'hod_rejected' %}Rejected
+                                    {% elif app.status == 'dean_approved' %}Dean Approved
+                                    {% elif app.status == 'dean_rejected' %}Rejected
+                                    {% elif app.status == 'pending_registrar' %}Pending Registrar
+                                    {% elif app.status == 'registrar_approved' %}Registrar Approved
+                                    {% elif app.status == 'registrar_rejected' %}Rejected
+                                    {% elif app.status == 'completed' %}✅ Completed
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>{{ app.application_date|date:"M d, Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No transfer applications yet</p>
+                                <a href="{% url 'student_application_form' %}" class="btn btn-primary btn-sm">
+                                    Apply for Transfer
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- View All Link -->
+        <div class="text-end mb-4">
+            <a href="#" class="view-all">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="info-grid">
+            <div class="info-card">
+                <h4>Fee Balance</h4>
+                <div class="value">KSH 0.00</div>
+                <div class="small">↑ Current balance</div>
+            </div>
+            <div class="info-card">
+                <h4>Current Session Progress</h4>
+                <div class="progress">
+                    <div class="progress-bar" style="width: 38%"></div>
+                </div>
+                <div class="progress-label">
+                    <span>38% Complete</span>
+                    <span>Semester 2 · 2025/2026</span>
+                </div>
+                <p class="mt-2 small text-muted">
+                    <i class="fas fa-graduation-cap me-2"></i>
+                    BACHELOR OF SCIENCE IN COMPUTER SCIENCE
+                </p>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="quick-links">
+            <a href="#" class="quick-link">
+                <i class="fas fa-credit-card"></i>
+                <span>Fee Statement</span>
+            </a>
+            <a href="#" class="quick-link">
+                <i class="fas fa-calendar-check"></i>
+                <span>Exam Card</span>
+            </a>
+            <a href="#" class="quick-link">
+                <i class="fas fa-download"></i>
+                <span>Download Reports</span>
+            </a>
+            <a href="{% url 'logout' %}" class="quick-link">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
         </div>
     </div>
 </div>
 {% endblock %}
-
-
-
-
-
