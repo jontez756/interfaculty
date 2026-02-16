@@ -4,16 +4,20 @@
 {% block content %}
 <style>
     :root {
-        --kfu-primary: #800000; /* Maroon/Burgundy color */
-        --kfu-secondary: #ffd700; /* Gold accent */
-        --kfu-light: #f8f9fa;
-        --kfu-dark: #343a40;
-        --kfu-sidebar: #1a1a2c;
-        --kfu-text: #4a5568;
+        --primary: #2c3e50;
+        --secondary: #3498db;
+        --accent: #e74c3c;
+        --success: #27ae60;
+        --warning: #f39c12;
+        --light: #f8f9fa;
+        --dark: #2c3e50;
+        --sidebar-bg: #1a1a2c;
+        --sidebar-text: rgba(255,255,255,0.8);
+        --sidebar-hover: #16213e;
     }
 
     body {
-        background-color: #f0f2f5;
+        background-color: #f5f7fa;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         margin: 0;
         padding: 0;
@@ -28,14 +32,13 @@
     /* Sidebar Styles */
     .sidebar {
         width: 280px;
-        background: var(--kfu-sidebar);
+        background: var(--sidebar-bg);
         color: white;
         position: fixed;
         left: 0;
         top: 0;
         bottom: 0;
         overflow-y: auto;
-        transition: all 0.3s;
         z-index: 1000;
     }
 
@@ -71,22 +74,22 @@
         display: flex;
         align-items: center;
         padding: 12px 25px;
-        color: rgba(255,255,255,0.8);
+        color: var(--sidebar-text);
         text-decoration: none;
         transition: all 0.3s;
         border-left: 3px solid transparent;
     }
 
     .nav-link:hover {
-        background: rgba(255,255,255,0.05);
+        background: var(--sidebar-hover);
         color: white;
-        border-left-color: var(--kfu-secondary);
+        border-left-color: var(--secondary);
     }
 
     .nav-link.active {
-        background: rgba(255,215,0,0.1);
-        color: var(--kfu-secondary);
-        border-left-color: var(--kfu-secondary);
+        background: var(--sidebar-hover);
+        color: white;
+        border-left-color: var(--secondary);
     }
 
     .nav-link i {
@@ -99,8 +102,8 @@
     }
 
     .nav-link .badge {
-        background: var(--kfu-secondary);
-        color: var(--kfu-sidebar);
+        background: var(--secondary);
+        color: white;
         font-size: 0.75rem;
         padding: 3px 8px;
         border-radius: 12px;
@@ -128,7 +131,7 @@
     .page-title h1 {
         font-size: 1.8rem;
         font-weight: 600;
-        color: var(--kfu-dark);
+        color: var(--dark);
         margin: 0;
     }
 
@@ -157,7 +160,7 @@
         position: absolute;
         top: -5px;
         right: -5px;
-        background: #e53e3e;
+        background: var(--accent);
         color: white;
         font-size: 0.7rem;
         padding: 3px 6px;
@@ -174,7 +177,7 @@
     .user-avatar {
         width: 40px;
         height: 40px;
-        background: linear-gradient(135deg, var(--kfu-primary), #b3002d);
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -190,7 +193,7 @@
 
     .user-name {
         font-weight: 600;
-        color: var(--kfu-dark);
+        color: var(--dark);
         margin: 0;
     }
 
@@ -202,12 +205,12 @@
 
     /* Welcome Card */
     .welcome-card {
-        background: linear-gradient(135deg, var(--kfu-primary), #b3002d);
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
         border-radius: 15px;
         padding: 30px;
         color: white;
         margin-bottom: 30px;
-        box-shadow: 0 10px 30px rgba(128,0,0,0.2);
+        box-shadow: 0 10px 30px rgba(44, 62, 80, 0.2);
         position: relative;
         overflow: hidden;
     }
@@ -219,7 +222,7 @@
         right: -50%;
         width: 200%;
         height: 200%;
-        background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
         animation: rotate 20s linear infinite;
     }
 
@@ -257,7 +260,7 @@
     .stat-value {
         font-size: 1.8rem;
         font-weight: 700;
-        color: var(--kfu-secondary);
+        color: white;
     }
 
     .stat-label {
@@ -276,12 +279,12 @@
     .section-header h3 {
         font-size: 1.3rem;
         font-weight: 600;
-        color: var(--kfu-dark);
+        color: var(--dark);
         margin: 0;
     }
 
     .view-all {
-        color: var(--kfu-primary);
+        color: var(--secondary);
         text-decoration: none;
         font-weight: 500;
         display: flex;
@@ -292,7 +295,7 @@
 
     .view-all:hover {
         gap: 10px;
-        color: #b3002d;
+        color: var(--primary);
     }
 
     /* Table Styles */
@@ -310,8 +313,8 @@
     }
 
     .table thead th {
-        background: var(--kfu-light);
-        color: var(--kfu-dark);
+        background: var(--light);
+        color: var(--dark);
         font-weight: 600;
         border: none;
         padding: 15px;
@@ -346,62 +349,22 @@
         color: #1e40af;
     }
 
-    /* Info Cards */
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+    .status-rejected {
+        background: #fee2e2;
+        color: #b91c1c;
     }
 
-    .info-card {
-        background: white;
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    }
-
-    .info-card h4 {
-        font-size: 1.1rem;
-        color: #718096;
-        margin-bottom: 10px;
-    }
-
-    .info-card .value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--kfu-primary);
-    }
-
-    .info-card .small {
-        color: #48bb78;
-        font-size: 0.9rem;
-    }
-
-    .progress {
-        height: 10px;
-        background: #edf2f7;
-        border-radius: 5px;
-        margin: 15px 0 10px;
-    }
-
-    .progress-bar {
-        background: linear-gradient(90deg, var(--kfu-primary), #b3002d);
-        border-radius: 5px;
-    }
-
-    .progress-label {
-        display: flex;
-        justify-content: space-between;
-        color: #718096;
-        font-size: 0.9rem;
+    .status-completed {
+        background: #c3dafe;
+        color: #2c3e50;
     }
 
     /* Quick Links */
     .quick-links {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 15px;
-        margin-top: 30px;
+        margin-top: 20px;
     }
 
     .quick-link {
@@ -421,13 +384,13 @@
 
     .quick-link i {
         font-size: 2rem;
-        color: var(--kfu-primary);
+        color: var(--secondary);
         margin-bottom: 10px;
     }
 
     .quick-link span {
         display: block;
-        color: var(--kfu-dark);
+        color: var(--dark);
         font-weight: 500;
     }
 
@@ -445,10 +408,6 @@
         .quick-links {
             grid-template-columns: repeat(2, 1fr);
         }
-        
-        .info-grid {
-            grid-template-columns: 1fr;
-        }
     }
 </style>
 
@@ -456,7 +415,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>KAIMOSI FRIENDS<br>UNIVERSITY</h2>
+            <h2>INTER-FACULTY<br>TRANSFER</h2>
             <p>Student Portal</p>
         </div>
         
@@ -468,60 +427,24 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-share-alt"></i>
-                    <span>Socials</span>
+                <a href="{% url 'student_application_form' %}" class="nav-link">
+                    <i class="fas fa-file-alt"></i>
+                    <span>New Application</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
-                    <i class="fas fa-envelope"></i>
-                    <span>Message</span>
+                    <i class="fas fa-history"></i>
+                    <span>Application History</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
                     {% if notifications %}
                     <span class="badge">{{ notifications.count }}</span>
                     {% endif %}
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'student_application_form' %}" class="nav-link">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>Admission</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-book"></i>
-                    <span>Academic</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-folder-open"></i>
-                    <span>Repository</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-coins"></i>
-                    <span>Financials</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Timetable</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-star"></i>
-                    <span>Evaluations</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span>Complaints</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -531,9 +454,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-robot"></i>
-                    <span>Virtual Assistant</span>
+                <a href="{% url 'logout' %}" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
                 </a>
             </li>
         </ul>
@@ -560,7 +483,7 @@
                     </div>
                     <div class="user-info">
                         <p class="user-name">{{ student.user.get_full_name }}</p>
-                        <p class="user-role">Student · {{ student.current_program.faculty.code }}</p>
+                        <p class="user-role">{{ student.current_program.name }}</p>
                     </div>
                 </div>
             </div>
@@ -569,28 +492,34 @@
         <!-- Welcome Card -->
         <div class="welcome-card">
             <div class="welcome-content">
-                <h2>Welcome back, {{ student.user.first_name }} 👋</h2>
-                <p>We're delighted to have you. Need help on system walk through? Navigate to virtual assistant on the side menu.</p>
+                <h2>Welcome back, {{ student.user.first_name }}! 👋</h2>
+                <p>Manage your inter-faculty transfer applications here. Start a new application or track existing ones.</p>
                 <div class="welcome-stats">
                     <div class="stat-item">
                         <div class="stat-value">{{ applications|length }}</div>
-                        <div class="stat-label">Applications</div>
+                        <div class="stat-label">Total Apps</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">Sem 2</div>
-                        <div class="stat-label">2025/2026</div>
+                        <div class="stat-value">
+                            {% with pending=applications|dictsort:"status" %}
+                                {{ applications|length }}
+                            {% endwith %}
+                        </div>
+                        <div class="stat-label">Pending</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">Year {{ student.current_year }}</div>
-                        <div class="stat-label">{{ student.current_program.faculty.code }}</div>
+                        <div class="stat-value">
+                            {{ student.current_year }}
+                        </div>
+                        <div class="stat-label">Year {{ student.current_year }}</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Current Registered Units (Your Applications) -->
+        <!-- Current Applications Table -->
         <div class="section-header">
-            <h3>📋 Current Transfer Applications</h3>
+            <h3>📋 My Transfer Applications</h3>
             <a href="{% url 'student_application_form' %}" class="view-all">
                 New Application <i class="fas fa-arrow-right"></i>
             </a>
@@ -600,10 +529,11 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Program Name</th>
+                        <th>Requested Program</th>
                         <th>Faculty</th>
                         <th>Status</th>
-                        <th>Date</th>
+                        <th>Date Applied</th>
+                        <th>Comments</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -614,32 +544,47 @@
                             <td>{{ app.requested_program.faculty.name }}</td>
                             <td>
                                 <span class="status-badge 
-                                    {% if 'pending' in app.status %}status-pending
-                                    {% elif 'approved' in app.status or 'completed' in app.status %}status-approved
-                                    {% elif 'rejected' in app.status %}status-pending
-                                    {% else %}status-progress{% endif %}">
-                                    {% if app.status == 'pending_hod' %}Pending HOD
-                                    {% elif app.status == 'hod_approved' %}HOD Approved
-                                    {% elif app.status == 'hod_rejected' %}Rejected
-                                    {% elif app.status == 'dean_approved' %}Dean Approved
-                                    {% elif app.status == 'dean_rejected' %}Rejected
-                                    {% elif app.status == 'pending_registrar' %}Pending Registrar
-                                    {% elif app.status == 'registrar_approved' %}Registrar Approved
-                                    {% elif app.status == 'registrar_rejected' %}Rejected
+                                    {% if app.status == 'pending_hod' %}status-pending
+                                    {% elif app.status == 'hod_approved' %}status-progress
+                                    {% elif app.status == 'hod_rejected' %}status-rejected
+                                    {% elif app.status == 'dean_approved' %}status-progress
+                                    {% elif app.status == 'dean_rejected' %}status-rejected
+                                    {% elif app.status == 'pending_registrar' %}status-progress
+                                    {% elif app.status == 'registrar_approved' %}status-approved
+                                    {% elif app.status == 'registrar_rejected' %}status-rejected
+                                    {% elif app.status == 'completed' %}status-completed
+                                    {% endif %}">
+                                    {% if app.status == 'pending_hod' %}⏳ Pending HOD
+                                    {% elif app.status == 'hod_approved' %}✓ HOD Approved
+                                    {% elif app.status == 'hod_rejected' %}✗ HOD Rejected
+                                    {% elif app.status == 'dean_approved' %}✓ Dean Approved
+                                    {% elif app.status == 'dean_rejected' %}✗ Dean Rejected
+                                    {% elif app.status == 'pending_registrar' %}⏳ Pending Registrar
+                                    {% elif app.status == 'registrar_approved' %}✓ Registrar Approved
+                                    {% elif app.status == 'registrar_rejected' %}✗ Registrar Rejected
                                     {% elif app.status == 'completed' %}✅ Completed
                                     {% endif %}
                                 </span>
                             </td>
                             <td>{{ app.application_date|date:"M d, Y" }}</td>
+                            <td>
+                                {% if app.hod_comment %}
+                                <small>HOD: {{ app.hod_comment|truncatechars:30 }}</small><br>
+                                {% endif %}
+                                {% if app.dean_comment %}
+                                <small>Dean: {{ app.dean_comment|truncatechars:30 }}</small>
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endfor %}
                     {% else %}
                         <tr>
-                            <td colspan="4" class="text-center py-4">
-                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                                <p class="text-muted">No transfer applications yet</p>
-                                <a href="{% url 'student_application_form' %}" class="btn btn-primary btn-sm">
-                                    Apply for Transfer
+                            <td colspan="5" class="text-center py-5">
+                                <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+                                <h5 class="text-muted">No transfer applications yet</h5>
+                                <p class="text-muted mb-3">Start your first application to transfer between faculties</p>
+                                <a href="{% url 'student_application_form' %}" class="btn btn-primary">
+                                    <i class="fas fa-plus-circle me-2"></i>Apply for Transfer
                                 </a>
                             </td>
                         </tr>
@@ -648,53 +593,19 @@
             </table>
         </div>
 
-        <!-- View All Link -->
-        <div class="text-end mb-4">
-            <a href="#" class="view-all">
-                View All <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-
-        <!-- Info Cards -->
-        <div class="info-grid">
-            <div class="info-card">
-                <h4>Fee Balance</h4>
-                <div class="value">KSH 0.00</div>
-                <div class="small">↑ Current balance</div>
-            </div>
-            <div class="info-card">
-                <h4>Current Session Progress</h4>
-                <div class="progress">
-                    <div class="progress-bar" style="width: 38%"></div>
-                </div>
-                <div class="progress-label">
-                    <span>38% Complete</span>
-                    <span>Semester 2 · 2025/2026</span>
-                </div>
-                <p class="mt-2 small text-muted">
-                    <i class="fas fa-graduation-cap me-2"></i>
-                    BACHELOR OF SCIENCE IN COMPUTER SCIENCE
-                </p>
-            </div>
-        </div>
-
-        <!-- Quick Links -->
+        <!-- Quick Actions -->
         <div class="quick-links">
-            <a href="#" class="quick-link">
-                <i class="fas fa-credit-card"></i>
-                <span>Fee Statement</span>
+            <a href="{% url 'student_application_form' %}" class="quick-link">
+                <i class="fas fa-file-alt"></i>
+                <span>New Application</span>
             </a>
             <a href="#" class="quick-link">
-                <i class="fas fa-calendar-check"></i>
-                <span>Exam Card</span>
+                <i class="fas fa-print"></i>
+                <span>Print Applications</span>
             </a>
             <a href="#" class="quick-link">
-                <i class="fas fa-download"></i>
-                <span>Download Reports</span>
-            </a>
-            <a href="{% url 'logout' %}" class="quick-link">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
+                <i class="fas fa-question-circle"></i>
+                <span>Transfer FAQs</span>
             </a>
         </div>
     </div>
