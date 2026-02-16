@@ -1,23 +1,583 @@
-
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4>Student Dashboard</h4>
+<style>
+    :root {
+        --primary: #2c3e50;
+        --secondary: #3498db;
+        --accent: #e74c3c;
+        --success: #27ae60;
+        --warning: #f39c12;
+        --light: #ecf0f1;
+        --dark: #2c3e50;
+        --text: #34495e;
+        --border: #bdc3c7;
+    }
+    
+    body {
+        background-color: #f5f7fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    /* Welcome Banner */
+    .welcome-banner {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .student-avatar {
+        width: 80px;
+        height: 80px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .student-avatar i {
+        font-size: 40px;
+        color: #764ba2;
+    }
+    
+    .welcome-text h1 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    
+    .welcome-text p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 0;
+    }
+    
+    .student-badge {
+        background: rgba(255,255,255,0.2);
+        padding: 8px 20px;
+        border-radius: 30px;
+        display: inline-block;
+        margin-top: 10px;
+    }
+    
+    /* Stats Cards */
+    .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        border: 1px solid rgba(0,0,0,0.05);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--secondary), var(--primary));
+    }
+    
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+    
+    .stat-icon i {
+        font-size: 30px;
+    }
+    
+    .stat-icon.pending { background: #fff3e0; color: #f39c12; }
+    .stat-icon.approved { background: #e8f5e9; color: #27ae60; }
+    .stat-icon.completed { background: #e3f2fd; color: #3498db; }
+    
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 5px;
+    }
+    
+    .stat-label {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Section Headers */
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--border);
+    }
+    
+    .section-header h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin: 0;
+    }
+    
+    .section-header h3 i {
+        color: var(--secondary);
+        margin-right: 10px;
+    }
+    
+    .view-all {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    
+    .view-all:hover {
+        color: var(--primary);
+    }
+    
+    /* Application Cards */
+    .application-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        margin-bottom: 15px;
+        border: 1px solid rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+        position: relative;
+    }
+    
+    .application-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .application-status {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    
+    .status-badge {
+        padding: 5px 15px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .status-badge.pending {
+        background: #fff3e0;
+        color: #f39c12;
+    }
+    
+    .status-badge.approved {
+        background: #e8f5e9;
+        color: #27ae60;
+    }
+    
+    .status-badge.rejected {
+        background: #ffebee;
+        color: #e74c3c;
+    }
+    
+    .status-badge.completed {
+        background: #e3f2fd;
+        color: #3498db;
+    }
+    
+    .application-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--dark);
+        margin-bottom: 10px;
+        padding-right: 120px;
+    }
+    
+    .application-meta {
+        display: flex;
+        gap: 20px;
+        color: #7f8c8d;
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+    
+    .application-meta i {
+        color: var(--secondary);
+        width: 20px;
+        margin-right: 5px;
+    }
+    
+    .application-progress {
+        margin-top: 15px;
+        height: 6px;
+        background: var(--light);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        border-radius: 3px;
+        transition: width 0.5s ease;
+    }
+    
+    .progress-bar.pending { background: #f39c12; width: 25%; }
+    .progress-bar.hod-approved { background: #3498db; width: 50%; }
+    .progress-bar.dean-approved { background: #9b59b6; width: 75%; }
+    .progress-bar.completed { background: #27ae60; width: 100%; }
+    
+    /* Quick Actions */
+    .quick-actions {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+    
+    .action-button {
+        display: block;
+        padding: 15px;
+        margin-bottom: 10px;
+        background: var(--light);
+        border-radius: 10px;
+        color: var(--dark);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+    
+    .action-button:hover {
+        background: white;
+        border-color: var(--secondary);
+        transform: translateX(5px);
+        color: var(--secondary);
+    }
+    
+    .action-button i {
+        width: 30px;
+        color: var(--secondary);
+    }
+    
+    /* Notifications */
+    .notification-item {
+        padding: 15px;
+        border-bottom: 1px solid var(--light);
+        transition: background 0.3s ease;
+    }
+    
+    .notification-item:hover {
+        background: var(--light);
+    }
+    
+    .notification-item.unread {
+        background: #fff3e0;
+        border-left: 3px solid #f39c12;
+    }
+    
+    .notification-time {
+        font-size: 0.85rem;
+        color: #95a5a6;
+    }
+    
+    /* Empty States */
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+    }
+    
+    .empty-state i {
+        font-size: 60px;
+        color: var(--border);
+        margin-bottom: 20px;
+    }
+    
+    .empty-state h4 {
+        color: var(--dark);
+        margin-bottom: 10px;
+    }
+    
+    .empty-state p {
+        color: #95a5a6;
+        margin-bottom: 20px;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, var(--secondary), var(--primary));
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .welcome-text h1 {
+            font-size: 1.8rem;
+        }
+        
+        .application-meta {
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .application-title {
+            padding-right: 0;
+        }
+        
+        .application-status {
+            position: static;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+<!-- Welcome Banner -->
+<div class="welcome-banner">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <div class="student-avatar">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
             </div>
-            <div class="card-body">
-                <h5>Welcome, {{ student.user.get_full_name }}!</h5>
-                <p><strong>Admission Number:</strong> {{ student.admission_number }}</p>
-                <p><strong>Program:</strong> {{ student.current_program.name }}</p>
-                <p><strong>Faculty:</strong> {{ student.current_program.faculty.name }}</p>
-                
-                <a href="{% url 'student_application_form' %}" class="btn btn-success">Apply for Transfer</a>
-                <a href="{% url 'logout' %}" class="btn btn-outline-danger">Logout</a>
+            <div class="col">
+                <div class="welcome-text">
+                    <h1>Welcome back, {{ student.user.first_name }}! 👋</h1>
+                    <p>{{ student.current_program.name }} · Year {{ student.current_year }}</p>
+                    <div class="student-badge">
+                        <i class="fas fa-id-card me-2"></i>
+                        {{ student.admission_number }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}    
+
+<div class="container">
+    <!-- Stats Row -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-value">{{ applications|length }}</div>
+                <div class="stat-label">Total Applications</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-icon approved">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-value">{{ applications|length }}</div>
+                <div class="stat-label">Active Applications</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fff3e0; color: #f39c12;">
+                    <i class="fas fa-hourglass-half"></i>
+                </div>
+                <div class="stat-value">{{ notifications.count }}</div>
+                <div class="stat-label">Notifications</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="stat-card">
+                <div class="stat-icon completed">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-value">2026</div>
+                <div class="stat-label">Academic Year</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content - Applications -->
+        <div class="col-lg-8">
+            <div class="section-header">
+                <h3><i class="fas fa-file-alt"></i> My Transfer Applications</h3>
+                <a href="{% url 'student_application_form' %}" class="view-all">
+                    New Application <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+
+            {% if applications %}
+                {% for app in applications %}
+                <div class="application-card">
+                    <div class="application-status">
+                        <span class="status-badge 
+                            {% if app.status == 'pending_hod' %}pending
+                            {% elif app.status == 'hod_approved' %}approved
+                            {% elif app.status == 'hod_rejected' %}rejected
+                            {% elif app.status == 'dean_approved' %}approved
+                            {% elif app.status == 'dean_rejected' %}rejected
+                            {% elif app.status == 'completed' %}completed
+                            {% endif %}">
+                            {% if app.status == 'pending_hod' %}Pending HOD Review
+                            {% elif app.status == 'hod_approved' %}HOD Approved
+                            {% elif app.status == 'hod_rejected' %}HOD Rejected
+                            {% elif app.status == 'pending_dean' %}Pending Dean Review
+                            {% elif app.status == 'dean_approved' %}Dean Approved
+                            {% elif app.status == 'dean_rejected' %}Dean Rejected
+                            {% elif app.status == 'pending_registrar' %}Pending Registrar
+                            {% elif app.status == 'registrar_approved' %}Registrar Approved
+                            {% elif app.status == 'registrar_rejected' %}Registrar Rejected
+                            {% elif app.status == 'completed' %}✅ Completed
+                            {% endif %}
+                        </span>
+                    </div>
+                    
+                    <h5 class="application-title">
+                        Transfer to {{ app.requested_program.name }}
+                    </h5>
+                    
+                    <div class="application-meta">
+                        <span><i class="fas fa-calendar"></i> {{ app.application_date|date:"M d, Y" }}</span>
+                        <span><i class="fas fa-graduation-cap"></i> From {{ app.current_program.faculty.code }}</span>
+                        <span><i class="fas fa-map-marker-alt"></i> To {{ app.requested_program.faculty.code }}</span>
+                    </div>
+                    
+                    {% if app.reason %}
+                    <div class="mb-3">
+                        <small class="text-muted"><i class="fas fa-quote-left me-2"></i>{{ app.reason|truncatechars:100 }}</small>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Progress Bar -->
+                    <div class="application-progress">
+                        <div class="progress-bar 
+                            {% if app.status == 'pending_hod' %}pending
+                            {% elif app.status == 'hod_approved' %}hod-approved
+                            {% elif app.status == 'hod_rejected' %}pending
+                            {% elif app.status == 'dean_approved' %}dean-approved
+                            {% elif app.status == 'dean_rejected' %}pending
+                            {% elif app.status == 'completed' %}completed
+                            {% endif %}">
+                        </div>
+                    </div>
+                    
+                    {% if app.hod_comment or app.dean_comment or app.registrar_comment %}
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <small class="text-muted"><i class="fas fa-comment me-2"></i>Comments:</small>
+                        {% if app.hod_comment %}
+                        <div class="mt-2"><strong>HOD:</strong> {{ app.hod_comment }}</div>
+                        {% endif %}
+                        {% if app.dean_comment %}
+                        <div class="mt-2"><strong>Dean:</strong> {{ app.dean_comment }}</div>
+                        {% endif %}
+                        {% if app.registrar_comment %}
+                        <div class="mt-2"><strong>Registrar:</strong> {{ app.registrar_comment }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if app.new_admission_number %}
+                    <div class="mt-3 alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        New Admission Number: <strong>{{ app.new_admission_number }}</strong>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h4>No Applications Yet</h4>
+                    <p>Ready to transfer? Start your application now!</p>
+                    <a href="{% url 'student_application_form' %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-2"></i>Apply for Transfer
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="quick-actions mb-4">
+                <h5 class="mb-3"><i class="fas fa-bolt me-2 text-warning"></i>Quick Actions</h5>
+                <a href="{% url 'student_application_form' %}" class="action-button">
+                    <i class="fas fa-file-alt me-3"></i> New Transfer Application
+                </a>
+                <a href="#" class="action-button">
+                    <i class="fas fa-print me-3"></i> Print Applications
+                </a>
+                <a href="#" class="action-button">
+                    <i class="fas fa-user-edit me-3"></i> Update Profile
+                </a>
+                <a href="{% url 'report_dashboard' %}" class="action-button">
+                    <i class="fas fa-chart-bar me-3"></i> View Reports
+                </a>
+            </div>
+
+            <!-- Notifications -->
+            <div class="quick-actions">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0"><i class="fas fa-bell me-2 text-warning"></i>Notifications</h5>
+                    {% if notifications %}
+                    <span class="badge bg-danger">{{ notifications.count }}</span>
+                    {% endif %}
+                </div>
+                
+                {% if notifications %}
+                    {% for note in notifications %}
+                    <div class="notification-item {% if not note.is_read %}unread{% endif %}">
+                        <p class="mb-1">{{ note.message }}</p>
+                        <small class="notification-time">
+                            <i class="far fa-clock me-1"></i>{{ note.created_at|timesince }} ago
+                        </small>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No new notifications</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
