@@ -3,60 +3,31 @@
 
 {% block content %}
 <style>
-    /* Modern CSS Reset */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    :root {
-        --primary: #2563eb;
-        --primary-dark: #1d4ed8;
-        --primary-light: #3b82f6;
-        --secondary: #7c3aed;
-        --accent: #06b6d4;
-        --dark: #0f172a;
-        --gray-800: #1e293b;
-        --gray-600: #475569;
-        --gray-400: #94a3b8;
-        --gray-200: #e2e8f0;
-        --gray-100: #f1f5f9;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --error: #ef4444;
-        --glass-bg: rgba(255, 255, 255, 0.85);
-        --glass-border: rgba(255, 255, 255, 0.2);
-        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-    }
-
     body {
-        font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: var(--dark);
-        overflow-x: hidden;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        min-height: 100vh;
     }
 
-    /* Animated Background */
+    /* Full screen background */
     .login-wrapper {
         min-height: 100vh;
-        width: 100%;
+        width: 100vw;
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
-        background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%),
-                    url('{% static "images/login.png" %}') no-repeat center center;
+        background: url('{% static "images/login.png" %}') no-repeat center center fixed;
         background-size: cover;
-        background-attachment: fixed;
-        padding: 20px;
         position: relative;
-        overflow: hidden;
+        padding: 20px;
     }
 
-    /* Animated Grid Overlay */
+    /* Semi-transparent overlay for better readability */
     .login-wrapper::before {
         content: '';
         position: absolute;
@@ -64,454 +35,204 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-        background-size: 50px 50px;
-        animation: gridMove 20s linear infinite;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(2px);
     }
 
-    @keyframes gridMove {
-        0% { transform: translate(0, 0); }
-        100% { transform: translate(50px, 50px); }
-    }
-
-    /* Floating Orbs */
-    .orb {
-        position: absolute;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary-light), var(--secondary));
-        filter: blur(60px);
-        opacity: 0.15;
-        animation: float 10s ease-in-out infinite;
-    }
-
-    .orb-1 {
-        width: 300px;
-        height: 300px;
-        top: -100px;
-        right: -100px;
-        animation-delay: 0s;
-    }
-
-    .orb-2 {
-        width: 400px;
-        height: 400px;
-        bottom: -150px;
-        left: -150px;
-        background: linear-gradient(135deg, var(--secondary), var(--accent));
-        animation-delay: -5s;
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translate(0, 0); }
-        50% { transform: translate(30px, 30px); }
-    }
-
-    /* Glass Card */
+    /* Compact Login Card */
     .login-card {
         width: 100%;
-        max-width: 440px;
-        background: var(--glass-bg);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-radius: 32px;
-        border: 1px solid var(--glass-border);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        padding: 48px 40px;
+        max-width: 380px;  /* Smaller width */
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        padding: 30px 28px;  /* Reduced padding */
         position: relative;
         z-index: 10;
-        animation: cardAppear 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        animation: fadeIn 0.5s ease;
     }
 
-    @keyframes cardAppear {
-        from {
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Decorative Elements */
-    .card-badge {
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--primary);
-        background: rgba(37, 99, 235, 0.1);
-        padding: 6px 12px;
-        border-radius: 100px;
-        letter-spacing: 0.5px;
-        border: 1px solid rgba(37, 99, 235, 0.2);
-    }
-
+    /* Header */
     .login-header {
-        margin-bottom: 32px;
+        text-align: center;
+        margin-bottom: 20px;
     }
 
-    .login-header .greeting {
+    .login-header .kaimosi {
         font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--primary);
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-bottom: 12px;
+        color: #666;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
         display: block;
     }
 
-    .login-header h1 {
-        font-size: 2.5rem;
+    .login-header .welcome {
+        font-size: 1.8rem;
         font-weight: 700;
-        background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 8px;
+        color: #333;
         line-height: 1.2;
+        margin-bottom: 5px;
     }
 
-    .login-header p {
-        font-size: 1rem;
-        color: var(--gray-600);
+    .login-header .subtitle {
+        font-size: 0.9rem;
+        color: #777;
     }
 
-    /* Form Styles */
+    /* Form */
     .form-group {
-        margin-bottom: 24px;
-    }
-
-    .input-wrapper {
-        position: relative;
-    }
-
-    .input-icon {
-        position: absolute;
-        left: 16px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--gray-400);
-        font-size: 1.2rem;
-        transition: color 0.3s;
-        z-index: 1;
+        margin-bottom: 18px;
     }
 
     .form-control {
         width: 100%;
-        height: 56px;
-        padding: 0 16px 0 48px;
-        font-size: 1rem;
+        height: 45px;  /* Smaller height */
+        padding: 0 15px;
+        font-size: 0.95rem;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 10px;
         background: white;
-        border: 2px solid var(--gray-200);
-        border-radius: 16px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        font-family: inherit;
-        color: var(--dark);
+        transition: all 0.3s;
     }
 
     .form-control:focus {
         outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-    }
-
-    .form-control:focus + .input-icon {
-        color: var(--primary);
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
     }
 
     .form-control::placeholder {
-        color: var(--gray-400);
-        font-weight: 400;
+        color: #999;
+        font-size: 0.9rem;
     }
 
-    /* Password Strength Indicator (optional) */
-    .password-strength {
-        margin-top: 8px;
-        height: 4px;
-        background: var(--gray-200);
-        border-radius: 2px;
-        overflow: hidden;
-    }
-
-    .strength-bar {
-        height: 100%;
-        width: 0;
-        background: linear-gradient(90deg, var(--error), var(--warning), var(--success));
-        transition: width 0.3s;
-        border-radius: 2px;
-    }
-
-    /* Form Options */
-    .form-options {
+    /* Options row - smaller */
+    .options-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 24px 0 32px;
+        margin: 15px 0 20px;
+        font-size: 0.9rem;
     }
 
     .remember-me {
         display: flex;
         align-items: center;
-        gap: 8px;
-        cursor: pointer;
-    }
-
-    .checkbox-custom {
-        width: 20px;
-        height: 20px;
-        border: 2px solid var(--gray-400);
-        border-radius: 6px;
-        position: relative;
-        transition: all 0.2s;
+        gap: 6px;
+        color: #555;
     }
 
     .remember-me input[type="checkbox"] {
-        display: none;
-    }
-
-    .remember-me input[type="checkbox"]:checked + .checkbox-custom {
-        background: var(--primary);
-        border-color: var(--primary);
-    }
-
-    .remember-me input[type="checkbox"]:checked + .checkbox-custom::after {
-        content: '✓';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: white;
-        font-size: 12px;
-    }
-
-    .remember-me span {
-        color: var(--gray-600);
-        font-size: 0.95rem;
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: #4a90e2;
     }
 
     .forgot-link {
-        color: var(--primary);
+        color: #4a90e2;
         text-decoration: none;
         font-weight: 500;
-        font-size: 0.95rem;
-        transition: color 0.3s;
-        position: relative;
-    }
-
-    .forgot-link::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 0;
-        height: 1px;
-        background: var(--primary);
-        transition: width 0.3s;
     }
 
     .forgot-link:hover {
-        color: var(--primary-dark);
+        text-decoration: underline;
+        color: #2c3e50;
     }
 
-    .forgot-link:hover::after {
+    /* Button - smaller */
+    .btn-signin {
         width: 100%;
-    }
-
-    /* Button */
-    .btn-login {
-        width: 100%;
-        height: 56px;
-        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        height: 45px;
+        background: #4a90e2;
         color: white;
         border: none;
-        border-radius: 16px;
+        border-radius: 10px;
         font-size: 1rem;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        text-transform: uppercase;
+        transition: all 0.3s;
         letter-spacing: 1px;
-        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        margin-bottom: 15px;
     }
 
-    .btn-login::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        transition: left 0.5s;
-    }
-
-    .btn-login:hover {
+    .btn-signin:hover {
+        background: #357abd;
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
     }
 
-    .btn-login:hover::before {
-        left: 100%;
-    }
-
-    .btn-login:active {
+    .btn-signin:active {
         transform: translateY(0);
     }
 
-    /* Sign Up Link */
-    .signup-section {
+    /* Footer */
+    .signup-text {
         text-align: center;
-        margin-top: 24px;
-        padding-top: 24px;
-        border-top: 1px solid var(--gray-200);
-    }
-
-    .signup-prompt {
-        color: var(--gray-600);
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+        color: #666;
     }
 
     .signup-link {
-        color: var(--primary);
+        color: #4a90e2;
         text-decoration: none;
         font-weight: 600;
-        margin-left: 5px;
-        position: relative;
-        transition: color 0.3s;
-    }
-
-    .signup-link::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 0;
-        height: 1px;
-        background: var(--primary);
-        transition: width 0.3s;
+        margin-left: 4px;
     }
 
     .signup-link:hover {
-        color: var(--primary-dark);
+        text-decoration: underline;
+        color: #2c3e50;
     }
 
-    .signup-link:hover::after {
-        width: 100%;
-    }
-
-    /* Error Message */
+    /* Error message - compact */
     .error-message {
-        background: rgba(239, 68, 68, 0.1);
-        border-left: 4px solid var(--error);
-        color: var(--error);
-        padding: 16px;
-        border-radius: 12px;
-        margin-bottom: 24px;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        animation: shake 0.5s ease;
+        background: #fee;
+        color: #c33;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-size: 0.85rem;
+        border-left: 3px solid #c33;
     }
 
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-
-    .error-message i {
-        font-size: 1.2rem;
-    }
-
-    /* Responsive Design */
-    @media screen and (max-width: 480px) {
+    /* Responsive */
+    @media screen and (max-width: 400px) {
         .login-card {
-            padding: 32px 24px;
+            max-width: 100%;
+            padding: 25px 20px;
         }
 
-        .login-header h1 {
-            font-size: 2rem;
+        .login-header .welcome {
+            font-size: 1.5rem;
         }
 
-        .form-control {
-            height: 52px;
-            font-size: 16px;
-        }
-
-        .btn-login {
-            height: 52px;
-        }
-
-        .form-options {
+        .options-row {
             flex-direction: column;
-            gap: 16px;
+            gap: 10px;
             align-items: flex-start;
-        }
-
-        .orb-1, .orb-2 {
-            opacity: 0.1;
-        }
-    }
-
-    @media screen and (max-width: 360px) {
-        .login-card {
-            padding: 24px 20px;
-        }
-
-        .login-header h1 {
-            font-size: 1.8rem;
-        }
-    }
-
-    /* Tablet */
-    @media screen and (min-width: 481px) and (max-width: 768px) {
-        .login-card {
-            max-width: 400px;
-            padding: 40px 32px;
-        }
-    }
-
-    /* Landscape */
-    @media screen and (max-height: 600px) and (orientation: landscape) {
-        .login-wrapper {
-            padding: 60px 20px;
-        }
-
-        .login-card {
-            padding: 24px 32px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
         }
     }
 </style>
 
 <div class="login-wrapper">
-    <!-- Animated Orbs -->
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    
     <div class="login-card">
-        <div class="card-badge">🎓 CS 4th Year Project</div>
-        
         <div class="login-header">
-            <span class="greeting">Welcome Back</span>
-            <h1>Hi, CS Student</h1>
-            <p>Enter your credentials to access the portal</p>
+            <div class="kaimosi">KAIMOSI FRIENDS UNIVERSITY</div>
+            <div class="welcome">WELCOME BACK</div>
+            <div class="subtitle">Hi, CS Student</div>
+            <div class="subtitle" style="font-size: 0.85rem; margin-top: 5px;">Enter your credentials to access the portal</div>
         </div>
         
         {% if form.errors %}
             <div class="error-message">
-                <i class="fas fa-exclamation-circle"></i>
-                <span>Invalid username or password. Please try again.</span>
+                <i class="fas fa-exclamation-circle" style="margin-right: 6px;"></i>
+                Invalid username or password
             </div>
         {% endif %}
         
@@ -519,89 +240,39 @@
             {% csrf_token %}
             
             <div class="form-group">
-                <div class="input-wrapper">
-                    <i class="fas fa-user input-icon"></i>
-                    <input type="text" 
-                           name="username" 
-                           class="form-control" 
-                           placeholder="Admission Number / Username"
-                           value="COM/0013/2023"
-                           required>
-                </div>
+                <input type="text" 
+                       name="username" 
+                       class="form-control" 
+                       placeholder="COM/0013/2023"
+                       value="COM/0013/2023"
+                       required>
             </div>
             
             <div class="form-group">
-                <div class="input-wrapper">
-                    <i class="fas fa-lock input-icon"></i>
-                    <input type="password" 
-                           name="password" 
-                           class="form-control" 
-                           placeholder="Password"
-                           id="passwordInput"
-                           required>
-                </div>
-                <!-- Optional password strength indicator -->
-                <div class="password-strength">
-                    <div class="strength-bar" id="strengthBar"></div>
-                </div>
+                <input type="password" 
+                       name="password" 
+                       class="form-control" 
+                       placeholder="********"
+                       required>
             </div>
             
-            <div class="form-options">
+            <div class="options-row">
                 <label class="remember-me">
-                    <input type="checkbox" name="remember" hidden>
-                    <span class="checkbox-custom"></span>
+                    <input type="checkbox" name="remember">
                     <span>Remember me</span>
                 </label>
                 <a href="{% url 'password_reset' %}" class="forgot-link">Forgot Password?</a>
             </div>
             
-            <button type="submit" class="btn-login">
-                <i class="fas fa-arrow-right" style="margin-right: 8px;"></i>
-                Sign In
+            <button type="submit" class="btn-signin">
+                SIGN IN
             </button>
         </form>
         
-        <div class="signup-section">
-            <p class="signup-prompt">
-                New to the portal?
-                <a href="{% url 'register_student' %}" class="signup-link">
-                    Create Account <i class="fas fa-external-link-alt" style="font-size: 0.8rem; margin-left: 4px;"></i>
-                </a>
-            </p>
+        <div class="signup-text">
+            New to the portal? 
+            <a href="{% url 'register_student' %}" class="signup-link">Create Account</a>
         </div>
     </div>
 </div>
-
-<!-- Optional: Password strength indicator script -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const passwordInput = document.getElementById('passwordInput');
-        const strengthBar = document.getElementById('strengthBar');
-        
-        if (passwordInput && strengthBar) {
-            passwordInput.addEventListener('input', function() {
-                const password = this.value;
-                let strength = 0;
-                
-                if (password.length > 0) strength += 20;
-                if (password.length >= 8) strength += 20;
-                if (password.match(/[a-z]/)) strength += 15;
-                if (password.match(/[A-Z]/)) strength += 15;
-                if (password.match(/[0-9]/)) strength += 15;
-                if (password.match(/[^a-zA-Z0-9]/)) strength += 15;
-                
-                strength = Math.min(strength, 100);
-                strengthBar.style.width = strength + '%';
-                
-                if (strength < 40) {
-                    strengthBar.style.opacity = '0.5';
-                } else if (strength < 70) {
-                    strengthBar.style.opacity = '0.8';
-                } else {
-                    strengthBar.style.opacity = '1';
-                }
-            });
-        }
-    });
-</script>
 {% endblock %}
