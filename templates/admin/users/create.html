@@ -1,0 +1,124 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h4><i class="fas fa-user-plus"></i> Create New User</h4>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Username *</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Password *</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" name="first_name" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" name="last_name" class="form-control">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" name="phone" class="form-control">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">User Type</label>
+                    <select name="user_type" class="form-select" id="userType">
+                        <option value="student">Student</option>
+                        <option value="hod">HOD</option>
+                        <option value="dean">Dean</option>
+                        <option value="registrar">Registrar</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Faculty</label>
+                    <select name="faculty" class="form-select" id="faculty">
+                        <option value="">-- None --</option>
+                        {% for faculty in faculties %}
+                            <option value="{{ faculty.id }}">{{ faculty.name }} ({{ faculty.code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="form-check mt-4">
+                        <input type="checkbox" name="is_superuser" class="form-check-input" id="isAdmin">
+                        <label class="form-check-label" for="isAdmin">Administrator</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Student specific fields -->
+            <div id="studentFields" style="display: none;">
+                <h5 class="mt-4">Student Information</h5>
+                <hr>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Admission Number</label>
+                        <input type="text" name="admission_number" class="form-control">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Current Program</label>
+                        <select name="current_program" class="form-select">
+                            <option value="">-- Select --</option>
+                            {% for program in programs %}
+                                <option value="{{ program.id }}">{{ program.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Current Year</label>
+                        <select name="current_year" class="form-select">
+                            <option value="1">Year 1</option>
+                            <option value="2">Year 2</option>
+                            <option value="3">Year 3</option>
+                            <option value="4">Year 4</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i> Create User
+                </button>
+                <a href="{% url 'admin_users' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('userType').addEventListener('change', function() {
+        const studentFields = document.getElementById('studentFields');
+        if (this.value === 'student') {
+            studentFields.style.display = 'block';
+        } else {
+            studentFields.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}
