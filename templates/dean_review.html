@@ -2,6 +2,46 @@
 
 {% block content %}
 !-- Dean Profile Bar -->
+
+ <div class="card mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    {% if faculty.code == 'SCIT' %}
+                        <img src="{% static 'media/deans/scit.png' %}" alt="Dean" style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid white;">
+                    {% elif faculty.code == 'SOS' %}
+                        <img src="{% static 'media/deans/sos.png' %}" alt="Dean" style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid white;">
+                    {% elif faculty.code == 'SOBE' %}
+                        <img src="{% static 'media/deans/sobe.png' %}" alt="Dean" style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid white;">
+                    {% elif faculty.code == 'SESS' %}
+                        <img src="{% static 'media/deans/sess.png' %}" alt="Dean" style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid white;">
+                    {% elif faculty.code == 'SOHES' %}
+                        <img src="{% static 'media/deans/sohes.png' %}" alt="Dean" style="width: 60px; height: 60px; border-radius: 50%; border: 3px solid white;">
+                    {% endif %}
+                </div>
+                <div class="col">
+                    <h4 class="mb-0">
+                        {% if faculty.code == 'SCIT' %}
+                            Prof. Kelvin K. Omieno
+                        {% elif faculty.code == 'SOS' %}
+                            Dr. Annette O. Busula
+                        {% elif faculty.code == 'SOBE' %}
+                            Dr. Atieno Margaret Omondi
+                        {% elif faculty.code == 'SESS' %}
+                            Dr. NABETA K.N SANGILI
+                        {% elif faculty.code == 'SOHES' %}
+                            Dr. Cyprian Mabonga
+                        {% endif %}
+                    </h4>
+                    <p class="mb-0 opacity-75">Dean, {{ faculty.name }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 <div class="row mb-4">
     <div class="col-md-12">
         <div class="card bg-light">
