@@ -131,15 +131,15 @@
         <div class="row align-items-center">
             <div class="col-md-2 text-center">
                 {% if faculty.code == 'SCIT' %}
-                    <img src="{% static 'media/deans/scit.png' %}" alt="Dean SCIT" class="dean-avatar">
+                    <img src="{% static 'interfaculty/media/deans/scit.png' %}" alt="Dean SCIT" class="dean-avatar">
                 {% elif faculty.code == 'SOS' %}
-                    <img src="{% static 'media/deans/sos.png' %}" alt="Dean SOS" class="dean-avatar">
+                    <img src="{% static 'interfaculty/media/deans/sos.png' %}" alt="Dean SOS" class="dean-avatar">
                 {% elif faculty.code == 'SOBE' %}
-                    <img src="{% static 'media/deans/sobe.png' %}" alt="Dean SOBE" class="dean-avatar">
+                    <img src="{% static 'intterfaculty/media/deans/sobe.png' %}" alt="Dean SOBE" class="dean-avatar">
                 {% elif faculty.code == 'SESS' %}
-                    <img src="{% static 'media/deans/sess.png' %}" alt="Dean SESS" class="dean-avatar">
+                    <img src="{% static 'interfaculty/media/deans/sess.png' %}" alt="Dean SESS" class="dean-avatar">
                 {% elif faculty.code == 'SOHES' %}
-                    <img src="{% static 'media/deans/sohes.png' %}" alt="Dean SOHES" class="dean-avatar">
+                    <img src="{% static 'interfaculty/media/deans/sohes.png' %}" alt="Dean SOHES" class="dean-avatar">
                 {% else %}
                     <div class="dean-avatar d-flex align-items-center justify-content-center bg-primary text-white" style="font-size: 3rem;">
                         {{ faculty.code|slice:":1" }}
