@@ -127,46 +127,33 @@
 
 <div class="container-fluid">
     <!-- Dean Profile Header -->
-    <div class="dean-profile-header">
-        <div class="row align-items-center">
-            <div class="col-md-2 text-center">
-                {% if faculty.code == 'SCIT' %}
-                    <img src="{% static 'interfaculty/media/deans/scit.png' %}" alt="Dean SCIT" class="dean-avatar">
-                {% elif faculty.code == 'SOS' %}
-                    <img src="{% static 'interfaculty/media/deans/sos.png' %}" alt="Dean SOS" class="dean-avatar">
-                {% elif faculty.code == 'SOBE' %}
-                    <img src="{% static 'intterfaculty/media/deans/sobe.png' %}" alt="Dean SOBE" class="dean-avatar">
-                {% elif faculty.code == 'SESS' %}
-                    <img src="{% static 'interfaculty/media/deans/sess.png' %}" alt="Dean SESS" class="dean-avatar">
-                {% elif faculty.code == 'SOHES' %}
-                    <img src="{% static 'interfaculty/media/deans/sohes.png' %}" alt="Dean SOHES" class="dean-avatar">
-                {% else %}
-                    <div class="dean-avatar d-flex align-items-center justify-content-center bg-primary text-white" style="font-size: 3rem;">
-                        {{ faculty.code|slice:":1" }}
-                    </div>
-                {% endif %}
-            </div>
-            <div class="col-md-10">
-                <div class="dean-info">
-                    <h2>
-                        {% if faculty.code == 'SCIT' %}
-                            Prof. Kelvin K. Omieno
-                        {% elif faculty.code == 'SOS' %}
-                            Dr. Annette O. Busula
-                        {% elif faculty.code == 'SOBE' %}
-                            Dr. Atieno Margaret Omondi
-                        {% elif faculty.code == 'SESS' %}
-                            Dr. NABETA K.N SANGILI
-                        {% elif faculty.code == 'SOHES' %}
-                            Dr. Cyprian Mabonga
-                        {% endif %}
-                    </h2>
-                    <div class="dean-title">Dean, {{ faculty.name }}</div>
-                    <div class="dean-faculty">{{ faculty.code }}</div>
+
+<!-- Dean Profile Header -->
+<div class="dean-profile-header">
+    <div class="row align-items-center">
+        <div class="col-md-2 text-center">
+            {% if user.profile.profile_pic %}
+                <img src="{{ user.profile.profile_pic.url }}" 
+                     alt="{{ faculty.code }} Dean" 
+                     class="dean-avatar"
+                     onerror="this.onerror=null; this.src='{% static 'images/default-dean.png' %}';">
+            {% else %}
+                <div class="dean-avatar d-flex align-items-center justify-content-center bg-primary text-white" style="font-size: 3rem;">
+                    {{ faculty.code|slice:":1" }}
                 </div>
+            {% endif %}
+        </div>
+        <div class="col-md-10">
+            <div class="dean-info">
+                <h2>{{ user.get_full_name }}</h2>
+                <div class="dean-title">Dean, {{ faculty.name }}</div>
+                <div class="dean-faculty">{{ faculty.code }}</div>
             </div>
         </div>
     </div>
+</div>
+
+  
 
     <!-- Statistics Cards -->
     <div class="row mb-4">
