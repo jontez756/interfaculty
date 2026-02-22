@@ -1,0 +1,43 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4><i class="fas fa-chart-bar"></i> Reports</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-pdf fa-3x text-danger mb-3"></i>
+                        <h5>Applications Report</h5>
+                        <p class="text-muted">Download complete applications report</p>
+                        <a href="{% url 'export_applications_pdf' %}" class="btn btn-primary">Download PDF</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-csv fa-3x text-success mb-3"></i>
+                        <h5>CSV Export</h5>
+                        <p class="text-muted">Export data to CSV format</p>
+                        <a href="{% url 'export_applications_csv' %}" class="btn btn-success">Download CSV</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-pie fa-3x text-info mb-3"></i>
+                        <h5>Statistics</h5>
+                        <p class="text-muted">View system statistics</p>
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-info">View Stats</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

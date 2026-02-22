@@ -54,7 +54,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Faculty</label>
-                    <select name="faculty" class="form-select" id="faculty">
+                    <select name="faculty" class="form-select">
                         <option value="">-- None --</option>
                         {% for faculty in faculties %}
                             <option value="{{ faculty.id }}">{{ faculty.name }} ({{ faculty.code }})</option>
@@ -114,11 +114,7 @@
 <script>
     document.getElementById('userType').addEventListener('change', function() {
         const studentFields = document.getElementById('studentFields');
-        if (this.value === 'student') {
-            studentFields.style.display = 'block';
-        } else {
-            studentFields.style.display = 'none';
-        }
+        studentFields.style.display = this.value === 'student' ? 'block' : 'none';
     });
 </script>
 {% endblock %}

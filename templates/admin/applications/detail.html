@@ -1,0 +1,131 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-file-alt"></i> Application #{{ application.id }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Student Information</h5>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ application.student.user.get_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Admission No.</th>
+                                <td>{{ application.student.admission_number }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ application.student.user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone</th>
+                                <td>{{ application.student.phone }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Application Details</h5>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Current Program</th>
+                                <td>{{ application.current_program.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Current Faculty</th>
+                                <td>{{ application.current_program.faculty.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Requested Program</th>
+                                <td>{{ application.requested_program.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Requested Faculty</th>
+                                <td>{{ application.requested_program.faculty.name }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Application Status</h5>
+                        <div class="alert 
+                            {% if 'pending' in application.status %}alert-warning
+                            {% elif 'approved' in application.status %}alert-success
+                            {% elif 'rejected' in application.status %}alert-danger
+                            {% elif 'completed' in application.status %}alert-info
+                            {% endif %}">
+                            <strong>Current Status:</strong> {{ application.get_status_display }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Reason for Transfer</h5>
+                        <div class="p-3 bg-light rounded">
+                            {{ application.reason|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Comments</h5>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>HOD Comment:</th>
+                                <td>{{ application.hod_comment|default:"—" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Dean Comment:</th>
+                                <td>{{ application.dean_comment|default:"—" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Registrar Comment:</th>
+                                <td>{{ application.registrar_comment|default:"—" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h5>Admin Actions</h5>
+                        <form method="post" class="row">
+                            {% csrf_token %}
+                            <div class="col-md-4">
+                                <select name="status" class="form-select">
+                                    <option value="">Change Status</option>
+                                    {% for status, label in status_choices %}
+                                        <option value="{{ status }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" name="admin_comment" class="form-control" placeholder="Admin comment (optional)">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-warning">Update Status</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{% url 'admin_applications' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Applications
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

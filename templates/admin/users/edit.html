@@ -1,0 +1,85 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-warning text-dark">
+        <h4><i class="fas fa-edit"></i> Edit User: {{ edit_user.username }}</h4>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" value="{{ edit_user.username }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Password (leave blank to keep current)</label>
+                    <input type="password" name="password" class="form-control">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" name="first_name" class="form-control" value="{{ edit_user.first_name }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" name="last_name" class="form-control" value="{{ edit_user.last_name }}">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="{{ edit_user.email }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" name="phone" class="form-control" value="{{ profile.phone|default:'' }}">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">User Type</label>
+                    <select name="user_type" class="form-select">
+                        <option value="student" {% if profile.user_type == 'student' %}selected{% endif %}>Student</option>
+                        <option value="hod" {% if profile.user_type == 'hod' %}selected{% endif %}>HOD</option>
+                        <option value="dean" {% if profile.user_type == 'dean' %}selected{% endif %}>Dean</option>
+                        <option value="registrar" {% if profile.user_type == 'registrar' %}selected{% endif %}>Registrar</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Faculty</label>
+                    <select name="faculty" class="form-select">
+                        <option value="">-- None --</option>
+                        {% for faculty in faculties %}
+                            <option value="{{ faculty.id }}" {% if profile.faculty.id == faculty.id %}selected{% endif %}>
+                                {{ faculty.name }} ({{ faculty.code }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="form-check mt-4">
+                        <input type="checkbox" name="is_superuser" class="form-check-input" id="isAdmin" {% if edit_user.is_superuser %}checked{% endif %}>
+                        <label class="form-check-label" for="isAdmin">Administrator</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Update User
+                </button>
+                <a href="{% url 'admin_users' %}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
