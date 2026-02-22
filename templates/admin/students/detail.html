@@ -1,0 +1,151 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4><i class="fas fa-user-graduate"></i> Student Details: {{ student.user.get_full_name }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Personal Information</h5>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Username</th>
+                                <td>{{ student.user.username }}</td>
+                            </tr>
+                            <tr>
+                                <th>Full Name</th>
+                                <td>{{ student.user.get_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ student.user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Admission Number</th>
+                                <td>{{ student.admission_number }}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone</th>
+                                <td>{{ student.phone }}</td>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <td>{{ student.address|default:"—" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Academic Information</h5>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Current Program</th>
+                                <td>{{ student.current_program.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Faculty</th>
+                                <td>{{ student.current_program.faculty.name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Current Year</th>
+                                <td>Year {{ student.current_year }}</td>
+                            </tr>
+                            <tr>
+                                <th>KCSE Index No.</th>
+                                <td>{{ student.kcse_index_no|default:"—" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Mean Grade</th>
+                                <td>{{ student.mean_grade|default:"—" }}</td>
+                            </tr>
+                            <tr>
+                                <th>Aggregate Points</th>
+                                <td>{{ student.aggregate_points|default:"—" }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <h5 class="mt-4">KCSE Results</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Subject</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in kcse_results %}
+                            <tr>
+                                <td>{{ result.subject }}</td>
+                                <td>{{ result.grade }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="text-center">No KCSE results recorded</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <h5 class="mt-4">Transfer Applications</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for app in applications %}
+                            <tr>
+                                <td>{{ app.application_date|date:"M d, Y" }}</td>
+                                <td>{{ app.current_program.faculty.code }}</td>
+                                <td>{{ app.requested_program.faculty.code }}</td>
+                                <td>
+                                    <span class="badge 
+                                        {% if 'pending' in app.status %}bg-warning
+                                        {% elif 'approved' in app.status %}bg-success
+                                        {% elif 'rejected' in app.status %}bg-danger
+                                        {% elif 'completed' in app.status %}bg-info
+                                        {% endif %}">
+                                        {{ app.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{% url 'admin_application_detail' app.id %}" class="btn btn-sm btn-primary">
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">No transfer applications</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">
+                    <a href="{% url 'admin_students' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Students
+                    </a>
+                    <a href="{% url 'admin_user_edit' student.user.id %}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit Student
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
