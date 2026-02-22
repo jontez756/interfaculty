@@ -905,3 +905,6 @@ def student_academic_report(request, student_id):
     except Student.DoesNotExist:
         messages.error(request, 'Student not found.')
         return redirect('report_dashboard')
+    
+    def media_test(request):
+       return render(request, 'media_test.html')

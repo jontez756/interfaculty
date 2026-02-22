@@ -1,4 +1,5 @@
 
+import os
 
 
 
@@ -17,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-your-secret-key-here-change-it-in-production'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['interfaculty-transfer.onrender.com', 'localhost', '127.0.0.1']
 
@@ -146,3 +147,15 @@ PASSWORD_RESET_TIMEOUT = 3600  # 1 hour
 # Static files storage for production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+import os
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# For production, ensure media URLs are handled
+if not DEBUG:
+    import whitenoise
+    # Whitenoise handles static files, but media files need different handling
+    # You might want to use cloud storage like Cloudinary for production
