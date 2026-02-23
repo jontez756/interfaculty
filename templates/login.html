@@ -3,236 +3,457 @@
 
 {% block content %}
 <style>
+    /* Reset & Base */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        min-height: 100vh;
+    :root {
+        --primary: #0a1929;
+        --primary-light: #1e2f4a;
+        --secondary: #0078d4;
+        --accent: #50b6ff;
+        --success: #107c10;
+        --warning: #ffb443;
+        --error: #d13438;
+        --text-primary: #1e1e1e;
+        --text-secondary: #605e5c;
+        --text-on-dark: #ffffff;
+        --border-light: #e1dfdd;
+        --card-bg: rgba(255, 255, 255, 0.98);
+        --shadow-sm: 0 2px 4px rgba(0,0,0,0.02);
+        --shadow-md: 0 4px 8px rgba(0,0,0,0.03);
+        --shadow-lg: 0 8px 16px rgba(0,0,0,0.04);
+        --shadow-xl: 0 16px 24px rgba(0,0,0,0.05);
+        --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Full screen background */
-    .login-wrapper {
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--primary);
+        line-height: 1.5;
+    }
+
+    /* Main Container - Full Screen with High-Res Background */
+    .login-container {
         min-height: 100vh;
-        width: 100vw;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: url('{% static "images/login.png" %}') no-repeat center center fixed;
-        background-size: cover;
         position: relative;
-        padding: 20px;
+        background: linear-gradient(
+            135deg,
+            rgba(10, 25, 41, 0.1) 0%,
+            rgba(0, 120, 212, 0.05) 100%
+        ), url('{% static "images/log.png" %}') no-repeat center center fixed;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+        -ms-interpolation-mode: nearest-neighbor;
+        padding: 24px;
     }
 
-    /* Semi-transparent overlay for better readability */
-    .login-wrapper::before {
+    /* Subtle Overlay for Readability - NO BLUR */
+    .login-container::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(2px);
+        background: linear-gradient(
+            135deg,
+            rgba(10, 25, 41, 0.15) 0%,
+            rgba(0, 0, 0, 0.1) 100%
+        );
+        pointer-events: none;
     }
 
-    /* Compact Login Card */
+    /* Premium Card - Sharp, Clean, No Blur */
     .login-card {
         width: 100%;
-        max-width: 380px;  /* Smaller width */
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 20px;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-        padding: 30px 28px;  /* Reduced padding */
+        max-width: 440px;
+        background: var(--card-bg);
+        border-radius: 24px;
+        box-shadow: 
+            0 20px 40px -10px rgba(0, 0, 0, 0.2),
+            0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        padding: 48px 40px;
         position: relative;
-        z-index: 10;
-        animation: fadeIn 0.5s ease;
+        z-index: 2;
+        animation: cardEntrance 0.6s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        backdrop-filter: none; /* Explicitly NO blur */
     }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
+    @keyframes cardEntrance {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    /* Header */
+    /* Academic Crest / Badge */
+    .academic-badge {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 32px;
+    }
+
+    .badge-circle {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .badge-circle i {
+        font-size: 40px;
+        color: white;
+    }
+
+    /* Header Typography - PhD Level */
     .login-header {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 40px;
     }
 
-    .login-header .kaimosi {
-        font-size: 0.9rem;
-        color: #666;
-        letter-spacing: 1px;
-        margin-bottom: 8px;
+    .greeting {
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--secondary);
+        margin-bottom: 12px;
         display: block;
     }
 
-    .login-header .welcome {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #333;
+    .login-header h1 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 8px;
         line-height: 1.2;
-        margin-bottom: 5px;
+        letter-spacing: -0.02em;
     }
 
-    .login-header .subtitle {
-        font-size: 0.9rem;
-        color: #777;
+    .subtitle {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        font-weight: 400;
     }
 
-    /* Form */
+    /* Form Elements - Pixel Perfect */
     .form-group {
-        margin-bottom: 18px;
+        margin-bottom: 24px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--secondary);
+        font-size: 1.25rem;
+        opacity: 0.7;
+        transition: var(--transition);
     }
 
     .form-control {
         width: 100%;
-        height: 45px;  /* Smaller height */
-        padding: 0 15px;
-        font-size: 0.95rem;
-        border: 1.5px solid #e0e0e0;
-        border-radius: 10px;
+        height: 56px;
+        padding: 0 16px 0 48px;
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--text-primary);
         background: white;
-        transition: all 0.3s;
+        border: 2px solid var(--border-light);
+        border-radius: 12px;
+        transition: var(--transition);
+        font-family: inherit;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .form-control:hover {
+        border-color: #b3b0ad;
     }
 
     .form-control:focus {
         outline: none;
-        border-color: #4a90e2;
-        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 4px rgba(0, 120, 212, 0.1);
     }
 
     .form-control::placeholder {
-        color: #999;
-        font-size: 0.9rem;
+        color: #a19f9d;
+        font-weight: 300;
+        font-size: 0.95rem;
     }
 
-    /* Options row - smaller */
-    .options-row {
+    /* Input Focus Effect */
+    .input-wrapper:focus-within .input-icon {
+        color: var(--secondary);
+        opacity: 1;
+    }
+
+    /* Form Options */
+    .form-options {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 15px 0 20px;
-        font-size: 0.9rem;
+        margin: 16px 0 32px;
     }
 
     .remember-me {
         display: flex;
         align-items: center;
-        gap: 6px;
-        color: #555;
+        gap: 8px;
+        cursor: pointer;
     }
 
     .remember-me input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
         cursor: pointer;
-        accent-color: #4a90e2;
+        accent-color: var(--secondary);
+    }
+
+    .remember-me span {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
     }
 
     .forgot-link {
-        color: #4a90e2;
+        color: var(--secondary);
         text-decoration: none;
+        font-size: 0.95rem;
         font-weight: 500;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .forgot-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--secondary);
+        transition: var(--transition);
     }
 
     .forgot-link:hover {
-        text-decoration: underline;
-        color: #2c3e50;
+        color: var(--primary);
     }
 
-    /* Button - smaller */
-    .btn-signin {
+    .forgot-link:hover::after {
         width: 100%;
-        height: 45px;
-        background: #4a90e2;
+    }
+
+    /* Primary Button - No Gradients, Solid Premium */
+    .btn-login {
+        width: 100%;
+        height: 56px;
+        background: var(--primary);
         color: white;
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         font-size: 1rem;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: var(--transition);
+        text-transform: uppercase;
         letter-spacing: 1px;
-        margin-bottom: 15px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
     }
 
-    .btn-signin:hover {
-        background: #357abd;
+    .btn-login:hover {
+        background: var(--primary-light);
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+        box-shadow: var(--shadow-lg);
     }
 
-    .btn-signin:active {
+    .btn-login:active {
         transform: translateY(0);
+        box-shadow: var(--shadow-sm);
     }
 
-    /* Footer */
-    .signup-text {
+    /* Academic Footer */
+    .academic-footer {
         text-align: center;
-        font-size: 0.9rem;
-        color: #666;
+        border-top: 1px solid var(--border-light);
+        padding-top: 24px;
+    }
+
+    .signup-prompt {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        margin-bottom: 16px;
     }
 
     .signup-link {
-        color: #4a90e2;
+        color: var(--secondary);
         text-decoration: none;
         font-weight: 600;
         margin-left: 4px;
+        transition: var(--transition);
     }
 
     .signup-link:hover {
+        color: var(--primary);
         text-decoration: underline;
-        color: #2c3e50;
     }
 
-    /* Error message - compact */
+    .university-meta {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        font-size: 0.75rem;
+        color: #979593;
+        margin-top: 16px;
+    }
+
+    .university-meta span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .university-meta i {
+        font-size: 0.875rem;
+        color: var(--secondary);
+    }
+
+    /* Error Message */
     .error-message {
-        background: #fee;
-        color: #c33;
-        padding: 10px;
+        background: #fef6f6;
+        border-left: 4px solid var(--error);
+        color: var(--error);
+        padding: 16px;
         border-radius: 8px;
-        margin-bottom: 15px;
-        font-size: 0.85rem;
-        border-left: 3px solid #c33;
+        margin-bottom: 24px;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid #ffd7d9;
     }
 
-    /* Responsive */
-    @media screen and (max-width: 400px) {
+    .error-message i {
+        font-size: 1.25rem;
+    }
+
+    /* Responsive Excellence */
+    @media screen and (max-width: 480px) {
         .login-card {
+            padding: 32px 24px;
             max-width: 100%;
-            padding: 25px 20px;
         }
 
-        .login-header .welcome {
-            font-size: 1.5rem;
+        .login-header h1 {
+            font-size: 2rem;
         }
 
-        .options-row {
+        .badge-circle {
+            width: 64px;
+            height: 64px;
+        }
+
+        .badge-circle i {
+            font-size: 32px;
+        }
+
+        .form-control {
+            height: 52px;
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+
+        .btn-login {
+            height: 52px;
+        }
+
+        .form-options {
             flex-direction: column;
-            gap: 10px;
+            gap: 16px;
             align-items: flex-start;
+        }
+
+        .university-meta {
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+    }
+
+    /* Tablet Optimization */
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+        .login-card {
+            max-width: 400px;
+            padding: 40px 32px;
+        }
+    }
+
+    /* High-DPI Screen Optimization */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        .login-container {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+    }
+
+    /* Print Styles */
+    @media print {
+        .login-container {
+            background: white;
+        }
+        .login-card {
+            box-shadow: none;
+            border: 1px solid #000;
         }
     }
 </style>
 
-<div class="login-wrapper">
+<div class="login-container">
     <div class="login-card">
+        <!-- Academic Badge -->
+        <div class="academic-badge">
+            <div class="badge-circle">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+        </div>
+
+        <!-- Header -->
         <div class="login-header">
-            <div class="kaimosi">KAIMOSI FRIENDS UNIVERSITY</div>
-            <div class="welcome">WELCOME BACK</div>
-            <div class="subtitle">Hi, CS Student</div>
-            <div class="subtitle" style="font-size: 0.85rem; margin-top: 5px;">Enter your credentials to access the portal</div>
+            <span class="greeting">Doctoral Access</span>
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Enter your credentials to access the portal</p>
         </div>
         
         {% if form.errors %}
             <div class="error-message">
-                <i class="fas fa-exclamation-circle" style="margin-right: 6px;"></i>
-                Invalid username or password
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Invalid credentials. Please try again.</span>
             </div>
         {% endif %}
         
@@ -240,38 +461,52 @@
             {% csrf_token %}
             
             <div class="form-group">
-                <input type="text" 
-                       name="username" 
-                       class="form-control" 
-                       placeholder="COM/0013/2023"
-                       value="COM/0013/2023"
-                       required>
+                <div class="input-wrapper">
+                    <i class="fas fa-id-card input-icon"></i>
+                    <input type="text" 
+                           name="username" 
+                           class="form-control" 
+                           placeholder="Admission Number / Username"
+                           value="{% if form.username.value %}{{ form.username.value }}{% endif %}"
+                           required>
+                </div>
             </div>
             
             <div class="form-group">
-                <input type="password" 
-                       name="password" 
-                       class="form-control" 
-                       placeholder="********"
-                       required>
+                <div class="input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" 
+                           name="password" 
+                           class="form-control" 
+                           placeholder="Password"
+                           required>
+                </div>
             </div>
             
-            <div class="options-row">
+            <div class="form-options">
                 <label class="remember-me">
                     <input type="checkbox" name="remember">
-                    <span>Remember me</span>
+                    <span>Remember access</span>
                 </label>
-                <a href="{% url 'password_reset' %}" class="forgot-link">Forgot Password?</a>
+                <a href="{% url 'password_reset' %}" class="forgot-link">Reset credentials</a>
             </div>
             
-            <button type="submit" class="btn-signin">
-                SIGN IN
+            <button type="submit" class="btn-login">
+                <i class="fas fa-arrow-right" style="margin-right: 8px;"></i>
+                Sign In
             </button>
         </form>
         
-        <div class="signup-text">
-            New to the portal? 
-            <a href="{% url 'register_student' %}" class="signup-link">Create Account</a>
+        <div class="academic-footer">
+            <p class="signup-prompt">
+                New to the system?
+                <a href="{% url 'register_student' %}" class="signup-link">Request access</a>
+            </p>
+            <div class="university-meta">
+                <span><i class="fas fa-shield-alt"></i> AES-256 Encrypted</span>
+                <span><i class="fas fa-gavel"></i> GDPR Compliant</span>
+                <span><i class="fas fa-certificate"></i> ISO 27001</span>
+            </div>
         </div>
     </div>
 </div>
