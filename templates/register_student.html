@@ -3,42 +3,73 @@
 
 {% block content %}
 <style>
+    /* Reset everything */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
         height: 100%;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        background-color: #f5f5f5;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
     }
 
-    /* Full screen background - using reg.png */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        background-color: #000;
+    }
+
+    /* Full-screen background container */
     .register-wrapper {
-        min-height: 100vh;
-        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         background: url('{% static "images/reg.png" %}') no-repeat center center;
         background-size: cover;
         background-position: center;
+        background-attachment: fixed;
         image-rendering: -webkit-optimize-contrast;
         image-rendering: crisp-edges;
+        overflow-y: auto; /* Allow scrolling if content overflows */
         padding: 40px 20px;
     }
 
-    /* Register card - matching login proportions */
+    /* Light overlay */
+    .register-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2);
+        pointer-events: none;
+    }
+
+    /* Register card */
     .register-card {
         width: 100%;
-        max-width: 480px;  /* Slightly wider for registration */
+        max-width: 480px;
         background: white;
-        border-radius: 8px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         padding: 40px 32px;
-        animation: fadeIn 0.3s ease;
+        position: relative;
+        z-index: 2;
+        animation: fadeIn 0.4s ease;
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
     @keyframes fadeIn {
@@ -51,26 +82,53 @@
         margin-bottom: 24px;
     }
 
-    .register-header h2 {
-        font-size: 28px;
-        font-weight: 500;
+    .register-header .main-title {
+        font-size: 24px;
+        font-weight: 600;
         color: #2c3e50;
-        margin-bottom: 8px;
-        line-height: 1.2;
+        margin-bottom: 16px;
+        letter-spacing: -0.3px;
     }
 
-    .register-header p {
-        font-size: 15px;
-        color: #7f8c8d;
-        margin: 0;
+    /* Navigation tabs */
+    .nav-tabs {
+        display: flex;
+        gap: 24px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid #ecf0f1;
+        padding-bottom: 8px;
     }
 
-    /* Warning box - simple like design */
+    .nav-tab {
+        font-size: 18px;
+        font-weight: 500;
+        color: #95a5a6;
+        text-decoration: none;
+        padding-bottom: 8px;
+        position: relative;
+    }
+
+    .nav-tab.active {
+        color: #3498db;
+    }
+
+    .nav-tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #3498db;
+        border-radius: 3px 3px 0 0;
+    }
+
+    /* Info box */
     .info-box {
         background: #f8f9fa;
         border-left: 3px solid #f39c12;
         padding: 16px;
-        border-radius: 6px;
+        border-radius: 8px;
         margin-bottom: 24px;
         font-size: 13px;
         color: #7f8c8d;
@@ -91,7 +149,7 @@
         margin-bottom: 4px;
     }
 
-    /* Form grid - 2 columns on PC */
+    /* Form grid */
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -114,7 +172,7 @@
         color: #34495e;
         margin-bottom: 4px;
         text-transform: uppercase;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.5px;
     }
 
     .form-control {
@@ -123,9 +181,9 @@
         padding: 0 12px;
         font-size: 14px;
         border: 1px solid #dcdde1;
-        border-radius: 6px;
+        border-radius: 8px;
         background: white;
-        transition: border-color 0.2s;
+        transition: all 0.2s;
         color: #2c3e50;
     }
 
@@ -151,18 +209,18 @@
     /* Register button */
     .btn-register {
         width: 100%;
-        height: 48px;
+        height: 52px;
         background: #3498db;
         color: white;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
         transition: background 0.2s;
         margin: 16px 0 24px;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 1px;
     }
 
     .btn-register:hover {
@@ -176,7 +234,7 @@
     /* Login link */
     .login-text {
         text-align: center;
-        font-size: 14px;
+        font-size: 15px;
         color: #7f8c8d;
         border-top: 1px solid #ecf0f1;
         padding-top: 24px;
@@ -191,7 +249,6 @@
 
     .login-link:hover {
         text-decoration: underline;
-        color: #2980b9;
     }
 
     /* Error messages */
@@ -199,25 +256,17 @@
         background: #fee;
         color: #e74c3c;
         padding: 12px;
-        border-radius: 6px;
+        border-radius: 8px;
         margin-bottom: 20px;
         font-size: 14px;
         border-left: 3px solid #e74c3c;
         grid-column: span 2;
     }
 
-    /* PC optimization */
-    @media screen and (min-width: 1024px) {
-        .register-card {
-            max-width: 480px;
-            padding: 40px 32px;
-        }
-    }
-
-    /* Mobile */
+    /* Responsive */
     @media screen and (max-width: 600px) {
         .register-card {
-            max-width: 100%;
+            max-width: 95%;
             padding: 30px 24px;
         }
 
@@ -229,9 +278,16 @@
         .form-group.full-width {
             grid-column: span 1;
         }
+    }
 
-        .register-header h2 {
-            font-size: 26px;
+    /* Landscape */
+    @media screen and (max-height: 700px) and (orientation: landscape) {
+        .register-wrapper {
+            align-items: flex-start;
+        }
+        
+        .register-card {
+            max-height: 85vh;
         }
     }
 </style>
@@ -239,14 +295,42 @@
 <div class="register-wrapper">
     <div class="register-card">
         <div class="register-header">
-            <h2>Create Your Account</h2>
-            <p>Join the Inter-Faculty Transfer System</p>
+            <div class="main-title">Inter-Faculty Transfer</div>
+            
+            <div class="nav-tabs">
+                <a href="{% url 'login' %}" class="nav-tab">Login</a>
+                <a href="#" class="nav-tab active">Register</a>
+            </div>
         </div>
 
         <div class="info-box">
             <p>Important Information</p>
             <ul>
-                <li>Please Do not ask for a transfer into a Programme that you do not qualify for</li>
+                <li>Please Do not ask {
+            align-items: flex-start;
+        }
+        
+        .register-card {
+            max-height: 85vh;
+        }
+    }
+</style>
+
+<div class="register-wrapper">
+    <div class="register-card">
+        <div class="register-header">
+            <div class="main-title">Inter-Faculty Transfer</div>
+            
+            <div class="nav-tabs">
+                <a href="{% url 'login' %}" class="nav-tab">Login</a>
+                <a href="#" class="nav-tab active">Register</a>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <p>Important Information</p>
+            <ul>
+                <li>Please Do for a transfer into a Programme that you do not qualify for</li>
                 <li>You will be disqualified if you apply for transfer into more than one degree programme</li>
                 <li>It is a criminal offence to give any falsified information</li>
             </ul>
@@ -268,6 +352,51 @@
 
             <div class="form-grid">
                 <div class="form-group">
+ not ask for a transfer into a Programme that you do not qualify for</li>
+                <li>You will be disqualified if you apply for transfer into more than one degree programme</li>
+                <li>It is a criminal offence to give any falsified information</li>
+            </ul>
+        </div>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" placeholder="Choose username" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form                    <label class="form-label">First Name</label>
+                    <input type="text" name="first_name" class="form-control" placeholder="First name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" name="last_name" class="form-control" placeholder="Last name" required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Create password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-control" placeholder="Confirm password" required>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Admission Number</label>
+                    <input type="text" name-group">
                     <label class="form-label">First Name</label>
                     <input type="text" name="first_name" class="form-control" placeholder="First name" required>
                 </div>
@@ -291,7 +420,7 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label">Admission Number</label>
-                    <input type="text" name="admission_number" class="form-control" placeholder="COM/0013/2023" required>
+                    <input type="admission_number" class="form-control" placeholder="COM/0013/2023" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Current Year</label>
@@ -317,7 +446,33 @@
 
             <div class="form-group full-width">
                 <label class="form-label">Phone Number</label>
-                <input type="tel" name="phone" class="form-control" placeholder="0712 345 678" required>
+                <input type="tel="text" name="admission_number" class="form-control" placeholder="COM/0013/2023" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Current Year</label>
+                    <select name="current_year" class="form-control" required>
+                        <option value="">Select</option>
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                        <option value="4">Year 4</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label class="form-label">Current Programme</label>
+                <select name="current_program" class="form-control" required>
+                    <option value="">-- Select Programme --</option>
+                    {% for program in form.current_program.field.queryset %}
+                        <option value="{{ program.id }}">{{ program.name }} ({{ program.faculty.code }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group full-width">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" name" name="phone" class="form-control" placeholder="0712 345 678" required>
             </div>
 
             {% if form.errors %}

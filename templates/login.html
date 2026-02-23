@@ -3,42 +3,69 @@
 
 {% block content %}
 <style>
+    /* Reset everything */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
         height: 100%;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        background-color: #f5f5f5;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevent scrolling */
     }
 
-    /* Full screen background - EXACT as screenshot */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        background-color: #000; /* Fallback */
+    }
+
+    /* Full-screen background container */
     .login-wrapper {
-        min-height: 100vh;
-        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         background: url('{% static "images/login.png" %}') no-repeat center center;
         background-size: cover;
         background-position: center;
+        background-attachment: fixed;
         image-rendering: -webkit-optimize-contrast;
         image-rendering: crisp-edges;
-        padding: 20px;
     }
 
-    /* Login card - EXACT proportions from screenshot */
+    /* Semi-transparent overlay for better readability */
+    .login-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2); /* Very light overlay */
+        pointer-events: none;
+    }
+
+    /* Login card - centered absolutely */
     .login-card {
         width: 100%;
-        max-width: 400px;  /* Exactly like screenshot */
+        max-width: 400px;
         background: white;
-        border-radius: 8px;  /* Slight rounding like screenshot */
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         padding: 40px 32px;
-        animation: fadeIn 0.3s ease;
+        position: relative;
+        z-index: 2;
+        animation: fadeIn 0.4s ease;
     }
 
     @keyframes fadeIn {
@@ -48,36 +75,77 @@
 
     /* Header - exactly like screenshot */
     .login-header {
-        margin-bottom: 32px;
+        margin-bottom: 24px;
     }
 
-    .login-header h1 {
+    .login-header .main-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 16px;
+        letter-spacing: -0.3px;
+    }
+
+    .login-header .welcome-title {
         font-size: 28px;
         font-weight: 500;
         color: #2c3e50;
-        margin-bottom: 8px;
+        margin: 20px 0 8px;
         line-height: 1.2;
     }
 
-    .login-header p {
+    .login-header .subtitle {
         font-size: 15px;
         color: #7f8c8d;
-        margin: 0;
+        margin: 0 0 24px 0;
     }
 
-    /* Form groups - exact spacing */
+    /* Navigation tabs */
+    .nav-tabs {
+        display: flex;
+        gap: 24px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid #ecf0f1;
+        padding-bottom: 8px;
+    }
+
+    .nav-tab {
+        font-size: 18px;
+        font-weight: 500;
+        color: #95a5a6;
+        text-decoration: none;
+        padding-bottom: 8px;
+        position: relative;
+    }
+
+    .nav-tab.active {
+        color: #3498db;
+    }
+
+    .nav-tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #3498db;
+        border-radius: 3px 3px 0 0;
+    }
+
+    /* Form groups */
     .form-group {
         margin-bottom: 24px;
     }
 
     .form-label {
         display: block;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 600;
         color: #34495e;
         margin-bottom: 6px;
         text-transform: uppercase;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.5px;
     }
 
     .form-control {
@@ -86,9 +154,9 @@
         padding: 0 14px;
         font-size: 15px;
         border: 1px solid #dcdde1;
-        border-radius: 6px;
+        border-radius: 8px;
         background: white;
-        transition: border-color 0.2s;
+        transition: all 0.2s;
         color: #2c3e50;
     }
 
@@ -103,12 +171,12 @@
         font-size: 15px;
     }
 
-    /* Options row - exactly as screenshot */
+    /* Options row */
     .options-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 16px 0 24px;
+        margin: 16px 0 28px;
     }
 
     .remember-me {
@@ -136,29 +204,27 @@
         text-decoration: none;
         font-size: 14px;
         font-weight: 500;
-        transition: color 0.2s;
     }
 
     .forgot-link:hover {
-        color: #2980b9;
         text-decoration: underline;
     }
 
-    /* Sign In button - exactly as screenshot */
+    /* Sign In button */
     .btn-signin {
         width: 100%;
-        height: 48px;
+        height: 52px;
         background: #3498db;
         color: white;
         border: none;
-        border-radius: 6px;
+        border-radius: 8px;
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
         transition: background 0.2s;
         margin-bottom: 24px;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 1px;
     }
 
     .btn-signin:hover {
@@ -169,13 +235,11 @@
         transform: translateY(1px);
     }
 
-    /* Sign up link - exactly as screenshot */
+    /* Sign up text */
     .signup-text {
         text-align: center;
         font-size: 15px;
         color: #7f8c8d;
-        border-top: 1px solid #ecf0f1;
-        padding-top: 24px;
     }
 
     .signup-link {
@@ -187,37 +251,28 @@
 
     .signup-link:hover {
         text-decoration: underline;
-        color: #2980b9;
     }
 
-    /* Error message (if needed) */
+    /* Error message */
     .error-message {
         background: #fee;
         color: #e74c3c;
         padding: 12px;
-        border-radius: 6px;
+        border-radius: 8px;
         margin-bottom: 20px;
         font-size: 14px;
         border-left: 3px solid #e74c3c;
     }
 
-    /* PC-specific optimization - no changes for mobile */
-    @media screen and (min-width: 1024px) {
-        .login-card {
-            max-width: 400px;
-            padding: 40px 32px;
-        }
-    }
-
-    /* Keep exact same on mobile */
+    /* Ensure full screen on all devices */
     @media screen and (max-width: 480px) {
         .login-card {
-            max-width: 100%;
+            max-width: 90%;
             padding: 30px 24px;
         }
 
-        .login-header h1 {
-            font-size: 26px;
+        .login-header .welcome-title {
+            font-size: 24px;
         }
 
         .options-row {
@@ -226,13 +281,29 @@
             align-items: flex-start;
         }
     }
+
+    /* Landscape orientation */
+    @media screen and (max-height: 600px) and (orientation: landscape) {
+        .login-wrapper {
+            align-items: flex-start;
+            padding: 40px 20px;
+            overflow-y: auto;
+        }
+    }
 </style>
 
 <div class="login-wrapper">
     <div class="login-card">
         <div class="login-header">
-            <h1>Hi, welcome back</h1>
-            <p>Please fill in your details to log in</p>
+            <div class="main-title">Inter-Faculty Transfer</div>
+            
+            <div class="nav-tabs">
+                <a href="#" class="nav-tab active">Login</a>
+                <a href="{% url 'register_student' %}" class="nav-tab">Register</a>
+            </div>
+            
+            <div class="welcome-title">Hi, welcome back</div>
+            <div class="subtitle">Please fill in your details to log in</div>
         </div>
         
         {% if form.errors %}
@@ -277,7 +348,7 @@
         </form>
         
         <div class="signup-text">
-            Don't have an account?
+            Don't have an account? 
             <a href="{% url 'register_student' %}" class="signup-link">Sign Up</a>
         </div>
     </div>
