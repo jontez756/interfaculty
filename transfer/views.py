@@ -25,8 +25,10 @@ def home(request):
     return render(request, 'home.html')
 
 def faq_view(request):
-    questions = Question.objects.filter(status=1).select_related('category')  # Only published
-    return render(request, 'faq.html', {'questions': questions})
+    questions = Question.objects.filter(status=1).select_related('category')
+    return render(request, 'faq/questions_list.html', {'questions': questions})
+
+
 # ============================================
 # CUSTOM LOGOUT
 # ============================================
