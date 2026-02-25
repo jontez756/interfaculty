@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q, Count
 from django.core.paginator import Paginator
 from .models import Faculty, Program, Student, Profile, TransferApplication, Notification, KCSE_Result
+from faq.models import Question
 
 # ============================================
 # ADMIN DASHBOARD
@@ -61,8 +62,13 @@ def admin_dashboard(request):
     
     # Unread notifications
     unread_notifications = Notification.objects.filter(user=request.user, is_read=False).count()
-    
+
+    faq_count = Question.objects.count()
+
+
     context = {
+        # At the top of the file with other imports
+        
         'total_users': total_users,
         'total_students': total_students,
         'total_faculties': total_faculties,
@@ -73,9 +79,11 @@ def admin_dashboard(request):
         'rejected_applications': rejected_applications,
         'completed_applications': completed_applications,
         'recent_applications': recent_applications,
+        'faq_count': faq_count,
         'faculty_stats': faculty_stats,
         'user_types': user_types,
         'unread_notifications': unread_notifications,
+        
     }
     
     return render(request, 'admin/dashboard.html', context)

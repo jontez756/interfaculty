@@ -1,21 +1,6 @@
-
 {% extends 'admin/base_admin.html' %}
 
 {% block content %}
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h4>
-            </div>
-            <div class="card-body">
-                <h5>Welcome, {{ request.user.get_full_name }}!</h5>
-                <p class="text-muted">Here's what's happening in your system today.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Stats Cards -->
 <div class="row mb-4">
     <div class="col-md-3 mb-3">
@@ -81,13 +66,30 @@
             </div>
         </div>
     </div>
+
+    <!-- ===== NEW FAQ STATS CARD ===== -->
+    <div class="col-md-3 mb-3">
+        <div class="card stats-card" onclick="location.href='/admin/faq/question/'">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-2">FAQ Questions</h6>
+                        <h2 class="mb-0" id="faq-count">{{ faq_count|default:"20" }}</h2>
+                    </div>
+                    <div class="bg-info text-white p-3 rounded-circle" style="background: linear-gradient(135deg, var(--primary-green), var(--deep-blue)) !important;">
+                        <i class="fas fa-question-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Application Stats -->
 <div class="row mb-4">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header bg-secondary text-white">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--deep-blue), var(--primary-green)); color: white;">
                 <h5><i class="fas fa-file-alt"></i> Application Statistics</h5>
             </div>
             <div class="card-body">
@@ -117,187 +119,95 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="text-center">
-                            <h3 class="text-info">{{ completed_applications }}</h3>
-                            <p class="text-muted">Completed Transfers</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Recent Applications -->
+<!-- Recent Applications Table -->
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <div class="card-header" style="background: var(--deep-blue); color: white;">
                 <h5><i class="fas fa-clock"></i> Recent Applications</h5>
-                <a href="{% url 'admin_applications' %}" class="btn btn-light btn-sm">
-                    View All <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Student</th>
-                                <th>From</th>
-                                <th>To</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for app in recent_applications %}
-                            <tr>
-                                <td>{{ app.student.user.get_full_name }}</td>
-                                <td>{{ app.current_program.faculty.code }}</td>
-                                <td>{{ app.requested_program.faculty.code }}</td>
-                                <td>
-                                    <span class="badge 
-                                        {% if 'pending' in app.status %}bg-warning
-                                        {% elif 'approved' in app.status %}bg-success
-                                        {% elif 'rejected' in app.status %}bg-danger
-                                        {% elif 'completed' in app.status %}bg-info
-                                        {% else %}bg-secondary{% endif %}">
-                                        {{ app.get_status_display }}
-                                    </span>
-                                </td>
-                                <td>{{ app.application_date|date:"M d, Y" }}</td>
-                                <td>
-                                    <a href="{% url 'admin_application_detail' app.id %}" class="btn btn-sm btn-primary btn-action">
-                                        <i class="fas fa-eye"></i> View
-                                    </a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6" class="text-center py-4">
-                                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                                    <p class="text-muted">No recent applications</p>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for app in recent_applications %}
+                        <tr>
+                            <td>{{ app.student.user.get_full_name }}</td>
+                            <td>{{ app.current_program.faculty.code }}</td>
+                            <td>{{ app.requested_program.faculty.code }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if 'pending' in app.status %}bg-warning
+                                    {% elif 'approved' in app.status %}bg-success
+                                    {% elif 'rejected' in app.status %}bg-danger
+                                    {% else %}bg-info{% endif %}">
+                                    {{ app.get_status_display }}
+                                </span>
+                            </td>
+                            <td>{{ app.application_date|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No recent applications</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Faculty Statistics -->
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header bg-info text-white">
-                <h5><i class="fas fa-chart-pie"></i> Faculty Statistics</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>Faculty</th>
-                                <th>Code</th>
-                                <th>Programs</th>
-                                <th>Students</th>
-                                <th>Applications</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for stat in faculty_stats %}
-                            <tr>
-                                <td>{{ stat.name }}</td>
-                                <td><strong>{{ stat.code }}</strong></td>
-                                <td>{{ stat.programs }}</td>
-                                <td>{{ stat.students }}</td>
-                                <td>{{ stat.applications }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center">No faculty data available</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<style>
+    .stats-card {
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid var(--border-light);
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .rounded-circle {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .bg-primary { background: var(--deep-blue) !important; }
+    .bg-success { background: var(--primary-green) !important; }
+    .bg-warning { background: var(--accent-gold) !important; color: #000 !important; }
+    .bg-info { background: var(--sky-blue) !important; }
+</style>
 
-<!-- User Type Distribution -->
-<div class="row mt-4">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                <h5><i class="fas fa-users-cog"></i> User Distribution</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-2 col-6 mb-3">
-                        <div class="text-center">
-                            <h5 class="text-primary">{{ user_types.students }}</h5>
-                            <p class="text-muted small">Students</p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-6 mb-3">
-                        <div class="text-center">
-                            <h5 class="text-info">{{ user_types.hods }}</h5>
-                            <p class="text-muted small">HODs</p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-6 mb-3">
-                        <div class="text-center">
-                            <h5 class="text-warning">{{ user_types.deans }}</h5>
-                            <p class="text-muted small">Deans</p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-6 mb-3">
-                        <div class="text-center">
-                            <h5 class="text-secondary">{{ user_types.registrars }}</h5>
-                            <p class="text-muted small">Registrars</p>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-6 mb-3">
-                        <div class="text-center">
-                            <h5 class="text-danger">{{ user_types.admins }}</h5>
-                            <p class="text-muted small">Admins</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Auto-hide alerts after 5 seconds
+    // Update FAQ count in sidebar if needed
     document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(function() {
-            var alerts = document.querySelectorAll('.alert');
-            for (var i = 0; i < alerts.length; i++) {
-                alerts[i].style.display = 'none';
-            }
-        }, 5000);
+        const faqCount = document.getElementById('faq-count');
+        const sidebarCount = document.getElementById('faq-count-sidebar');
+        
+        // You can fetch the actual count via AJAX if needed
+        // For now, the count is passed from the view
     });
-    
-    // Confirm delete function
-    window.confirmDelete = function(event, message) {
-        if (!confirm(message || 'Are you sure you want to delete this item?')) {
-            event.preventDefault();
-            return false;
-        }
-        return true;
-    };
 </script>
 {% endblock %}
