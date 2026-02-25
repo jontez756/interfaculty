@@ -41,12 +41,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'interfaculty.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Your templates FIRST
+        'APP_DIRS': True,  # Then app templates
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -58,16 +57,34 @@ TEMPLATES = [
     },
 ]
 
+
+
 WSGI_APPLICATION = 'interfaculty.wsgi.application'
 
-# Database - Uses DATABASE_URL from environment variable
+import os
+
+
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://postgres:admin123@localhost:5432/interfaculty_db',
-        conn_max_age=600,
-        ssl_require=False
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'neondb',
+        'USER': 'neondb_owner',
+        'PASSWORD': 'npg_tqyBIE0SpM4c',
+        'HOST': 'ep-sparkling-dream-agnnf37h-pooler.c-2.eu-central-1.aws.neon.tech',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+            'keepalives': 1,
+            'keepalives_idle': 30,
+            'keepalives_interval': 5,
+            'keepalives_count': 5,
+            'connect_timeout': 10,
+        }
+    }
 }
+
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
