@@ -12,6 +12,7 @@ from django.utils import timezone
 import csv
 import json
 from datetime import datetime
+from faq.models import Question
 
 from django.http import HttpResponse
 
@@ -23,7 +24,9 @@ def test_view(request):
 def home(request):
     return render(request, 'home.html')
 
-
+def faq_view(request):
+    questions = Question.objects.filter(status=1).select_related('category')  # Only published
+    return render(request, 'faq.html', {'questions': questions})
 # ============================================
 # CUSTOM LOGOUT
 # ============================================
