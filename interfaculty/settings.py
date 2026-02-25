@@ -1,8 +1,3 @@
-
-import os
-
-
-
 """
 Django settings for interfaculty project.
 """
@@ -18,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-your-secret-key-here-change-it-in-production'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True  # Set to False in production
 
 ALLOWED_HOSTS = ['interfaculty-transfer.onrender.com', 'localhost', '127.0.0.1']
 
@@ -30,12 +25,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'transfer',
+    'transfer',  # Our transfer app
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add whitenoise here
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -64,33 +59,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'interfaculty.wsgi.application'
 
-
-
-
-import os
-
+# Database - Uses DATABASE_URL from environment variable
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'neondb',
-        'USER': 'neondb_owner',
-        'PASSWORD': 'npg_tqyBIE0SpM4c',
-        'HOST': 'ep-sparkling-dream-agnnf37h-pooler.c-2.eu-central-1.aws.neon.tech',
-        'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',
-            'connect_timeout': 10,
-        }
-    }
+    'default': dj_database_url.config(
+        default='postgresql://postgres:admin123@localhost:5432/interfaculty_db',
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
-
-
-
-
-
-
-
-
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -119,6 +95,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Whitenoise static files storage
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Media files (Uploaded profile pictures, KCSE slips, etc)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -144,18 +123,3 @@ SESSION_COOKIE_AGE = 3600  # 1 hour
 # Email Configuration (For password reset)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 PASSWORD_RESET_TIMEOUT = 3600  # 1 hour
-# Static files storage for production
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-import os
-
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
-# For production, ensure media URLs are handled
-if not DEBUG:
-    import whitenoise
-    # Whitenoise handles static files, but media files need different handling
-    # You might want to use cloud storage like Cloudinary for production
