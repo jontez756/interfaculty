@@ -5,18 +5,13 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),  # Django admin first
-    path('', include('transfer.urls')),  # Your app URLs
-    path('admin-panel/', include('transfer.admin_urls')),  # Your custom admin (if you have this)
-    path('faq/', include('faq.urls')),  # FAQ LAST
+    path('admin/', admin.site.urls),  
+    path('', include('transfer.urls')),  
+    #path('admin-panel/', include('transfer.admin_urls')),  
+    path('faq/', include('faq.urls')),  
     path('', include('django.contrib.auth.urls')),
+    path('faq/', views.faq_view, name='faq'),
 ]
-
-
-
-
-
-
 
 
 if settings.DEBUG:
