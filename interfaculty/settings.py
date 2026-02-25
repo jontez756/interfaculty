@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'transfer',  # Our transfer app
+    'faq',
 ]
 
 MIDDLEWARE = [
@@ -64,7 +65,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default='postgresql://postgres:admin123@localhost:5432/interfaculty_db',
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=False
     )
 }
 
@@ -123,3 +124,9 @@ SESSION_COOKIE_AGE = 3600  # 1 hour
 # Email Configuration (For password reset)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 PASSWORD_RESET_TIMEOUT = 3600  # 1 hour
+
+# FAQ Settings (for django-easy-faq)
+FAQ_SETTINGS = [
+    'no_category',  # Simple FAQ without categories
+    # 'categories',  # Uncomment if you want categories
+]

@@ -10,7 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('transfer.urls')),  # This includes ALL transfer app URLs
     path('', include('django.contrib.auth.urls')),
-
+    path('faq/', include('faq.urls')),
 
     
 ]
