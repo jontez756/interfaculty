@@ -11,6 +11,7 @@ urlpatterns = [
     #path('admin-panel/', include('transfer.admin_urls')),  
     path('', include('django.contrib.auth.urls')),
     path('faq/', views.faq_view, name='faq'),
+    
 ]
 
 

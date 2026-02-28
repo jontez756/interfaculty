@@ -16,6 +16,17 @@ from faq.models import Question
 
 from django.http import HttpResponse
 
+
+def faq_view(request):
+    """Display frequently asked questions"""
+    questions = Question.objects.all().select_related('category')
+    return render(request, 'faq/questions_list.html', {'questions': questions})
+
+
+
+
+
+
 def test_view(request):
     return HttpResponse("Test view is working!")
 # ============================================
@@ -24,9 +35,7 @@ def test_view(request):
 def home(request):
     return render(request, 'home.html')
 
-def faq_view(request):
-    questions = Question.objects.filter(status=1).select_related('category')
-    return render(request, 'faq/questions_list.html', {'questions': questions})
+
 
 
 # ============================================
@@ -913,3 +922,4 @@ def student_academic_report(request, student_id):
     
     def media_test(request):
        return render(request, 'media_test.html')
+                     

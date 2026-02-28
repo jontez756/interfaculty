@@ -1,0 +1,178 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Simple but beautiful FAQ styling */
+    :root {
+        --primary-green: #2e7d32;
+        --deep-blue: #1565c0;
+        --accent-gold: #ffb300;
+    }
+    
+    .faq-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 0 20px;
+    }
+    
+    .faq-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .faq-header h1 {
+        font-size: 2.5rem;
+        color: var(--deep-blue);
+        margin-bottom: 10px;
+    }
+    
+    .faq-header h1 i {
+        color: var(--accent-gold);
+        margin-right: 10px;
+    }
+    
+    .faq-header p {
+        color: #666;
+        font-size: 1.1rem;
+    }
+    
+    .faq-item {
+        background: white;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: 1px solid #e0e0e0;
+        overflow: hidden;
+    }
+    
+    .faq-question {
+        padding: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        border-left: 4px solid transparent;
+    }
+    
+    .faq-item:hover .faq-question {
+        border-left-color: var(--accent-gold);
+    }
+    
+    .faq-question h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+    
+    .faq-question i {
+        color: var(--deep-blue);
+        transition: transform 0.3s;
+    }
+    
+    .faq-item.active .faq-question i {
+        transform: rotate(180deg);
+        color: var(--accent-gold);
+    }
+    
+    .faq-answer {
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+    
+    .faq-item.active .faq-answer {
+        padding: 20px;
+        max-height: 500px;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .faq-answer p {
+        margin: 0;
+        color: #555;
+        line-height: 1.6;
+    }
+    
+    .faq-meta {
+        margin-top: 15px;
+        font-size: 0.8rem;
+        color: #999;
+        display: flex;
+        gap: 15px;
+    }
+    
+    .faq-meta i {
+        color: var(--accent-gold);
+        margin-right: 5px;
+    }
+    
+    .category-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        background: linear-gradient(135deg, var(--deep-blue), var(--primary-green));
+        color: white;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        margin-left: 10px;
+    }
+    
+    .no-questions {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 10px;
+        color: #999;
+    }
+    
+    .no-questions i {
+        font-size: 4rem;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="faq-container">
+    <div class="faq-header">
+        <h1><i class="fas fa-question-circle"></i> FAQ</h1>
+        <p>Frequently Asked Questions</p>
+    </div>
+    
+    <div class="faq-list">
+        {% for question in questions %}
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <h3>
+                    {{ question.question }}
+                    <span class="category-badge">{{ question.category.name|default:"General" }}</span>
+                </h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>{{ question.answer|linebreaks }}</p>
+                <div class="faq-meta">
+                    <span><i class="fas fa-folder"></i> {{ question.category.name|default:"General" }}</span>
+                    <span><i class="fas fa-calendar"></i> Updated recently</span>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-questions">
+            <i class="fas fa-inbox"></i>
+            <h3>No FAQ questions yet</h3>
+            <p>Check back later for updates.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function toggleFAQ(element) {
+    element.closest('.faq-item').classList.toggle('active');
+}
+</script>
+{% endblock %}
