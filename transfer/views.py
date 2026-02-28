@@ -19,10 +19,7 @@ from django.http import HttpResponse
 def simple_faq(request):
     return render(request, 'simple_faq.html')
 
-def faq_view(request):
-    """Display frequently asked questions"""
-    questions = Question.objects.all().select_related('category')
-    return render(request, 'faq/questions_list.html', {'questions': questions})
+
 
 
 
