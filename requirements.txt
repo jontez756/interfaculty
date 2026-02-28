@@ -8,3 +8,4 @@ python-decouple==3.8
 sqlparse==0.5.5
 tzdata==2025.3
 whitenoise==6.11.0
+gunicorn==23.0.0 
