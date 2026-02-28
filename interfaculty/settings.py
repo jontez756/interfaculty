@@ -5,7 +5,7 @@ Django settings for interfaculty project.
 from pathlib import Path
 import os
 import dj_database_url
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -142,8 +142,16 @@ SESSION_COOKIE_AGE = 3600  # 1 hour
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 PASSWORD_RESET_TIMEOUT = 3600  # 1 hour
 
-# FAQ Settings (for django-easy-faq)
-FAQ_SETTINGS = [
-    'no_category',  # Simple FAQ without categories
-    # 'categories',  # Uncomment if you want categories
-]
+
+
+FAQ_SETTINGS = ['no_category'] 
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Your Gmail address
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  # Your 16-char app password
+DEFAULT_FROM_EMAIL = 'Inter-Faculty Transfer <noreply@yourdomain.com>'  # Use your email or a

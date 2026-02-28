@@ -14,6 +14,8 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('faq/', views.simple_faq, name='faq'),  # ← Changed to simple_faq
     # path('faq/', include('faq.urls')),  # ← Comment this out
+     path('', include('django.contrib.auth.urls'))
+     
 ]
 
 if settings.DEBUG:
