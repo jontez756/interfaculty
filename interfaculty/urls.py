@@ -20,6 +20,6 @@ if settings.DEBUG:
       urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-      path('faq/', include('faq.urls')),
+      #path('faq/', include('faq.urls')),
 
 path('simple-faq/', views.simple_faq, name='simple_faq'),
