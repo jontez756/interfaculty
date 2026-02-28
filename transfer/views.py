@@ -16,6 +16,8 @@ from faq.models import Question
 
 from django.http import HttpResponse
 
+def simple_faq(request):
+    return render(request, 'simple_faq.html')
 
 def faq_view(request):
     """Display frequently asked questions"""

@@ -11,6 +11,7 @@ urlpatterns = [
     #path('admin-panel/', include('transfer.admin_urls')),  
     path('', include('django.contrib.auth.urls')),
     path('faq/', views.faq_view, name='faq'),
+    path('simple-faq/', views.simple_faq, name='simple_faq'),
     
 ]
 
@@ -20,3 +21,5 @@ if settings.DEBUG:
       urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
       path('faq/', include('faq.urls')),
+
+path('simple-faq/', views.simple_faq, name='simple_faq'),

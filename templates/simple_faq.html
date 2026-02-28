@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .faq-simple {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+    .faq-item {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .faq-question {
+        background: #f5f5f5;
+        padding: 15px 20px;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .faq-question:hover {
+        background: #e8e8e8;
+    }
+    .faq-answer {
+        padding: 20px;
+        background: white;
+        border-top: 1px solid #ddd;
+        display: none;
+    }
+    .faq-item.open .faq-answer {
+        display: block;
+    }
+    .arrow {
+        transition: transform 0.3s;
+    }
+    .faq-item.open .arrow {
+        transform: rotate(180deg);
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 40px;
+    }
+</style>
+
+<div class="faq-simple">
+    <h1>Frequently Asked Questions</h1>
+    
+    <div id="faq-list">
+        <!-- FAQ items will be loaded here -->
+    </div>
+</div>
+
+<script>
+// Hard-coded FAQ data (this will definitely work!)
+const faqData = [
+    {
+        question: "I forgot my password. What should I do?",
+        answer: "Click on the 'Forgot Password?' link on the login page. Enter your email address and you'll receive a password reset link within minutes. Check your spam folder if you don't see it."
+    },
+    {
+        question: "Can I apply to multiple faculties at once?",
+        answer: "No, applying to multiple faculties simultaneously will result in automatic disqualification. You may only submit one active application at a time."
+    },
+    {
+        question: "How will I receive my new admission number?",
+        answer: "Once the Registrar approves your transfer, the new admission number will appear in your student dashboard and you'll receive a notification."
+    },
+    {
+        question: "What happens after Dean approval?",
+        answer: "After the Dean approves your application, it moves to the Registrar for final review. The Registrar will issue a new admission number and complete the transfer."
+    },
+    {
+        question: "What happens after HOD approval?",
+        answer: "After HOD approval, your application moves to the Dean of your requested faculty for review. The Dean will check your KCSE results and qualifications."
+    },
+    {
+        question: "Can I track my application status?",
+        answer: "Yes! Your student dashboard shows the current status of all your applications with color-coded badges (pending, approved, rejected, completed)."
+    },
+    {
+        question: "How long does the approval process take?",
+        answer: "The complete process typically takes 5-7 working days, depending on the availability of HODs, Deans, and the Registrar."
+    },
+    {
+        question: "What are the requirements for transfer?",
+        answer: "You must have completed at least one year in your current program and meet the KCSE requirements for your desired program."
+    },
+    {
+        question: "How do I apply for a faculty transfer?",
+        answer: "Log in to your student dashboard and click on 'Apply for Transfer' in the Quick Actions sidebar. Fill in your KCSE details and submit."
+    }
+];
+
+// Load FAQ items
+const faqList = document.getElementById('faq-list');
+faqData.forEach((item, index) => {
+    const faqItem = document.createElement('div');
+    faqItem.className = 'faq-item';
+    faqItem.innerHTML = `
+        <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            ${item.question}
+            <span class="arrow">▼</span>
+        </div>
+        <div class="faq-answer">
+            ${item.answer}
+        </div>
+    `;
+    faqList.appendChild(faqItem);
+});
+</script>
+{% endblock %}
