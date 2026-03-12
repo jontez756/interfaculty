@@ -4,10 +4,9 @@ from django.contrib.auth.models import User
 
 # ============================================
 # STUDENT REGISTRATION FORM (Basic Info Only)
-# ============================================
+# ======================================
 
-
-class StudentRegistrationForm(forms.Form):  # Using forms.Form, not ModelForm
+class StudentRegistrationForm(forms.Form):
     username = forms.CharField(
         max_length=150,
         widget=forms.TextInput(attrs={
@@ -53,8 +52,6 @@ class StudentRegistrationForm(forms.Form):  # Using forms.Form, not ModelForm
         })
     )
     
-    # NO ACADEMIC FIELDS HERE - they're removed
-    
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
@@ -76,6 +73,7 @@ class StudentRegistrationForm(forms.Form):  # Using forms.Form, not ModelForm
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Email already registered. Please use another.")
         return email
+
 
 
 

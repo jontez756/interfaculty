@@ -73,16 +73,11 @@ def dashboard_redirect(request):
 # ============================================
 # STUDENT REGISTRATION (Basic Info Only)
 # ============================================
-
-
-
-
-
 def register_student(request):
     if request.method == 'POST':
         form = StudentRegistrationForm(request.POST)
         if form.is_valid():
-            # Create user
+            # Create user ONLY - using cleaned_data from the form
             user = User.objects.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password'],
@@ -91,25 +86,23 @@ def register_student(request):
                 email=form.cleaned_data['email']
             )
             
-            # Create student profile
-            student = form.save(commit=False)
-            student.user = user
-            student.save()
-            
-            # Create profile for user type
+            # Create a basic profile
             Profile.objects.create(
                 user=user,
                 user_type='student',
-                phone=student.phone,
-                faculty=student.current_program.faculty
+                phone='',
+                faculty=None
             )
             
-            messages.success(request, 'Registration successful! You can now login and complete your application.')
+            # NO STUDENT RECORD CREATED HERE - student will complete profile during application
+            
+            messages.success(request, 'Account created successfully! Please login and complete your application.')
             return redirect('login')
     else:
         form = StudentRegistrationForm()
     
     return render(request, 'register_student.html', {'form': form})
+
 
 
 # ============================================
