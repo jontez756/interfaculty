@@ -5,29 +5,55 @@ from django.contrib.auth.models import User
 # ============================================
 # STUDENT REGISTRATION FORM (Basic Info Only)
 # ============================================
-class StudentRegistrationForm(forms.ModelForm):
-    username = forms.CharField(max_length=150)
-    password = forms.CharField(widget=forms.PasswordInput)
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
-    first_name = forms.CharField(max_length=30, label="First Name")
-    last_name = forms.CharField(max_length=30, label="Last Name")
-    email = forms.EmailField(label="Email")
+
+
+class StudentRegistrationForm(forms.Form):  # Using forms.Form, not ModelForm
+    username = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Choose username'
+        })
+    )
     
-    class Meta:
-        model = Student
-        fields = ['admission_number', 'current_program', 'current_year', 'phone']
-        widgets = {
-            'admission_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., COM/0013/2023'}),
-            'current_program': forms.Select(attrs={'class': 'form-control'}),
-            'current_year': forms.Select(attrs={'class': 'form-control'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., 0712345678'}),
-        }
-        labels = {
-            'admission_number': 'Admission Number',
-            'current_program': 'Current Programme',
-            'current_year': 'Current Year',
-            'phone': 'Phone Number',
-        }
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'your@email.com'
+        })
+    )
+    
+    first_name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'First name'
+        })
+    )
+    
+    last_name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Last name'
+        })
+    )
+    
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Create password'
+        })
+    )
+    
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Confirm password'
+        })
+    )
+    
+    # NO ACADEMIC FIELDS HERE - they're removed
     
     def clean(self):
         cleaned_data = super().clean()
@@ -38,6 +64,25 @@ class StudentRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match!")
         
         return cleaned_data
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Username already exists. Please choose another.")
+        return username
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Email already registered. Please use another.")
+        return email
+
+
+
+
+
+
+
 
 
 # ============================================

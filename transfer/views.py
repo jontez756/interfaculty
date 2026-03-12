@@ -73,6 +73,11 @@ def dashboard_redirect(request):
 # ============================================
 # STUDENT REGISTRATION (Basic Info Only)
 # ============================================
+
+
+
+
+
 def register_student(request):
     if request.method == 'POST':
         form = StudentRegistrationForm(request.POST)
