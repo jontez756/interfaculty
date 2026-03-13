@@ -3,43 +3,45 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Student, Program, TransferApplication, Notification, Profile, Faculty, KCSE_Result
-from .forms import StudentRegistrationForm, StudentApplicationForm, TransferApplicationForm
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+from django.core.paginator import Paginator
 from django.utils import timezone
+from datetime import datetime
 import csv
 import json
-from datetime import datetime
+
+from .models import Student, Program, TransferApplication, Notification, Profile, Faculty, KCSE_Result
+from .forms import StudentRegistrationForm, StudentApplicationForm, TransferApplicationForm
 from faq.models import Question
 
-from django.http import HttpResponse
+# ============================================
+# TEST VIEWS
+# ============================================
+
+def test_view(request):
+    return HttpResponse("Test view is working!")
 
 def simple_faq(request):
     return render(request, 'simple_faq.html')
 
+def media_test(request):
+    return render(request, 'media_test.html')
 
 
-
-
-
-
-
-def test_view(request):
-    return HttpResponse("Test view is working!")
 # ============================================
 # HOME PAGE
 # ============================================
+
 def home(request):
     return render(request, 'home.html')
-
-
 
 
 # ============================================
 # CUSTOM LOGOUT
 # ============================================
+
 def custom_logout(request):
     logout(request)
     return redirect('login')
@@ -48,6 +50,7 @@ def custom_logout(request):
 # ============================================
 # DASHBOARD REDIRECT - Based on user type
 # ============================================
+
 @login_required
 def dashboard_redirect(request):
     """Redirect users to their appropriate dashboard based on user type"""
@@ -71,13 +74,15 @@ def dashboard_redirect(request):
 
 
 # ============================================
-# STUDENT REGISTRATION (Basic Info Only)
+# STUDENT REGISTRATION (Account Only - No Academic Info)
 # ============================================
+
 def register_student(request):
+    """Register a new student account - NO academic information required"""
     if request.method == 'POST':
         form = StudentRegistrationForm(request.POST)
         if form.is_valid():
-            # Create user ONLY - using cleaned_data from the form
+            # Create user account
             user = User.objects.create_user(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password'],
@@ -86,7 +91,7 @@ def register_student(request):
                 email=form.cleaned_data['email']
             )
             
-            # Create a basic profile
+            # Create basic profile
             Profile.objects.create(
                 user=user,
                 user_type='student',
@@ -94,35 +99,39 @@ def register_student(request):
                 faculty=None
             )
             
-            # NO STUDENT RECORD CREATED HERE - student will complete profile during application
-            
             messages.success(request, 'Account created successfully! Please login and complete your application.')
             return redirect('login')
+        else:
+            # Log form errors for debugging
+            print("Form errors:", form.errors)
     else:
         form = StudentRegistrationForm()
     
     return render(request, 'register_student.html', {'form': form})
 
 
-
 # ============================================
 # STUDENT DASHBOARD
 # ============================================
 
-from django.http import HttpResponse
-
-
 @login_required
 def student_dashboard(request):
+    """Student dashboard showing applications and notifications"""
     try:
         # Check if user is a student
         profile = Profile.objects.get(user=request.user)
         if profile.user_type != 'student':
             messages.error(request, 'Access denied. Student dashboard only.')
             return redirect('dashboard_redirect')
-            
-        student = Student.objects.get(user=request.user)
-        # THIS LINE IS CRITICAL - make sure it's there
+        
+        # Get student record
+        try:
+            student = Student.objects.get(user=request.user)
+        except Student.DoesNotExist:
+            messages.warning(request, 'Please complete your student profile first.')
+            return redirect('student_application_form')
+        
+        # Get applications and notifications
         applications = TransferApplication.objects.filter(student=student).order_by('-application_date')
         notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
         
@@ -138,28 +147,29 @@ def student_dashboard(request):
             student.kcse_slip
         ])
         
-    except Student.DoesNotExist:
-        messages.warning(request, 'Please complete your student profile first.')
-        return redirect('student_application_form')
+        # Calculate counts
+        pending_count = applications.filter(status__contains='pending').count()
+        approved_count = applications.filter(status__contains='approved').count()
+        
     except Profile.DoesNotExist:
         messages.error(request, 'Profile not found. Please contact admin.')
         return redirect('home')
     
     context = {
         'student': student,
-        'applications': applications,  # This must be passed to template
+        'applications': applications,
         'notifications': notifications,
         'has_completed_profile': has_completed_profile,
+        'pending_count': pending_count,
+        'approved_count': approved_count,
     }
     return render(request, 'student_dashboard.html', context)
-
-
-
 
 
 # ============================================
 # STUDENT APPLICATION FORM (KCSE & Transfer Details)
 # ============================================
+
 @login_required
 def student_application_form(request):
     """Student fills detailed KCSE and transfer application"""
@@ -169,8 +179,16 @@ def student_application_form(request):
         if profile.user_type != 'student':
             messages.error(request, 'Access denied. Student only.')
             return redirect('home')
-            
-        student = Student.objects.get(user=request.user)
+        
+        # Get or create student record
+        student, created = Student.objects.get_or_create(
+            user=request.user,
+            defaults={
+                'admission_number': '',
+                'current_year': 1,
+                'phone': ''
+            }
+        )
         
         # Check if already has pending application
         existing_application = TransferApplication.objects.filter(
@@ -182,7 +200,7 @@ def student_application_form(request):
             messages.warning(request, 'You already have a pending transfer application.')
             return redirect('student_dashboard')
         
-    except (Student.DoesNotExist, Profile.DoesNotExist):
+    except Profile.DoesNotExist:
         return redirect('register_student')
     
     if request.method == 'POST':
@@ -204,7 +222,7 @@ def student_application_form(request):
         student.save()
         
         # Save KCSE subject results
-        KCSE_Result.objects.filter(student=student).delete()  # Clear old results
+        KCSE_Result.objects.filter(student=student).delete()
         for i in range(1, 20):
             subject = request.POST.get(f'subject_{i}')
             grade = request.POST.get(f'grade_{i}')
@@ -242,8 +260,12 @@ def student_application_form(request):
         messages.success(request, 'Transfer application submitted successfully!')
         return redirect('student_dashboard')
     
-    # Get programs for dropdown (exclude current faculty)
-    programs = Program.objects.exclude(faculty=student.current_program.faculty)
+    # GET request - show form
+    # Get programs for dropdown (exclude current faculty if student has a program)
+    if student.current_program:
+        programs = Program.objects.exclude(faculty=student.current_program.faculty)
+    else:
+        programs = Program.objects.all()
     
     context = {
         'student': student,
@@ -255,6 +277,7 @@ def student_application_form(request):
 # ============================================
 # HOD DASHBOARD - University HOD (No Faculty)
 # ============================================
+
 @login_required
 def hod_dashboard(request):
     try:
@@ -310,6 +333,7 @@ def hod_dashboard(request):
 # ============================================
 # HOD REVIEW APPLICATION
 # ============================================
+
 @login_required
 def review_application(request, app_id):
     try:
@@ -387,6 +411,7 @@ def review_application(request, app_id):
 # ============================================
 # DEAN DASHBOARD
 # ============================================
+
 @login_required
 def dean_dashboard(request):
     try:
@@ -403,7 +428,7 @@ def dean_dashboard(request):
         # Get applications for THIS DEAN'S FACULTY (where students want to transfer TO this faculty)
         pending_applications = TransferApplication.objects.filter(
             requested_program__faculty=dean_faculty,
-            status='hod_approved'  # Only show HOD approved applications
+            status='hod_approved'
         ).order_by('-application_date')
         
         # All applications for this faculty
@@ -439,6 +464,7 @@ def dean_dashboard(request):
 # ============================================
 # DEAN REVIEW APPLICATION
 # ============================================
+
 @login_required
 def dean_review(request, app_id):
     try:
@@ -517,6 +543,7 @@ def dean_review(request, app_id):
 # ============================================
 # REGISTRAR DASHBOARD
 # ============================================
+
 @login_required
 def registrar_dashboard(request):
     """Registrar dashboard with pending and completed transfers"""
@@ -561,6 +588,7 @@ def registrar_dashboard(request):
 # ============================================
 # REGISTRAR REVIEW APPLICATION
 # ============================================
+
 @login_required
 def registrar_review(request, app_id):
     """Registrar reviews dean-approved applications and issues new admission number"""
@@ -650,10 +678,13 @@ def registrar_review(request, app_id):
     context = {
         'application': application,
     }
-    return render(request, 'registrar_review.html', context) 
-#============================================  
-      # REPORT DASHBOARD
+    return render(request, 'registrar_review.html', context)
+
+
 # ============================================
+# REPORT DASHBOARD
+# ============================================
+
 @login_required
 def report_dashboard(request):
     """Central report dashboard - different views per user type"""
@@ -734,6 +765,7 @@ def report_dashboard(request):
 # ============================================
 # EXPORT TO CSV
 # ============================================
+
 @login_required
 def export_applications_csv(request):
     """Export applications data to CSV"""
@@ -801,6 +833,7 @@ def export_applications_csv(request):
 # ============================================
 # EXPORT TO PDF (Simple HTML version)
 # ============================================
+
 @login_required
 def export_applications_pdf(request):
     """Export applications data to printable HTML/PDF"""
@@ -847,6 +880,7 @@ def export_applications_pdf(request):
 # ============================================
 # FACULTY WISE REPORT
 # ============================================
+
 @login_required
 def faculty_report(request, faculty_code=None):
     """Generate report for specific faculty"""
@@ -877,7 +911,6 @@ def faculty_report(request, faculty_code=None):
             'rejected': applications.filter(status__contains='rejected').count(),
             'completed': applications.filter(status='completed').count(),
         }
-        
         return render(request, 'faculty_report.html', context)
         
     except Faculty.DoesNotExist:
@@ -889,8 +922,9 @@ def faculty_report(request, faculty_code=None):
 
 
 # ============================================
-# STUDENT PERFORMANCE REPORT (For HOD/Registrar)
+# STUDENT ACADEMIC REPORT (For HOD/Registrar)
 # ============================================
+
 @login_required
 def student_academic_report(request, student_id):
     """View student's academic details and KCSE results"""
@@ -916,7 +950,3 @@ def student_academic_report(request, student_id):
     except Student.DoesNotExist:
         messages.error(request, 'Student not found.')
         return redirect('report_dashboard')
-    
-    def media_test(request):
-       return render(request, 'media_test.html')
-                     
