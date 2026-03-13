@@ -4,51 +4,53 @@
 
 {% block content %}
 <style>
-    /* Simple but beautiful FAQ styling */
+    /* Your existing styles */
     :root {
         --primary-green: #2e7d32;
-        --deep-blue: #1565c0;
+        --light-green: #4caf50;
         --accent-gold: #ffb300;
+        --deep-blue: #1565c0;
+        --sky-blue: #42a5f5;
+        --dark-bg: #1e2a3a;
+        --card-bg: #ffffff;
+        --text-dark: #263238;
+        --text-muted: #546e7a;
+        --border-light: #e0e0e0;
+        --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+        --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+        --shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
-    .faq-container {
-        max-width: 800px;
-        margin: 50px auto;
-        padding: 0 20px;
-    }
-    
-    .faq-header {
+
+    body { background: #f8faff; font-family: 'Segoe UI', sans-serif; }
+
+    .faq-hero {
+        background: linear-gradient(135deg, #1565c0 0%, #2e7d32 100%);
+        padding: 60px 20px;
         text-align: center;
+        color: white;
         margin-bottom: 40px;
+        border-radius: 0 0 30px 30px;
     }
-    
-    .faq-header h1 {
-        font-size: 2.5rem;
-        color: var(--deep-blue);
-        margin-bottom: 10px;
-    }
-    
-    .faq-header h1 i {
-        color: var(--accent-gold);
-        margin-right: 10px;
-    }
-    
-    .faq-header p {
-        color: #666;
-        font-size: 1.1rem;
-    }
-    
+
+    .faq-hero h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 15px; }
+    .faq-hero h1 i { color: #ffb300; margin-right: 10px; }
+    .faq-hero p { font-size: 1.2rem; max-width: 600px; margin: 0 auto; opacity: 0.95; }
+
+    .faq-container { max-width: 900px; margin: 0 auto 60px; padding: 0 20px; }
+
+    /* FAQ Item Styles */
     .faq-item {
         background: white;
-        border-radius: 10px;
+        border-radius: 20px;
         margin-bottom: 15px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         border: 1px solid #e0e0e0;
         overflow: hidden;
     }
-    
+
     .faq-question {
-        padding: 20px;
+        padding: 20px 25px;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
@@ -56,103 +58,88 @@
         background: white;
         border-left: 4px solid transparent;
     }
-    
-    .faq-item:hover .faq-question {
-        border-left-color: var(--accent-gold);
-    }
-    
+
+    .faq-question:hover { background: #f5f5f5; }
+
     .faq-question h3 {
         font-size: 1.1rem;
         font-weight: 600;
-        color: #333;
+        color: #263238;
         margin: 0;
     }
-    
+
     .faq-question i {
-        color: var(--deep-blue);
+        font-size: 1.2rem;
+        color: #1565c0;
         transition: transform 0.3s;
     }
-    
-    .faq-item.active .faq-question i {
-        transform: rotate(180deg);
-        color: var(--accent-gold);
-    }
-    
+
+    .faq-item.active .faq-question i { transform: rotate(180deg); }
+
+    /* Answer section - initially hidden */
     .faq-answer {
-        padding: 0 20px;
-        max-height: 0;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        background: #f8f9fa;
-    }
-    
-    .faq-item.active .faq-answer {
-        padding: 20px;
-        max-height: 500px;
+        display: none;
+        padding: 0 25px 20px 25px;
+        background: #f8faff;
         border-top: 1px solid #e0e0e0;
     }
-    
+
+    .faq-item.active .faq-answer { display: block; }
+
     .faq-answer p {
-        margin: 0;
-        color: #555;
+        color: #263238;
         line-height: 1.6;
+        margin: 15px 0 0 0;
     }
-    
+
     .faq-meta {
         margin-top: 15px;
-        font-size: 0.8rem;
-        color: #999;
         display: flex;
-        gap: 15px;
+        gap: 20px;
+        font-size: 0.85rem;
+        color: #666;
     }
-    
-    .faq-meta i {
-        color: var(--accent-gold);
-        margin-right: 5px;
-    }
-    
+
+    .faq-meta i { color: #ffb300; margin-right: 5px; }
+
     .category-badge {
         display: inline-block;
         padding: 3px 10px;
-        background: linear-gradient(135deg, var(--deep-blue), var(--primary-green));
-        color: white;
+        background: #e0e0e0;
+        color: #333;
         border-radius: 20px;
         font-size: 0.7rem;
         margin-left: 10px;
     }
-    
-    .no-questions {
+
+    .no-results {
         text-align: center;
         padding: 60px 20px;
         background: white;
-        border-radius: 10px;
+        border-radius: 20px;
         color: #999;
     }
-    
-    .no-questions i {
-        font-size: 4rem;
-        color: #ddd;
-        margin-bottom: 20px;
-    }
+
+    .no-results i { font-size: 5rem; color: #ddd; margin-bottom: 20px; }
 </style>
 
+<div class="faq-hero">
+    <h1><i class="fas fa-question-circle"></i> Frequently Asked Questions</h1>
+    <p>Click any question to see the answer</p>
+</div>
+
 <div class="faq-container">
-    <div class="faq-header">
-        <h1><i class="fas fa-question-circle"></i> FAQ</h1>
-        <p>Frequently Asked Questions</p>
-    </div>
-    
     <div class="faq-list">
         {% for question in questions %}
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFAQ(this)">
+        <div class="faq-item" id="faq-{{ question.id }}">
+            <div class="faq-question" onclick="toggleAnswer({{ question.id }})">
                 <h3>
                     {{ question.question }}
                     <span class="category-badge">{{ question.category.name|default:"General" }}</span>
                 </h3>
                 <i class="fas fa-chevron-down"></i>
             </div>
-            <div class="faq-answer">
+            <div class="faq-answer" id="answer-{{ question.id }}">
                 <p>{{ question.answer|linebreaks }}</p>
                 <div class="faq-meta">
                     <span><i class="fas fa-folder"></i> {{ question.category.name|default:"General" }}</span>
@@ -161,7 +148,7 @@
             </div>
         </div>
         {% empty %}
-        <div class="no-questions">
+        <div class="no-results">
             <i class="fas fa-inbox"></i>
             <h3>No FAQ questions yet</h3>
             <p>Check back later for updates.</p>
@@ -171,8 +158,27 @@
 </div>
 
 <script>
-function toggleFAQ(element) {
-    element.closest('.faq-item').classList.toggle('active');
+function toggleAnswer(id) {
+    // Get the answer element
+    var answer = document.getElementById('answer-' + id);
+    
+    // Get the parent faq-item
+    var faqItem = document.getElementById('faq-' + id);
+    
+    // Toggle the answer display
+    if (answer.style.display === 'block') {
+        answer.style.display = 'none';
+        faqItem.classList.remove('active');
+    } else {
+        answer.style.display = 'block';
+        faqItem.classList.add('active');
+    }
 }
 </script>
+
+<style>
+    /* Simple fix to ensure answers are hidden initially */
+    .faq-answer { display: none; }
+    .faq-item.active .faq-answer { display: block; }
+</style>
 {% endblock %}
