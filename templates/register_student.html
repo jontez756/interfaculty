@@ -57,14 +57,14 @@
         pointer-events: none;
     }
 
-    /* Register card - larger to fit all fields */
+    /* Register card - compact size for account-only form */
     .register-card {
         width: 100%;
-        max-width: 550px;
+        max-width: 450px;
         background: white;
         border-radius: 12px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        padding: 40px 35px;
+        padding: 35px 30px;
         position: relative;
         z-index: 2;
         animation: fadeIn 0.4s ease;
@@ -80,27 +80,28 @@
     /* Header */
     .register-header {
         margin-bottom: 20px;
+        text-align: center;
     }
 
     .register-header .main-title {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 600;
         color: #2c3e50;
-        margin-bottom: 16px;
-        letter-spacing: -0.3px;
+        margin-bottom: 15px;
     }
 
     /* Navigation tabs */
     .nav-tabs {
         display: flex;
         gap: 24px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         border-bottom: 2px solid #ecf0f1;
         padding-bottom: 8px;
+        justify-content: center;
     }
 
     .nav-tab {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 500;
         color: #95a5a6;
         text-decoration: none;
@@ -123,48 +124,35 @@
         border-radius: 3px 3px 0 0;
     }
 
-    /* Info box - FIXED TEXT */
+    /* Simple info box */
     .info-box {
         background: #f8f9fa;
         border-left: 3px solid #f39c12;
-        padding: 16px;
-        border-radius: 8px;
+        padding: 12px;
+        border-radius: 6px;
         margin-bottom: 25px;
-        font-size: 13px;
+        font-size: 12px;
         color: #7f8c8d;
     }
 
     .info-box p {
-        margin: 0 0 8px 0;
+        margin: 0 0 5px 0;
         font-weight: 600;
         color: #2c3e50;
-        font-size: 14px;
     }
 
     .info-box ul {
         margin: 0;
-        padding-left: 20px;
+        padding-left: 18px;
     }
 
     .info-box li {
-        margin-bottom: 5px;
-        line-height: 1.4;
+        margin-bottom: 3px;
     }
 
-    /* Form grid - 2 columns */
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-        margin-bottom: 8px;
-    }
-
+    /* Form groups - single column for account only */
     .form-group {
-        margin-bottom: 16px;
-    }
-
-    .form-group.full-width {
-        grid-column: span 2;
+        margin-bottom: 18px;
     }
 
     .form-label {
@@ -189,14 +177,6 @@
         color: #2c3e50;
     }
 
-    select.form-control {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='%237f8c8d'%3E%3Cpath d='M6 9L1 4h10L6 9z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        padding-right: 30px;
-    }
-
     .form-control:focus {
         outline: none;
         border-color: #3498db;
@@ -205,41 +185,30 @@
 
     .form-control::placeholder {
         color: #bdc3c7;
-        font-size: 14px;
+        font-size: 13px;
     }
 
-    /* Section divider */
-    .section-divider {
-        margin: 20px 0 12px;
-        grid-column: span 2;
-    }
-
-    .section-divider h4 {
-        font-size: 16px;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 8px;
-    }
-
-    .divider-line {
-        height: 2px;
-        background: linear-gradient(90deg, #3498db 0%, #ecf0f1 100%);
-        width: 100%;
+    /* Two-column layout for name fields */
+    .name-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 18px;
     }
 
     /* Register button */
     .btn-register {
         width: 100%;
-        height: 52px;
+        height: 48px;
         background: #3498db;
         color: white;
         border: none;
         border-radius: 8px;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 600;
         cursor: pointer;
         transition: background 0.2s;
-        margin: 20px 0 24px;
+        margin: 15px 0 20px;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
@@ -248,17 +217,13 @@
         background: #2980b9;
     }
 
-    .btn-register:active {
-        transform: translateY(1px);
-    }
-
     /* Login link */
     .login-text {
         text-align: center;
-        font-size: 15px;
+        font-size: 14px;
         color: #7f8c8d;
         border-top: 1px solid #ecf0f1;
-        padding-top: 24px;
+        padding-top: 20px;
     }
 
     .login-link {
@@ -276,12 +241,11 @@
     .error-message {
         background: #fee;
         color: #e74c3c;
-        padding: 12px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        font-size: 14px;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-size: 13px;
         border-left: 3px solid #e74c3c;
-        grid-column: span 2;
     }
 
     /* Scrollbar styling */
@@ -300,30 +264,15 @@
     }
 
     /* Responsive */
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 480px) {
         .register-card {
             max-width: 95%;
-            padding: 30px 20px;
-        }
-
-        .form-grid {
-            grid-template-columns: 1fr;
-            gap: 0;
-        }
-
-        .form-group.full-width {
-            grid-column: span 1;
-        }
-    }
-
-    /* Landscape */
-    @media screen and (max-height: 700px) and (orientation: landscape) {
-        .register-wrapper {
-            align-items: flex-start;
+            padding: 25px 20px;
         }
         
-        .register-card {
-            max-height: 85vh;
+        .name-row {
+            grid-template-columns: 1fr;
+            gap: 0;
         }
     }
 </style>
@@ -339,93 +288,56 @@
             </div>
         </div>
 
-        <!-- FIXED: Complete warning text -->
+        <!-- Simple info box -->
         <div class="info-box">
-            <p>⚠️ Important Information</p>
+            <p>⚠️ Important</p>
             <ul>
-                <li>Please do not ask for a transfer into a Programme that you do not qualify for</li>
-                <li>You will be disqualified if you apply for transfer into more than one degree programme</li>
-                <li>It is a criminal offence to give any falsified information</li>
+                <li>Apply only for programmes you qualify for</li>
+                <li>Multiple applications = disqualification</li>
+                <li>False information is an offence</li>
             </ul>
         </div>
 
         <form method="post" novalidate>
             {% csrf_token %}
             
-            <!-- Account Information Section -->
-            <div class="section-divider">
-                <h4>Account Information</h4>
-                <div class="divider-line"></div>
-            </div>
-            
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" placeholder="Choose username" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
-                </div>
+            <!-- Username field -->
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Choose username" required>
             </div>
 
-            <div class="form-grid">
-                <div class="form-group">
+            <!-- Email field -->
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="your@email.com" required>
+            </div>
+
+            <!-- Name fields in 2-column layout -->
+            <div class="name-row">
+                <div>
                     <label class="form-label">First Name</label>
                     <input type="text" name="first_name" class="form-control" placeholder="First name" required>
                 </div>
-                <div class="form-group">
+                <div>
                     <label class="form-label">Last Name</label>
                     <input type="text" name="last_name" class="form-control" placeholder="Last name" required>
                 </div>
             </div>
 
-            <div class="form-grid">
-                <div class="form-group">
+            <!-- Password fields -->
+            <div class="name-row">
+                <div>
                     <label class="form-label">Password</label>
                     <input type="password" name="password" class="form-control" placeholder="Create password" required>
                 </div>
-                <div class="form-group">
+                <div>
                     <label class="form-label">Confirm Password</label>
                     <input type="password" name="confirm_password" class="form-control" placeholder="Confirm password" required>
                 </div>
             </div>
 
-            <!-- Academic Information Section -->
-            <div class="section-divider">
-                <h4>Academic Information</h4>
-                <div class="divider-line"></div>
-            </div>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Admission Number</label>
-                    <input type="text" name="admission_number" class="form-control" placeholder="COM/0013/2023" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Current Year</label>
-                    <select name="current_year" class="form-control" required>
-                        <option value="">Select Year</option>
-                        <option value="1">Year 1</option>
-                        <option value="2">Year 2</option>
-                        <option value="3">Year 3</option>
-                        <option value="4">Year 4</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group full-width">
-                <label class="form-label">Current Programme</label>
-                <select name="current_program" class="form-control" required>
-                    <option value="">-- Select Programme --</option>
-                    {% for program in form.current_program.field.queryset %}
-                        <option value="{{ program.id }}">{{ program.name }} ({{ program.faculty.code }})</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-
-            
+            <!-- ALL ACADEMIC FIELDS REMOVED - they will be in the application form -->
 
             {% if form.errors %}
                 <div class="error-message">
