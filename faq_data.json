@@ -1,0 +1,237 @@
+[
+{
+  "model": "faq.question",
+  "pk": 6,
+  "fields": {
+    "category": null,
+    "question": "How do I apply for a faculty transfer?",
+    "slug": "how-do-i-apply-for-a-faculty-transfer",
+    "helpful": 1,
+    "not_helpful": 0
+  }
+},
+{
+  "model": "faq.question",
+  "pk": 7,
+  "fields": {
+    "category": null,
+    "question": "What are the requirements for transfer?",
+    "slug": "what-are-the-requirements-for-transfer",
+    "helpful": 0,
+    "not_helpful": 0
+  }
+},
+{
+  "model": "faq.question",
+  "pk": 8,
+  "fields": {
+    "category": null,
+    "question": "How long does the approval process take?",
+    "slug": "how-long-does-the-approval-process-take",
+    "helpful": 0,
+    "not_helpful": 0
+  }
+},
+{
+  "model": "faq.question",
+  "pk": 9,
+  "fields": {
+    "category": null,
+    "question": "Can I track my application status?",
+    "slug": "can-i-track-my-application-status",
+    "helpful": 0,
+    "not_helpful": 0
+  }
+},
+{
+  "model": "faq.question",
+  "pk": 10,
+  "fields": {
+    "category": null,
+    "question": "What happens after HOD approval?",
+    "slug": "what-happens-after-hod-approval",
+    "helpful": 0,
+    "not_helpful": 0
+  }
+},
+{
+  "model": "faq.question",
+  "pk": 11,
+  "fields": {
+    "category": null,
+    "question": "What happens after Dean approval?",
+    "slug": "what-happens-after-dean-approval",
+    "helpful": 0,
+    "not_helpful": 0
+  }
+},
+{
+  "model": "faq.question",
+  "pk": 12,
+  "fields": {
+    "category": null,
+    "question": "How will I receive my new admission number?",
+    "slug": "how-will-i-receive-my-new-admission-number",
+    "helpful": 0,
+    "not_helpful": 0
+  }
+},
+{
+  "model": "faq.question",
+  "pk": 13,
+  "fields": {
+    "category": null,
+    "question": "Can I apply to multiple faculties at once?",
+    "slug": "can-i-apply-to-multiple-faculties-at-once",
+    "helpful": 0,
+    "not_helpful": 0
+  }
+},
+{
+  "model": "faq.question",
+  "pk": 14,
+  "fields": {
+    "category": null,
+    "question": "I forgot my password. What should I do?",
+    "slug": "i-forgot-my-password-what-should-i-do",
+    "helpful": 0,
+    "not_helpful": 0
+  }
+},
+{
+  "model": "faq.answer",
+  "pk": 1,
+  "fields": {
+    "question": 6,
+    "answer": "Log in to your student dashboard, click on \"Apply for Transfer\", fill in the required details including your KCSE results, and submit the application.",
+    "slug": "EcTkF",
+    "helpful": 0,
+    "not_helpful": 0,
+    "is_rich_text": false,
+    "_order": 0
+  }
+},
+{
+  "model": "faq.answer",
+  "pk": 2,
+  "fields": {
+    "question": 7,
+    "answer": "You must have completed at least one year in your current program and meet the KCSE requirements for your desired program.",
+    "slug": "LrxEd",
+    "helpful": 0,
+    "not_helpful": 0,
+    "is_rich_text": false,
+    "_order": 0
+  }
+},
+{
+  "model": "faq.answer",
+  "pk": 3,
+  "fields": {
+    "question": 8,
+    "answer": "The process typically takes 5-7 working days, depending on HOD, Dean, and Registrar availability.",
+    "slug": "abaTj",
+    "helpful": 0,
+    "not_helpful": 0,
+    "is_rich_text": false,
+    "_order": 0
+  }
+},
+{
+  "model": "faq.answer",
+  "pk": 4,
+  "fields": {
+    "question": 9,
+    "answer": "Yes! You can track your application status in real-time from your student dashboard.",
+    "slug": "0vXNs",
+    "helpful": 0,
+    "not_helpful": 0,
+    "is_rich_text": false,
+    "_order": 0
+  }
+},
+{
+  "model": "faq.answer",
+  "pk": 5,
+  "fields": {
+    "question": 10,
+    "answer": "After HOD approval, your application moves to the Dean of your requested faculty for review.",
+    "slug": "5T23r",
+    "helpful": 0,
+    "not_helpful": 0,
+    "is_rich_text": false,
+    "_order": 0
+  }
+},
+{
+  "model": "faq.answer",
+  "pk": 6,
+  "fields": {
+    "question": 11,
+    "answer": "After Dean approval, your application moves to the Registrar for final approval and new admission number issuance.",
+    "slug": "luzl5",
+    "helpful": 0,
+    "not_helpful": 0,
+    "is_rich_text": false,
+    "_order": 0
+  }
+},
+{
+  "model": "faq.answer",
+  "pk": 7,
+  "fields": {
+    "question": 12,
+    "answer": "Once the Registrar approves your transfer, your new admission number will appear in your student dashboard and you'll receive a notification.",
+    "slug": "ZbZ5I",
+    "helpful": 0,
+    "not_helpful": 0,
+    "is_rich_text": false,
+    "_order": 0
+  }
+},
+{
+  "model": "faq.answer",
+  "pk": 8,
+  "fields": {
+    "question": 13,
+    "answer": "No, applying to multiple faculties at once will lead to automatic disqualification.",
+    "slug": "bniLd",
+    "helpful": 0,
+    "not_helpful": 0,
+    "is_rich_text": false,
+    "_order": 0
+  }
+},
+{
+  "model": "faq.answer",
+  "pk": 9,
+  "fields": {
+    "question": 14,
+    "answer": "Click on \"Forgot Password?\" on the login page and follow the instructions sent to your email.",
+    "slug": "WJgav",
+    "helpful": 0,
+    "not_helpful": 0,
+    "is_rich_text": false,
+    "_order": 0
+  }
+},
+{
+  "model": "faq.faqcomment",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "comment": "tfkd",
+    "question": 6,
+    "post_time": "2026-02-25T16:29:49.937Z"
+  }
+},
+{
+  "model": "faq.questionhelpful",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "question": 6,
+    "vote": true
+  }
+}
+]
