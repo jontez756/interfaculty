@@ -18,7 +18,7 @@
                     </ol>
                 </div>
 
-                <!-- Student Info Display -->
+                <!-- Student Info Display (ONCE) -->
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <h6>Name of Candidate:</h6>
@@ -30,58 +30,46 @@
                     </div>
                 </div>
 
-                <!-- IMPORTANT: Fields for student to enter/edit -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Registration Number <span class="text-danger">*</span></label>
-                        <input type="text" name="admission_number" class="form-control" 
-                               placeholder="e.g., COM/0013/2023" 
-                               value="{{ student.admission_number|default:'' }}" required>
-                        <small class="text-muted">Enter your current admission number</small>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Phone Number <span class="text-danger">*</span></label>
-                        <input type="text" name="phone" class="form-control" 
-                               placeholder="e.g., 0712345678" 
-                               value="{{ student.phone|default:'' }}" required>
-                    </div>
-                </div>
-
-                <!-- Current Program Selection -->
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <label class="form-label fw-bold">Current Programme <span class="text-danger">*</span></label>
-                        <select name="current_program" class="form-control" required>
-                            <option value="">-- Select Your Current Programme --</option>
-                            {% for program in all_programs %}
-                                <option value="{{ program.id }}" {% if student.current_program and student.current_program.id == program.id %}selected{% endif %}>
-                                    {{ program.name }} ({{ program.faculty.name }})
-                                </option>
-                            {% endfor %}
-                        </select>
-                        <small class="text-muted">Select the programme you are currently enrolled in</small>
-                    </div>
-                </div>
-                
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <h6>Phone No.:</h6>
-                        <p class="border-bottom">{{ student.phone }}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>Official Email:</h6>
-                        <p class="border-bottom">{{ student.user.email }}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>Current Programme:</h6>
-                        <p class="border-bottom">{{ student.current_program.name }} ({{ student.current_program.faculty.code }})</p>
-                    </div>
-                </div>-->
-
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     
-                    <!-- Personal Details -->
+                    <!-- Academic Information Section (ONCE) -->
+                    <h5 class="border-bottom pb-2 mt-4">Academic Information</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Registration Number <span class="text-danger">*</span></label>
+                            <input type="text" name="admission_number" class="form-control" 
+                                   placeholder="e.g., COM/0013/2023" 
+                                   value="{{ student.admission_number|default:'' }}" required>
+                            <small class="text-muted">Enter your current admission number</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Phone Number <span class="text-danger">*</span></label>
+                            <input type="text" name="phone" class="form-control" 
+                                   placeholder="e.g., 0712345678" 
+                                   value="{{ student.phone|default:'' }}" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Current Programme <span class="text-danger">*</span></label>
+                            <select name="current_program" class="form-control" required>
+                                <option value="">-- Select Your Current Programme --</option>
+                                {% for program in all_programs %}
+                                    <option value="{{ program.id }}" {% if student.current_program and student.current_program.id == program.id %}selected{% endif %}>
+                                        {{ program.name }} ({{ program.faculty.name }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <small class="text-muted">Select the programme you are currently enrolled in</small>
+                        </div>
+                    </div>
+
+                    <!-- Personal Details Section -->
+                    <h5 class="border-bottom pb-2 mt-4">Personal Details</h5>
+                    
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">KCSE Index No.</label>
@@ -117,6 +105,7 @@
                         </div>
                     </div>
 
+                    <!-- KCSE Results Table -->
                     <h5 class="border-bottom pb-2 mt-4">Table 1: KCSE RESULTS (Attach a copy of your Result Slip)</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -170,6 +159,7 @@
                         + Add More Subject
                     </button>
 
+                    <!-- KCSE Summary -->
                     <div class="row">
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">Mean Grade</label>
@@ -189,6 +179,7 @@
                         </div>
                     </div>
 
+                    <!-- Application Details -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Academic Year</label>
