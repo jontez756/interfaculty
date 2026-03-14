@@ -204,7 +204,10 @@ def student_application_form(request):
         return redirect('register_student')
     
     if request.method == 'POST':
-        # Update student with KCSE details
+        # ===== SAVE ALL FORM DATA =====
+        student.admission_number = request.POST.get('admission_number', student.admission_number)
+        student.current_year = request.POST.get('current_year', student.current_year)
+        student.phone = request.POST.get('phone', student.phone)
         student.birth_cert_no = request.POST.get('birth_cert_no')
         student.id_no = request.POST.get('id_no')
         student.kcse_index_no = request.POST.get('kcse_index_no')
@@ -214,6 +217,14 @@ def student_application_form(request):
         student.cluster_weight = request.POST.get('cluster_weight')
         student.university_cutoff = request.POST.get('university_cutoff')
         student.address = request.POST.get('address')
+        
+        # Update current program if provided
+        current_program_id = request.POST.get('current_program')
+        if current_program_id:
+            try:
+                student.current_program = Program.objects.get(id=current_program_id)
+            except Program.DoesNotExist:
+                pass
         
         # Handle KCSE slip upload
         if 'kcse_slip' in request.FILES:
@@ -261,7 +272,10 @@ def student_application_form(request):
         return redirect('student_dashboard')
     
     # GET request - show form
-    # Get programs for dropdown (exclude current faculty if student has a program)
+    # Get all programs for current program dropdown
+    all_programs = Program.objects.all().select_related('faculty')
+    
+    # Get programs for transfer TO dropdown (exclude current faculty if student has a program)
     if student.current_program:
         programs = Program.objects.exclude(faculty=student.current_program.faculty)
     else:
@@ -270,6 +284,7 @@ def student_application_form(request):
     context = {
         'student': student,
         'programs': programs,
+        'all_programs': all_programs,
     }
     return render(request, 'student_application_form.html', context)
 

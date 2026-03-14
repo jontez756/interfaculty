@@ -18,14 +18,48 @@
                     </ol>
                 </div>
 
+                <!-- Student Info Display -->
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <h6>Name of Candidate:</h6>
                         <p class="border-bottom">{{ student.user.get_full_name }}</p>
                     </div>
                     <div class="col-md-6">
-                        <h6>Reg. No:</h6>
-                        <p class="border-bottom">{{ student.admission_number }}</p>
+                        <h6>Official Email:</h6>
+                        <p class="border-bottom">{{ student.user.email }}</p>
+                    </div>
+                </div>
+
+                <!-- IMPORTANT: Fields for student to enter/edit -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Registration Number <span class="text-danger">*</span></label>
+                        <input type="text" name="admission_number" class="form-control" 
+                               placeholder="e.g., COM/0013/2023" 
+                               value="{{ student.admission_number|default:'' }}" required>
+                        <small class="text-muted">Enter your current admission number</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Phone Number <span class="text-danger">*</span></label>
+                        <input type="text" name="phone" class="form-control" 
+                               placeholder="e.g., 0712345678" 
+                               value="{{ student.phone|default:'' }}" required>
+                    </div>
+                </div>
+
+                <!-- Current Program Selection -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Current Programme <span class="text-danger">*</span></label>
+                        <select name="current_program" class="form-control" required>
+                            <option value="">-- Select Your Current Programme --</option>
+                            {% for program in all_programs %}
+                                <option value="{{ program.id }}" {% if student.current_program and student.current_program.id == program.id %}selected{% endif %}>
+                                    {{ program.name }} ({{ program.faculty.name }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Select the programme you are currently enrolled in</small>
                     </div>
                 </div>
                 
@@ -42,11 +76,12 @@
                         <h6>Current Programme:</h6>
                         <p class="border-bottom">{{ student.current_program.name }} ({{ student.current_program.faculty.code }})</p>
                     </div>
-                </div>
+                </div>-->
 
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     
+                    <!-- Personal Details -->
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">KCSE Index No.</label>
@@ -72,7 +107,7 @@
                             <textarea name="address" class="form-control" rows="1" placeholder="Your physical address"></textarea>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label class="form-label fw-bold">Programme Changing To</label>
+                            <label class="form-label fw-bold">Programme Changing To <span class="text-danger">*</span></label>
                             <select name="requested_program" class="form-control" required>
                                 <option value="">-- Select Programme --</option>
                                 {% for program in programs %}
@@ -179,8 +214,6 @@
                         <input type="file" name="kcse_slip" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required>
                         <small class="text-muted">Attach a copy of your KCSE Result Slip (PDF, JPG, PNG)</small>
                     </div>
-
-                    
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-success btn-lg">Submit Transfer Application</button>
