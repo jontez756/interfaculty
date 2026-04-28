@@ -11,6 +11,7 @@ from django.utils import timezone
 from datetime import datetime
 import csv
 import json
+import random
 
 from .models import Student, Program, TransferApplication, Notification, Profile, Faculty, KCSE_Result
 from .forms import StudentRegistrationForm, StudentApplicationForm, TransferApplicationForm
@@ -149,7 +150,7 @@ def student_dashboard(request):
         
         # Calculate counts
         pending_count = applications.filter(status__contains='pending').count()
-        approved_count = applications.filter(status__contains='approved').count()
+        approved_count = applications.filter(status__contains='approved' ).count()
         
     except Profile.DoesNotExist:
         messages.error(request, 'Profile not found. Please contact admin.')
@@ -180,15 +181,25 @@ def student_application_form(request):
             messages.error(request, 'Access denied. Student only.')
             return redirect('home')
         
-        # Get or create student record
-        student, created = Student.objects.get_or_create(
-            user=request.user,
-            defaults={
-                'admission_number': '',
-                'current_year': 1,
-                'phone': ''
-            }
-        )
+        # Get or create student record WITHOUT empty admission number
+        try:
+            student = Student.objects.get(user=request.user)
+            # If admission number is empty, give them a temporary one
+            if not student.admission_number or student.admission_number == '':
+                temp_number = f"TEMP{random.randint(10000, 99999)}"
+                student.admission_number = temp_number
+                student.save()
+                print(f"Fixed student {student.user.username}: new temp number {temp_number}")
+        except Student.DoesNotExist:
+            # Create new student with unique temporary admission number
+            temp_number = f"TEMP{random.randint(10000, 99999)}"
+            student = Student.objects.create(
+                user=request.user,
+                admission_number=temp_number,
+                current_year=2,
+                phone=''
+            )
+            print(f"Created new student with temp number: {temp_number}")
         
         # Check if already has pending application
         existing_application = TransferApplication.objects.filter(
@@ -204,8 +215,11 @@ def student_application_form(request):
         return redirect('register_student')
     
     if request.method == 'POST':
-        # ===== SAVE ALL FORM DATA =====
-        student.admission_number = request.POST.get('admission_number', student.admission_number)
+        # Update student with form data
+        # Only update admission number if provided in form
+        if request.POST.get('admission_number'):
+            student.admission_number = request.POST.get('admission_number')
+        
         student.current_year = request.POST.get('current_year', student.current_year)
         student.phone = request.POST.get('phone', student.phone)
         student.birth_cert_no = request.POST.get('birth_cert_no')
