@@ -47,16 +47,13 @@
         color: var(--text-dark);
     }
 
-    /* Dashboard Container */
     .dashboard-container {
         max-width: 1440px;
         margin: 0 auto;
         padding: 24px 32px;
     }
 
-    /* ============================================
-       TOP NAVIGATION BAR
-    ============================================ */
+    /* Top Navigation Bar */
     .top-nav {
         display: flex;
         justify-content: space-between;
@@ -92,13 +89,8 @@
         transition: var(--transition);
     }
 
-    .nav-links a:hover {
+    .nav-links a:hover, .nav-links a.active {
         color: var(--primary);
-    }
-
-    .nav-links a.active {
-        color: var(--primary);
-        font-weight: 600;
     }
 
     .notification-icon {
@@ -109,11 +101,6 @@
     .notification-icon i {
         font-size: 1.2rem;
         color: var(--text-gray);
-        transition: var(--transition);
-    }
-
-    .notification-icon:hover i {
-        color: var(--primary);
     }
 
     .notification-dot {
@@ -138,17 +125,9 @@
         font-weight: 600;
         font-size: 1rem;
         cursor: pointer;
-        transition: var(--transition);
     }
 
-    .user-avatar:hover {
-        transform: scale(1.02);
-        box-shadow: var(--shadow-md);
-    }
-
-    /* ============================================
-       WELCOME SECTION
-    ============================================ */
+    /* Welcome Section */
     .welcome-card {
         background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
         border-radius: var(--radius-lg);
@@ -177,7 +156,7 @@
         gap: 8px;
     }
 
-    .gpa-card {
+    .stats-badge {
         background: rgba(255, 255, 255, 0.15);
         backdrop-filter: blur(10px);
         padding: 18px 32px;
@@ -186,28 +165,21 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .gpa-label {
+    .stats-badge .label {
         font-size: 0.8rem;
         color: rgba(255, 255, 255, 0.7);
         text-transform: uppercase;
         letter-spacing: 1px;
     }
 
-    .gpa-value {
+    .stats-badge .value {
         font-size: 2.2rem;
         font-weight: 700;
         color: white;
         line-height: 1;
     }
 
-    .gpa-value span {
-        font-size: 1rem;
-        font-weight: 400;
-    }
-
-    /* ============================================
-       STATS GRID
-    ============================================ */
+    /* Stats Grid */
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -264,297 +236,35 @@
         margin-top: 4px;
     }
 
-    /* ============================================
-       DASHBOARD GRID - 2 COLUMNS
-    ============================================ */
+    /* Dashboard Grid */
     .dashboard-grid {
         display: grid;
         grid-template-columns: 1fr 380px;
         gap: 28px;
     }
 
-    /* ============================================
-       COURSE PROGRESS CARD
-    ============================================ */
-    .progress-card {
+    /* Applications Table */
+    .applications-table {
         background: var(--card-white);
         border-radius: var(--radius-lg);
         padding: 24px;
-        margin-bottom: 28px;
         box-shadow: var(--shadow-sm);
         border: 1px solid var(--border-light);
+        margin-bottom: 28px;
     }
 
-    .card-header {
+    .section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
     }
 
-    .card-header h3 {
+    .section-header h3 {
         font-size: 1.2rem;
         font-weight: 600;
         color: var(--text-dark);
     }
-
-    .card-header a {
-        font-size: 0.8rem;
-        color: var(--primary);
-        text-decoration: none;
-        font-weight: 500;
-    }
-
-    .course-item {
-        margin-bottom: 20px;
-    }
-
-    .course-info {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 8px;
-    }
-
-    .course-name {
-        font-weight: 500;
-        font-size: 0.9rem;
-        color: var(--text-dark);
-    }
-
-    .course-progress-value {
-        font-size: 0.8rem;
-        color: var(--text-gray);
-    }
-
-    .progress-bar-bg {
-        height: 8px;
-        background: var(--border-light);
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    .progress-bar-fill {
-        height: 100%;
-        border-radius: 10px;
-        transition: width 0.5s ease;
-    }
-
-    .fill-primary { background: linear-gradient(90deg, var(--primary), var(--secondary)); }
-    .fill-success { background: var(--success); }
-    .fill-warning { background: var(--warning); }
-
-    /* ============================================
-       UPCOMING ASSIGNMENTS
-    ============================================ */
-    .assignments-card {
-        background: var(--card-white);
-        border-radius: var(--radius-lg);
-        padding: 24px;
-        margin-bottom: 28px;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid var(--border-light);
-    }
-
-    .assignment-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px 0;
-        border-bottom: 1px solid var(--border-light);
-    }
-
-    .assignment-item:last-child {
-        border-bottom: none;
-    }
-
-    .assignment-info h4 {
-        font-size: 1rem;
-        font-weight: 500;
-        color: var(--text-dark);
-        margin-bottom: 4px;
-    }
-
-    .assignment-course {
-        font-size: 0.75rem;
-        color: var(--text-gray);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .assignment-due {
-        text-align: right;
-    }
-
-    .due-date {
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: var(--warning);
-    }
-
-    .due-status {
-        font-size: 0.7rem;
-        color: var(--text-gray);
-    }
-
-    /* ============================================
-       GRADE OVERVIEW
-    ============================================ */
-    .grades-card {
-        background: var(--card-white);
-        border-radius: var(--radius-lg);
-        padding: 24px;
-        margin-bottom: 28px;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid var(--border-light);
-    }
-
-    .grade-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 0;
-        border-bottom: 1px solid var(--border-light);
-    }
-
-    .grade-item:last-child {
-        border-bottom: none;
-    }
-
-    .grade-subject {
-        font-weight: 500;
-        color: var(--text-dark);
-    }
-
-    .grade-score {
-        font-weight: 600;
-    }
-
-    .grade-score.A { color: var(--success); }
-    .grade-score.B { color: var(--primary); }
-    .grade-score.C { color: var(--warning); }
-
-    /* ============================================
-       CALENDAR WIDGET
-    ============================================ */
-    .calendar-card {
-        background: var(--card-white);
-        border-radius: var(--radius-lg);
-        padding: 24px;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid var(--border-light);
-    }
-
-    .calendar-month {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .calendar-month h3 {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-dark);
-    }
-
-    .calendar-nav button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 5px;
-        color: var(--text-gray);
-    }
-
-    .calendar-weekdays {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        text-align: center;
-        margin-bottom: 12px;
-    }
-
-    .weekday {
-        font-size: 0.75rem;
-        font-weight: 500;
-        color: var(--text-gray);
-        padding: 8px 0;
-    }
-
-    .calendar-dates {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 4px;
-    }
-
-    .calendar-date {
-        text-align: center;
-        padding: 10px 0;
-        font-size: 0.85rem;
-        color: var(--text-dark);
-        border-radius: 8px;
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    .calendar-date:hover {
-        background: var(--bg-main);
-    }
-
-    .calendar-date.today {
-        background: var(--primary);
-        color: white;
-        font-weight: 600;
-    }
-
-    .calendar-date.event {
-        position: relative;
-    }
-
-    .calendar-date.event::after {
-        content: '';
-        position: absolute;
-        bottom: 2px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 4px;
-        height: 4px;
-        background: var(--warning);
-        border-radius: 50%;
-    }
-
-    /* ============================================
-       TRANSFER APPLICATIONS TABLE
-    ============================================ */
-    .applications-section {
-        background: var(--card-white);
-        border-radius: var(--radius-lg);
-        padding: 24px;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid var(--border-light);
-    }
-
-    .section-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--text-dark);
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .status-badge {
-        display: inline-block;
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-size: 0.7rem;
-        font-weight: 500;
-    }
-
-    .status-pending { background: #FEF3C7; color: #B45309; }
-    .status-approved { background: #D1FAE5; color: #065F46; }
-    .status-completed { background: #E0E7FF; color: #3730A3; }
-    .status-rejected { background: #FEE2E2; color: #991B1B; }
 
     .btn-primary {
         background: var(--primary);
@@ -566,10 +276,10 @@
         font-size: 0.85rem;
         cursor: pointer;
         text-decoration: none;
-        transition: var(--transition);
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        transition: var(--transition);
     }
 
     .btn-primary:hover {
@@ -597,15 +307,159 @@
         color: white;
     }
 
-    /* ============================================
-       RESPONSIVE
-    ============================================ */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .applications-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .applications-table th {
+        text-align: left;
+        padding: 12px 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-gray);
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .applications-table td {
+        padding: 16px 8px;
+        border-bottom: 1px solid var(--border-light);
+        font-size: 0.9rem;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 500;
+    }
+
+    .status-pending { background: #FEF3C7; color: #B45309; }
+    .status-approved { background: #D1FAE5; color: #065F46; }
+    .status-completed { background: #E0E7FF; color: #3730A3; }
+    .status-rejected { background: #FEE2E2; color: #991B1B; }
+    .status-progress { background: #E0F7FA; color: #0891B2; }
+
+    /* Quick Actions */
+    .quick-actions {
+        background: var(--card-white);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        margin-bottom: 28px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-light);
+    }
+
+    .action-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .action-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px;
+        background: var(--bg-main);
+        border-radius: var(--radius-md);
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    .action-item:hover {
+        background: white;
+        transform: translateX(5px);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .action-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .action-icon.green { background: #D1FAE5; color: var(--success); }
+    .action-icon.blue { background: #E8EDFF; color: var(--primary); }
+    .action-icon.gold { background: #FEF3C7; color: var(--warning); }
+
+    .action-text strong {
+        display: block;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+    }
+
+    .action-text small {
+        font-size: 0.7rem;
+        color: var(--text-gray);
+    }
+
+    /* Notifications */
+    .notifications-card {
+        background: var(--card-white);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-light);
+    }
+
+    .notification-item {
+        padding: 14px;
+        border-radius: var(--radius-md);
+        background: var(--bg-main);
+        margin-bottom: 12px;
+        border-left: 3px solid transparent;
+    }
+
+    .notification-item.unread {
+        background: #FEF3C7;
+        border-left-color: var(--warning);
+    }
+
+    .notification-message {
+        font-size: 0.85rem;
+        color: var(--text-dark);
+        margin-bottom: 5px;
+    }
+
+    .notification-time {
+        font-size: 0.7rem;
+        color: var(--text-gray);
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: var(--text-light);
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        color: var(--text-gray);
+        margin-bottom: 20px;
+    }
+
+    /* Responsive */
     @media screen and (max-width: 1024px) {
-        .dashboard-container {
-            padding: 20px;
-        }
         .dashboard-grid {
             grid-template-columns: 1fr;
+        }
+        .dashboard-container {
+            padding: 20px;
         }
     }
 
@@ -628,13 +482,10 @@
     }
 
     @media screen and (max-width: 480px) {
-        .dashboard-container {
-            padding: 16px;
-        }
         .stats-grid {
             grid-template-columns: 1fr;
         }
-        .stat-card {
+        .dashboard-container {
             padding: 16px;
         }
     }
@@ -648,16 +499,14 @@
         </div>
         <div class="nav-links">
             <a href="#" class="active">Dashboard</a>
-            <a href="#">Courses</a>
             <a href="{% url 'student_application_form' %}">Transfer</a>
-            <a href="#">Grades</a>
             <a href="{% url 'report_dashboard' %}">Reports</a>
             <a href="{% url 'faq' %}">FAQ</a>
         </div>
         <div style="display: flex; align-items: center; gap: 20px;">
             <div class="notification-icon">
                 <i class="far fa-bell"></i>
-                {% if notifications_count %}
+                {% if notifications.count %}
                 <div class="notification-dot"></div>
                 {% endif %}
             </div>
@@ -667,20 +516,20 @@
         </div>
     </nav>
 
-    <!-- Welcome Section with GPA -->
+    <!-- Welcome Section -->
     <div class="welcome-card">
         <div class="welcome-text">
             <h2>Welcome back, {{ student.user.first_name }}! 👋</h2>
             <p><i class="fas fa-graduation-cap"></i> {{ student.current_program.name }} · Year {{ student.current_year }}</p>
             <p><i class="fas fa-id-card"></i> {{ student.admission_number }}</p>
         </div>
-        <div class="gpa-card">
-            <div class="gpa-label">Current GPA</div>
-            <div class="gpa-value">3.8 <span>/ 4.0</span></div>
+        <div class="stats-badge">
+            <div class="label">Transfer Status</div>
+            <div class="value">{{ applications.count }}</div>
         </div>
     </div>
 
-    <!-- Stats Grid -->
+    <!-- Stats Cards -->
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-header">
@@ -715,211 +564,135 @@
                     <i class="fas fa-exchange-alt"></i>
                 </div>
             </div>
-            <div class="stat-value">
-                {% with completed=applications|length %}
-                    {{ completed }}
-                {% endwith %}
-            </div>
+            <div class="stat-value">{{ completed_count|default:"0" }}</div>
             <div class="stat-label">Completed</div>
         </div>
     </div>
 
     <!-- Main Dashboard Grid -->
     <div class="dashboard-grid">
-        <!-- Left Column -->
-        <div>
-            <!-- Course Progress Card -->
-            <div class="progress-card">
-                <div class="card-header">
-                    <h3>Course Progress</h3>
-                    <a href="#">View All →</a>
-                </div>
-                <div class="course-item">
-                    <div class="course-info">
-                        <span class="course-name">Computer Science Project</span>
-                        <span class="course-progress-value">75%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill fill-primary" style="width: 75%"></div>
-                    </div>
-                </div>
-                <div class="course-item">
-                    <div class="course-info">
-                        <span class="course-name">Database Systems</span>
-                        <span class="course-progress-value">60%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill fill-primary" style="width: 60%"></div>
-                    </div>
-                </div>
-                <div class="course-item">
-                    <div class="course-info">
-                        <span class="course-name">Web Development</span>
-                        <span class="course-progress-value">90%</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill fill-success" style="width: 90%"></div>
-                    </div>
-                </div>
+        <!-- Applications Table -->
+        <div class="applications-table">
+            <div class="section-header">
+                <h3><i class="fas fa-history" style="color: var(--primary); margin-right: 8px;"></i> My Transfer Applications</h3>
+                <a href="{% url 'student_application_form' %}" class="btn-primary">
+                    <i class="fas fa-plus-circle"></i> New Application
+                </a>
             </div>
-
-            <!-- Upcoming Assignments -->
-            <div class="assignments-card">
-                <div class="card-header">
-                    <h3>Upcoming Assignments</h3>
-                    <a href="#">View All →</a>
-                </div>
-                <div class="assignment-item">
-                    <div class="assignment-info">
-                        <h4>Final Project Submission</h4>
-                        <div class="assignment-course">
-                            <span>Computer Science Project</span>
-                        </div>
-                    </div>
-                    <div class="assignment-due">
-                        <div class="due-date">Due in 3 days</div>
-                        <div class="due-status">Not Started</div>
-                    </div>
-                </div>
-                <div class="assignment-item">
-                    <div class="assignment-info">
-                        <h4>Database Design Report</h4>
-                        <div class="assignment-course">
-                            <span>Database Systems</span>
-                        </div>
-                    </div>
-                    <div class="assignment-due">
-                        <div class="due-date">Due in 5 days</div>
-                        <div class="due-status">In Progress</div>
-                    </div>
-                </div>
-                <div class="assignment-item">
-                    <div class="assignment-info">
-                        <h4>E-commerce Website</h4>
-                        <div class="assignment-course">
-                            <span>Web Development</span>
-                        </div>
-                    </div>
-                    <div class="assignment-due">
-                        <div class="due-date">Due in 7 days</div>
-                        <div class="due-status">Almost Done</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Grade Overview -->
-            <div class="grades-card">
-                <div class="card-header">
-                    <h3>Grade Overview</h3>
-                    <a href="#">View All →</a>
-                </div>
-                <div class="grade-item">
-                    <span class="grade-subject">Computer Science Project</span>
-                    <span class="grade-score A">A-</span>
-                </div>
-                <div class="grade-item">
-                    <span class="grade-subject">Database Systems</span>
-                    <span class="grade-score B">B+</span>
-                </div>
-                <div class="grade-item">
-                    <span class="grade-subject">Web Development</span>
-                    <span class="grade-score A">A</span>
-                </div>
-                <div class="grade-item">
-                    <span class="grade-subject">Data Structures</span>
-                    <span class="grade-score B">B</span>
-                </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Requested Program</th>
+                            <th>Faculty</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </thead>
+                    </thead>
+                    <tbody>
+                        {% if applications %}
+                            {% for app in applications %}
+                            <tr>
+                                <td>#{{ app.id }}</td>
+                                <td><strong>{{ app.requested_program.name }}</strong></td>
+                                <td>{{ app.requested_program.faculty.code }}</td>
+                                <td>
+                                    <span class="status-badge 
+                                        {% if app.status == 'pending_hod' %}status-pending
+                                        {% elif app.status == 'hod_approved' %}status-progress
+                                        {% elif app.status == 'hod_rejected' %}status-rejected
+                                        {% elif app.status == 'dean_approved' %}status-progress
+                                        {% elif app.status == 'dean_rejected' %}status-rejected
+                                        {% elif app.status == 'pending_registrar' %}status-progress
+                                        {% elif app.status == 'registrar_approved' %}status-approved
+                                        {% elif app.status == 'registrar_rejected' %}status-rejected
+                                        {% elif app.status == 'completed' %}status-completed
+                                        {% endif %}">
+                                        {{ app.get_status_display }}
+                                    </span>
+                                </td>
+                                <td>{{ app.application_date|date:"M d, Y" }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>No transfer applications yet.</p>
+                                    <a href="{% url 'student_application_form' %}" class="btn-primary">Start Application</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <!-- Right Column -->
         <div>
-            <!-- Calendar Widget -->
-            <div class="calendar-card">
-                <div class="calendar-month">
-                    <h3>April 2026</h3>
-                    <div class="calendar-nav">
-                        <button><i class="fas fa-chevron-left"></i></button>
-                        <button><i class="fas fa-chevron-right"></i></button>
-                    </div>
-                </div>
-                <div class="calendar-weekdays">
-                    <div class="weekday">S</div>
-                    <div class="weekday">M</div>
-                    <div class="weekday">T</div>
-                    <div class="weekday">W</div>
-                    <div class="weekday">T</div>
-                    <div class="weekday">F</div>
-                    <div class="weekday">S</div>
-                </div>
-                <div class="calendar-dates">
-                    <div class="calendar-date">30</div>
-                    <div class="calendar-date">31</div>
-                    <div class="calendar-date">1</div>
-                    <div class="calendar-date">2</div>
-                    <div class="calendar-date">3</div>
-                    <div class="calendar-date">4</div>
-                    <div class="calendar-date">5</div>
-                    <div class="calendar-date">6</div>
-                    <div class="calendar-date">7</div>
-                    <div class="calendar-date">8</div>
-                    <div class="calendar-date">9</div>
-                    <div class="calendar-date">10</div>
-                    <div class="calendar-date">11</div>
-                    <div class="calendar-date">12</div>
-                    <div class="calendar-date">13</div>
-                    <div class="calendar-date">14</div>
-                    <div class="calendar-date">15</div>
-                    <div class="calendar-date">16</div>
-                    <div class="calendar-date">17</div>
-                    <div class="calendar-date">18</div>
-                    <div class="calendar-date">19</div>
-                    <div class="calendar-date">20</div>
-                    <div class="calendar-date">21</div>
-                    <div class="calendar-date">22</div>
-                    <div class="calendar-date">23</div>
-                    <div class="calendar-date">24</div>
-                    <div class="calendar-date today">25</div>
-                    <div class="calendar-date">26</div>
-                    <div class="calendar-date">27</div>
-                    <div class="calendar-date">28</div>
-                    <div class="calendar-date">29</div>
-                    <div class="calendar-date">30</div>
-                    <div class="calendar-date">1</div>
-                    <div class="calendar-date">2</div>
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3 style="margin-bottom: 16px;"><i class="fas fa-bolt" style="color: var(--warning);"></i> Quick Actions</h3>
+                <div class="action-list">
+                    <a href="{% url 'student_application_form' %}" class="action-item">
+                        <div class="action-icon green">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="action-text">
+                            <strong>New Application</strong>
+                            <small>Start a transfer request</small>
+                        </div>
+                        <i class="fas fa-arrow-right" style="margin-left: auto; color: var(--primary);"></i>
+                    </a>
+                    <a href="{% url 'report_dashboard' %}" class="action-item">
+                        <div class="action-icon blue">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="action-text">
+                            <strong>My Reports</strong>
+                            <small>Download application history</small>
+                        </div>
+                        <i class="fas fa-arrow-right" style="margin-left: auto; color: var(--primary);"></i>
+                    </a>
+                    <a href="{% url 'faq' %}" class="action-item">
+                        <div class="action-icon gold">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="action-text">
+                            <strong>FAQ</strong>
+                            <small>Get help</small>
+                        </div>
+                        <i class="fas fa-arrow-right" style="margin-left: auto; color: var(--primary);"></i>
+                    </a>
+                    <a href="{% url 'logout' %}" class="action-item">
+                        <div class="action-icon" style="background: #FEE2E2; color: #DC2626;">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </div>
+                        <div class="action-text">
+                            <strong>Logout</strong>
+                            <small>End session</small>
+                        </div>
+                        <i class="fas fa-arrow-right" style="margin-left: auto; color: var(--primary);"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Transfer Applications Section -->
-            <div class="applications-section" style="margin-top: 28px;">
-                <div class="section-title">
-                    <i class="fas fa-exchange-alt" style="color: var(--secondary);"></i>
-                    Recent Transfer Applications
-                </div>
-                {% if applications %}
-                    {% for app in applications|slice:":3" %}
-                    <div class="grade-item">
-                        <div>
-                            <span class="grade-subject" style="font-weight: 500;">{{ app.requested_program.name }}</span>
-                            <div style="font-size: 0.7rem; color: var(--text-gray);">{{ app.application_date|date:"M d, Y" }}</div>
-                        </div>
-                        <span class="status-badge 
-                            {% if app.status == 'pending_hod' %}status-pending
-                            {% elif app.status == 'hod_approved' %}status-approved
-                            {% elif app.status == 'completed' %}status-completed
-                            {% elif app.status == 'hod_rejected' %}status-rejected
-                            {% endif %}">
-                            {{ app.get_status_display }}
-                        </span>
+            <!-- Notifications -->
+            <div class="notifications-card">
+                <h3 style="margin-bottom: 16px;"><i class="fas fa-bell" style="color: var(--primary);"></i> Notifications</h3>
+                {% if notifications %}
+                    {% for note in notifications %}
+                    <div class="notification-item {% if not note.is_read %}unread{% endif %}">
+                        <div class="notification-message">{{ note.message }}</div>
+                        <div class="notification-time">{{ note.created_at|timesince }} ago</div>
                     </div>
                     {% endfor %}
                 {% else %}
-                    <div style="text-align: center; padding: 40px 20px;">
-                        <i class="fas fa-inbox" style="font-size: 2.5rem; color: var(--text-light); margin-bottom: 12px;"></i>
-                        <p style="color: var(--text-gray);">No transfer applications yet.</p>
-                        <a href="{% url 'student_application_form' %}" class="btn-primary" style="margin-top: 16px; display: inline-flex;">
-                            <i class="fas fa-plus-circle"></i> Start Application
-                        </a>
+                    <div class="notification-item">
+                        <div class="notification-message text-muted">
+                            <i class="fas fa-check-circle" style="color: var(--success);"></i> No new notifications
+                        </div>
                     </div>
                 {% endif %}
             </div>
