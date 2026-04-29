@@ -13,10 +13,27 @@ import csv
 import json
 import random
 
+from .models import PasswordResetCode
+from django.core.mail import send_mail
+from django.conf import settings
+import random
+import string
+
 from .models import Student, Program, TransferApplication, Notification, Profile, Faculty, KCSE_Result
 from .forms import StudentRegistrationForm, StudentApplicationForm, TransferApplicationForm
 from faq.models import Question
 
+
+# Add these to your existing imports
+from .forms import (
+    StudentRegistrationForm, 
+    StudentApplicationForm, 
+    TransferApplicationForm,
+    PasswordResetRequestForm,
+    PasswordResetVerifyForm,
+    PasswordResetConfirmForm
+)
+from .models import Student, Program, TransferApplication, Notification, Profile, Faculty, KCSE_Result, PasswordResetCode
 # ============================================
 # TEST VIEWS
 # ============================================
@@ -979,3 +996,138 @@ def student_academic_report(request, student_id):
     except Student.DoesNotExist:
         messages.error(request, 'Student not found.')
         return redirect('report_dashboard')
+    
+    
+# ============================================
+# PASSWORD RESET WITH CODE (No Link)
+# ============================================
+
+def password_reset_request(request):
+    """Step 1: User enters email, receives 6-digit code"""
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            
+            try:
+                user = User.objects.get(email=email)
+                
+                # Generate 6-digit code
+                code = ''.join(random.choices(string.digits, k=6))
+                
+                # Save code to database
+                PasswordResetCode.objects.create(
+                    user=user,
+                    code=code
+                )
+                
+                # Send email with code
+                subject = 'Password Reset Code - Inter-Faculty Transfer'
+                message = f"""
+Hello {user.get_full_name() or user.username},
+
+You requested to reset your password for the Inter-Faculty Transfer System.
+
+Your verification code is: {code}
+
+This code will expire in 10 minutes.
+
+If you did not request this, please ignore this email.
+
+Best regards,
+Inter-Faculty Transfer Team
+"""
+                from_email = settings.DEFAULT_FROM_EMAIL
+                recipient_list = [email]
+                
+                send_mail(subject, message, from_email, recipient_list)
+                
+                # Store email in session for next step
+                request.session['reset_email'] = email
+                
+                messages.success(request, f'Verification code sent to {email}! Please check your inbox.')
+                return redirect('password_reset_verify')
+                
+            except User.DoesNotExist:
+                # For security, still show success message even if email not found
+                messages.success(request, f'If an account exists with {email}, you will receive a verification code.')
+                return redirect('password_reset_verify')
+    else:
+        form = PasswordResetRequestForm()
+    
+    return render(request, 'registration/password_reset_request.html', {'form': form})
+
+
+def password_reset_verify(request):
+    """Step 2: User enters the 6-digit code sent to email"""
+    # Check if email is in session
+    email = request.session.get('reset_email')
+    if not email:
+        messages.error(request, 'Please start the password reset process again.')
+        return redirect('password_reset')
+    
+    if request.method == 'POST':
+        form = PasswordResetVerifyForm(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data['code']
+            
+            try:
+                user = User.objects.get(email=email)
+                reset_code = PasswordResetCode.objects.filter(
+                    user=user,
+                    code=code,
+                    is_used=False
+                ).latest('created_at')
+                
+                if reset_code.is_valid():
+                    # Mark code as used
+                    reset_code.is_used = True
+                    reset_code.save()
+                    
+                    # Store user ID in session for next step
+                    request.session['reset_user_id'] = user.id
+                    
+                    messages.success(request, 'Code verified! Please enter your new password.')
+                    return redirect('password_reset_confirm')
+                else:
+                    messages.error(request, 'Code has expired or is invalid. Please request a new code.')
+                    
+            except PasswordResetCode.DoesNotExist:
+                messages.error(request, 'Invalid verification code. Please try again.')
+    else:
+        form = PasswordResetVerifyForm()
+    
+    return render(request, 'registration/password_reset_verify.html', {'form': form, 'email': email})
+
+
+def password_reset_confirm(request):
+    """Step 3: User enters new password"""
+    user_id = request.session.get('reset_user_id')
+    if not user_id:
+        messages.error(request, 'Please start the password reset process again.')
+        return redirect('password_reset')
+    
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        messages.error(request, 'User not found.')
+        return redirect('password_reset')
+    
+    if request.method == 'POST':
+        form = PasswordResetConfirmForm(request.POST)
+        if form.is_valid():
+            new_password = form.cleaned_data['new_password']
+            
+            # Set new password
+            user.set_password(new_password)
+            user.save()
+            
+            # Clear session
+            request.session.flush()
+            
+            messages.success(request, 'Password reset successfully! You can now login with your new password.')
+            return redirect('login')
+    else:
+        form = PasswordResetConfirmForm()
+    
+    return render(request, 'registration/password_reset_confirm.html', {'form': form})

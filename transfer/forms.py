@@ -156,3 +156,41 @@ class KCSE_ResultForm(forms.ModelForm):
             'subject': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., Mathematics'}),
             'grade': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'e.g., B+'}),
         }
+
+        # Password Reset Forms
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label="Email Address", widget=forms.EmailInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter your registered email'
+    }))
+
+class PasswordResetVerifyForm(forms.Form):
+    code = forms.CharField(label="Verification Code", max_length=6, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter 6-digit code',
+        'maxlength': '6'
+    }))
+    
+class PasswordResetConfirmForm(forms.Form):
+    new_password = forms.CharField(label="New Password", widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Enter new password'
+    }))
+    confirm_password = forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Confirm new password'
+    }))
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get('new_password')
+        confirm_password = cleaned_data.get('confirm_password')
+        
+        if new_password and confirm_password and new_password != confirm_password:
+            raise forms.ValidationError("Passwords do not match!")
+        
+        # Password strength validation
+        if len(new_password) < 8:
+            raise forms.ValidationError("Password must be at least 8 characters long!")
+        
+        return cleaned_data
