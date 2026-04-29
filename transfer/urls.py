@@ -67,4 +67,9 @@ urlpatterns = [
     path('admin-panel/audit/', views_admin.admin_audit_logs, name='admin_audit_logs'),
     path('admin-panel/settings/', views_admin.admin_settings, name='admin_settings'),
     path('admin-panel/notifications/', views_admin.admin_notifications, name='admin_notifications'),
+
+    path('password-reset/', views.password_reset_request, name='password_reset'),
+    path('password-reset/verify/', views.password_reset_verify, name='password_reset_verify'),
+    path('password-reset/confirm/', views.password_reset_confirm, name='password_reset_confirm'),
 ]
+
